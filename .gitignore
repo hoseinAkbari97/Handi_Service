@@ -1,0 +1,31 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+venv/
+Handi-Backend/venv/
+Handi-Backend/.env
+Handi-Service/.env
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+*.env.local
+.env.development
+.env.production
+
+# Media and static
+media/
+staticfiles/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Docker
+*.pid
