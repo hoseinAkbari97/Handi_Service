@@ -14,7 +14,6 @@ export default function CustomerDashboard() {
     <Box sx={{ backgroundColor: "#F5EDE1", minHeight: "100vh", p: 2 }}>
       <Header />
       
-
       {/* Drawer */}
       <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
         <Sidebar onClose={() => setOpen(false)} />
