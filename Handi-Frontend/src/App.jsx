@@ -1,13 +1,19 @@
-import { ThemeProvider, CssBaseline} from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import theme from "./Theme/Theme";
-import MainLayout from "./Layout/MainLayout";
-import Login from "./Pages/Login";
 import Home from "./Pages/Home";
+import Login from "./Pages/Login";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

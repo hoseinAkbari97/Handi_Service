@@ -10,7 +10,6 @@ import {
   FormControl,
   Select,
 } from "@mui/material";
-import { blue } from "@mui/material/colors";
 
 export default function Login() {
   const [role, setRole] = useState("");

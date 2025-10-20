@@ -1,15 +1,17 @@
-import { Typography } from "@mui/material";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Typography, Link as MuiLink } from "@mui/material";
+import { Link } from "react-router-dom";
 
-function HomePage() {
+export default function Home() {
   return (
-    <BrowserRouter>
-      <Typography variant="h3" align="center">This is Home Page</Typography>
-      <Typography align="center" variant="h6">
-      <Link to="/login">Login</Link>
+    <>
+      <Typography variant="h3" align="center">
+        This is Home Page
       </Typography>
-    </BrowserRouter>
+      <Typography align="center" variant="h6">
+        <MuiLink component={Link} to="/login">
+          Login
+        </MuiLink>
+      </Typography>
+    </>
   );
 }
-
-export default HomePage;
