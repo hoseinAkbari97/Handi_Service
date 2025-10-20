@@ -242,14 +242,29 @@ export default function Login() {
               margin="normal"
               value={code}
               onChange={codeHandler}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "secondary.main",
+                },
+                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "secondary.dark",
+                  },
+                "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+                  color: "secondary.dark",
+                },
+                "& .MuiInputLabel-root": {
+                  color: "secondary.main",
+                },
+              }}
             />
 
             <Button
               variant="contained"
-              color="primary"
+              color="secondary"
               fullWidth
               onClick={verifyHandler}
-              sx={{ mt: 2, py: 1.2 }}
+              sx={{ mt: 2, py: 1.2,  }}
             >
               ورود
             </Button>
