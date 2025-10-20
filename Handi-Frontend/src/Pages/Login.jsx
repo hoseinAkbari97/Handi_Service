@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -10,12 +10,15 @@ import {
   FormControl,
   Select,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
   const [step, setStep] = useState("login");
   const [code, setCode] = useState("");
+
+  const navigate = useNavigate()
 
   const phoneRegex = /^(?:(?:\+98|0098)9\d{9}|09\d{9})$/;
   const isValid = phoneRegex.test(phone);
@@ -48,9 +51,13 @@ export default function Login() {
 
   const verifyHandler = () => {
     if (code === "1234") {
-      console.log("ورود با موفقیت انجام شد");
+      if (role === "Customer") {
+        navigate("/customer")
+      } else if (role === "Technicians") {
+        navigate("/technicians")
+      }
     } else {
-      console.log("کد تأیید اشتباه است");
+      alert("کد تأیید اشتباه است");
     }
   };
 

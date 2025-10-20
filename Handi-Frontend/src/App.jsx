@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import theme from "./Theme/Theme";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
+import Customer from "./Pages/Customer";
+import Technicians from "./Pages/Technicians";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/customer" element={<Customer />} />
+          <Route path="/technicians" element={<Technicians />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
