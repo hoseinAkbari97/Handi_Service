@@ -23,21 +23,24 @@ export default function Login() {
   const phoneRegex = /^(?:(?:\+98|0098)9\d{9}|09\d{9})$/;
   const isValid = phoneRegex.test(phone);
 
+  const convertToEnglishDigits = (value) => {
+  const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+  const englishDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+  let result = value;
+  persianDigits.forEach((d, i) => {
+    result = result.replaceAll(d, englishDigits[i]);
+  });
+  return result;
+};
+
+
   const roleChange = (event) => {
     setRole(event.target.value);
   };
 
   const phoneHandler = (event) => {
-    const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-    const englishDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-    let value = event.target.value.trim();
-
-    persianDigits.forEach((d, i) => {
-      value = value.replaceAll(d, englishDigits[i]);
-    });
-
-    setPhone(value);
+    setPhone(convertToEnglishDigits(event.target.value.trim()))
   };
 
   const stepHandler = () => {
@@ -46,16 +49,14 @@ export default function Login() {
   };
 
   const codeHandler = (event) => {
-    setCode(event.target.value);
+    const normalizedCode = convertToEnglishDigits(event.target.value.trim())
+    setCode(normalizedCode);
   };
 
   const verifyHandler = () => {
     if (code === "1234") {
-      if (role === "Customer") {
-        navigate("/customer")
-      } else if (role === "Technicians") {
-        navigate("/technicians")
-      }
+      if (role === "Customer") navigate("/customer");
+      else if (role === "Technicians") navigate("/technicians");
     } else {
       alert("کد تأیید اشتباه است");
     }
