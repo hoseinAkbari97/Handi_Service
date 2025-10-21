@@ -8,20 +8,19 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 // props: iconType, label, value
 export default function SummaryCard({ iconType, label, value }) {
   const theme = useTheme();
-
-  // انتخاب آیکون بر اساس نوع کارت
+  
   const getIcon = () => {
     switch (iconType) {
       case "requests":
-        return <AssignmentIcon sx={{ fontSize: 36, color: theme.palette.secondary.main }} />;
+        return <AssignmentIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       case "done":
-        return <CheckCircleIcon sx={{ fontSize: 36, color: theme.palette.secondary.main }} />;
+        return <CheckCircleIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       case "wallet":
-        return <AccountBalanceWalletIcon sx={{ fontSize: 36, color: theme.palette.secondary.main }} />;
+        return <AccountBalanceWalletIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       case "points":
-        return <EmojiEventsIcon sx={{ fontSize: 36, color: theme.palette.secondary.main }} />;
+        return <EmojiEventsIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       default:
-        return <AssignmentIcon sx={{ fontSize: 36, color: theme.palette.secondary.main }} />;
+        return <AssignmentIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
     }
   };
 
@@ -39,7 +38,7 @@ export default function SummaryCard({ iconType, label, value }) {
         transition: "transform 0.2s ease, box-shadow 0.3s ease",
         "&:hover": {
           transform: "translateY(-3px)",
-          boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
         },
       }}
     >
