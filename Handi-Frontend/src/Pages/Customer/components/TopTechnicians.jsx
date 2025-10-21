@@ -28,9 +28,9 @@ export default function TopTechnicians({ avatar, fullName, expertise, rate }) {
         </Typography>
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt:5}}>
         {/* Left Side (avatar + fullName + expertise) */}
-        <Box mt={4} sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex" }}>
           <Avatar alt={fullName} src={avatar} sx={{ width: 45, height: 45 }} />
           <Box
             sx={{
@@ -46,11 +46,11 @@ export default function TopTechnicians({ avatar, fullName, expertise, rate }) {
         </Box>
 
         {/* Right Side (icon + rate) */}
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography mt={1} mr={1} color="text.secondary">
+        <Box sx={{ display: "flex", alignItems: "center", gap:1 }}>
+          <Typography color="text.secondary" mt={1}>
             {rate}4.9
           </Typography>
-          <StarIcon sx={{ fontSize: 30, color: "secondary.main" }}></StarIcon>
+          <StarIcon sx={{ fontSize: 30, color: "secondary.main" }} />
         </Box>
       </Box>
       <Divider
