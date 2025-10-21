@@ -31,7 +31,7 @@ export default function TopTechnicians({ avatar, fullName, expertise, rate }) {
       <Box sx={{ display: "flex", justifyContent: "space-between", mt:5}}>
         {/* Left Side (avatar + fullName + expertise) */}
         <Box sx={{ display: "flex" }}>
-          <Avatar alt={fullName} src={avatar} sx={{ width: 45, height: 45 }} />
+          <Avatar alt={fullName} src={avatar} sx={{ width: 50, height: 50 }} />
           <Box
             sx={{
               display: "flex",
@@ -40,15 +40,15 @@ export default function TopTechnicians({ avatar, fullName, expertise, rate }) {
               alignItems: "flex-start",
             }}
           >
-            <Typography>{fullName}عرفان نشاطی</Typography>
-            <Typography>تخصص:{expertise}</Typography>
+            <Typography>{fullName}</Typography>
+            <Typography variant="caption" mt={.5} color="text.dark">تخصص: {expertise}</Typography>
           </Box>
         </Box>
 
         {/* Right Side (icon + rate) */}
         <Box sx={{ display: "flex", alignItems: "center", gap:1 }}>
           <Typography color="text.secondary" mt={1}>
-            {rate}4.9
+            {rate}
           </Typography>
           <StarIcon sx={{ fontSize: 30, color: "secondary.main" }} />
         </Box>

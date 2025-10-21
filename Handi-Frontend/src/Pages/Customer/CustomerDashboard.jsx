@@ -35,7 +35,9 @@ export default function CustomerDashboard() {
 
       {/* Chart & Technicians */}
       <Box mt={4}>
-        <TopTechnicians />
+        <TopTechnicians fullName="عرفان نشاطی" expertise="یخچال" rate="4.9" avatar="https://i.pravatar.cc/500?img=12" />
+        <TopTechnicians fullName="امیر امیری" expertise="لباسشویی" rate="2.9" avatar="https://i.pravatar.cc/500?img=13" />
+        <TopTechnicians fullName="احمد احمدی" expertise="کلی" rate="4" avatar="https://i.pravatar.cc/500?img=8" />
       </Box>
     </Box>
   );
