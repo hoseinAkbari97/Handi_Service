@@ -9,7 +9,7 @@ export default function ActiveRequestCard() {
         backgroundColor: "primary.main",
         border: "solid 2px",
         borderColor: "secondary.main",
-        color: "#fff",
+        color: "text.primary",
         p: 3,
         borderRadius: 3,
         textAlign: "center",
