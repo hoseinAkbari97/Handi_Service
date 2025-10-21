@@ -9,6 +9,12 @@ import Header from "./Components/Header";
 export default function CustomerDashboard() {
   const [open, setOpen] = useState(false);
 
+  const technicians = [
+    { fullName: "عرفان نشاطی", expertise: "یخچال", rate: "4.9", avatar: "https://i.pravatar.cc/500?img=12" },
+    { fullName: "امیر امیری", expertise: "لباسشویی", rate: "2.9", avatar: "https://i.pravatar.cc/500?img=13" },
+    { fullName: "احمد احمدی", expertise: "کلی", rate: "4", avatar: "https://i.pravatar.cc/500?img=8" },
+  ];
+
   return (
     <Box sx={{ backgroundColor: "#F5EDE1", minHeight: "100vh", p: 2 }}>
       <Header />
@@ -34,11 +40,7 @@ export default function CustomerDashboard() {
       </Box> */}
 
       {/* Chart & Technicians */}
-      <Box mt={4}>
-        <TopTechnicians fullName="عرفان نشاطی" expertise="یخچال" rate="4.9" avatar="https://i.pravatar.cc/500?img=12" />
-        <TopTechnicians fullName="امیر امیری" expertise="لباسشویی" rate="2.9" avatar="https://i.pravatar.cc/500?img=13" />
-        <TopTechnicians fullName="احمد احمدی" expertise="کلی" rate="4" avatar="https://i.pravatar.cc/500?img=8" />
-      </Box>
+        <TopTechnicians technicians={technicians} />
     </Box>
   );
 }
