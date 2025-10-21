@@ -2,9 +2,10 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    primary: {main: "#D96C2B"},
-    secondary: {main: "#ff9800"},
-    background: {default: "#f9f9f9"}
+    primary: {main: "#1A423A"},
+    secondary: {main: "#D4AF37"},
+    background: {default: "#EFE6D5", paper:"#e6f7f7" },
+    text:{primary: "#FFFFFF", secondary:"#D9B55A", contrastText:"#0A3D3F"}
   },
   typography: {fontFamily: `'vazirmatn', Roboto, Arial`},
   direction: "rtl",

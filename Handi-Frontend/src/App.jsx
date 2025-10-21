@@ -1,12 +1,23 @@
-import { ThemeProvider, CssBaseline} from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import theme from "./Theme/Theme";
-import MainLayout from "./Layout/MainLayout";
+import Home from "./Pages/Home";
 import Login from "./Pages/Login";
+import Customer from "./Pages/Customer/CustomerDashboard";
+import Technicians from "./Pages/Technicians";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Login></Login>
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/customer" element={<Customer />} />
+          <Route path="/technicians" element={<Technicians />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
