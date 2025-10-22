@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Drawer } from "@mui/material";
+import { Box, Drawer, IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import ActiveRequestCard from "./Components/ActiveRequestCard";
 import SummaryCard from "./Components/SummaryCard";
 import TopTechnicians from "./Components/TopTechnicians";
@@ -8,20 +9,11 @@ import Sidebar from "../../Layout/Sidebar";
 import Technicians from "../../Datas";
 
 export default function CustomerDashboard() {
-  const [open, setOpen] = useState(false);
-
-  const technicians = Technicians
-
   return (
-    <Box sx={{ backgroundColor: "#F5EDE1", minHeight: "100vh", p: 2 }}>
+    <Box sx={{ backgroundColor: "background.default", minHeight: "100vh", p: 2 }}>
 
       {/* Heaedr */}
       <Header />
-
-      {/* Drawer */}
-      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-        <Sidebar onClose={() => setOpen(false)} />
-      </Drawer>
 
       {/* Active Request */}
       <ActiveRequestCard />
@@ -39,7 +31,7 @@ export default function CustomerDashboard() {
       </Box>
 
       {/* Top Technicians */}
-        <TopTechnicians technicians={technicians} />
+        <TopTechnicians technicians={Technicians} />
     </Box>
   );
 }
