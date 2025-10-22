@@ -4,7 +4,7 @@ import ActiveRequestCard from "./Components/ActiveRequestCard";
 import SummaryCard from "./Components/SummaryCard";
 import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
-import Technicians from "../../Datas";
+import {TechniciansList} from "../../Datas";
 
 export default function CustomerDashboard() {
   return (
@@ -29,7 +29,7 @@ export default function CustomerDashboard() {
       </Box>
 
       {/* Top Technicians */}
-        <TopTechnicians technicians={Technicians} />
+        <TopTechnicians technicians={TechniciansList} />
     </Box>
   );
 }
