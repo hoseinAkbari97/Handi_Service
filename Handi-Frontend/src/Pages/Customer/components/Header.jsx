@@ -8,9 +8,9 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   const user = {
-    name: "عرفان نشاطی",
+    name: "محمد محمدی",
     role: "customer",
-    avatar: "https://i.pravatar.cc/500?img=12",
+    avatar: "https://i.pravatar.cc/500?img=52",
   };
 
 
@@ -25,12 +25,9 @@ export default function Header() {
         <IconButton
           onClick={() => setOpen(true)}
           sx={{
-            position: "fixed",
-            top: 16,
-            right: 16,
-            backgroundColor: "#004d40",
-            color: "#fff",
-            "&:hover": { backgroundColor: "#00695c" },
+            backgroundColor: "primary.main",
+            color: "secondary.main",
+            "&:hover": { backgroundColor: "primary.light" },
           }}
         >
           <MenuIcon />
@@ -51,7 +48,7 @@ export default function Header() {
         </Button>
       </Box>
       <Typography variant="h6" fontWeight="bold" color="primary">
-        داشبورد
+        پنل مشتری
       </Typography>
     </Box>
   );

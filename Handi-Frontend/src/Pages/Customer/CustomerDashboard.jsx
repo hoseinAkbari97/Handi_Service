@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { Box, Drawer, IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import React from "react";
+import { Box } from "@mui/material";
 import ActiveRequestCard from "./Components/ActiveRequestCard";
 import SummaryCard from "./Components/SummaryCard";
 import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
-import Sidebar from "../../Layout/Sidebar";
 import Technicians from "../../Datas";
 
 export default function CustomerDashboard() {
