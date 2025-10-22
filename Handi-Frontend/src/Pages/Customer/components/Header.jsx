@@ -35,7 +35,7 @@ export default function Header() {
 
         {/* Drawer */}
         <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-          <Sidebar role="customer" user={user} onClose={() => setOpen(false)} />
+          <Sidebar role={user.role} user={user} onClose={() => setOpen(false)} />
         </Drawer>
 
         <Button

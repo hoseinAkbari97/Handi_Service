@@ -54,8 +54,8 @@ export default function Login() {
 
   const verifyHandler = () => {
     if (code === "1234") {
-      if (role === "Customer") navigate("/customer");
-      else if (role === "Technicians") navigate("/technicians");
+      if (role === "customer") navigate("/customer");
+      else if (role === "technician") navigate("/technicians");
     } else {
       alert("کد تأیید اشتباه است");
     }
@@ -145,8 +145,8 @@ export default function Login() {
                   },
                 }}
               >
-                <MenuItem value={"Customer"}>کاربر</MenuItem>
-                <MenuItem value={"Technicians"}>تکنسین</MenuItem>
+                <MenuItem value={"customer"}>کاربر</MenuItem>
+                <MenuItem value={"technician"}>تکنسین</MenuItem>
               </Select>
             </FormControl>
 

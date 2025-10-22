@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
-  Drawer,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
   Avatar,
-  IconButton,
   Divider,
   Button,
 } from "@mui/material";
@@ -19,7 +17,6 @@ import {
   Wallet as WalletIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
-  Menu as MenuIcon,
   People as PeopleIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
@@ -39,8 +36,10 @@ export default function Sidebar({ role, user, onClose }) {
     technician: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/technician/dashboard" },
       { text: "درخواست‌ها", icon: <AssignmentIcon />, path: "/technician/requests" },
-      { text: "مشتریان من", icon: <PeopleIcon />, path: "/technician/customers" },
-      { text: "کیف پول", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "تقویم کاری", icon: <PeopleIcon />, path: "/technician/customers" },
+      { text: "گزارش گیری", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "پیام ها", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "پروفایل", icon: <WalletIcon />, path: "/technician/wallet" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],
   };
