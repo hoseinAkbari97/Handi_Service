@@ -28,7 +28,7 @@ export default function CustomerDashboard() {
       <ActiveRequestCard />
 
       {/* Summary Section */}
-      {/* <Box mt={3} display="grid" gap={1}>
+      <Box mt={3} display="grid" gap={1}>
         <SummaryCard iconType="requests" label="کل درخواست‌ها" value="۲۴" />
         <SummaryCard iconType="done" label="خدمات انجام‌شده" value="۱۸" />
         <SummaryCard
@@ -37,7 +37,7 @@ export default function CustomerDashboard() {
           value="۵۵۰,۰۰۰ تومان"
         />
         <SummaryCard iconType="points" label="امتیاز کلاب" value="۱۲۰" />
-      </Box> */}
+      </Box>
 
       {/* Chart & Technicians */}
         <TopTechnicians technicians={technicians} />
