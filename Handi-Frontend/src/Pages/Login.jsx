@@ -85,7 +85,6 @@ export default function Login() {
             src="../../public/pictures/Handi-Logo.png"
             alt="Logo"
             height={150}
-            sx={{ color: "#fff" }}
           />
         </Box>
         <Typography variant="h5" gutterBottom align="center">
@@ -94,7 +93,7 @@ export default function Login() {
 
         {step === "login" ? (
           <>
-            <Typography variant="body1" gutterBottom align="center">
+            <Typography variant="body1" gutterBottom align="center" mb={4}>
               ورود به حساب کاربری
             </Typography>
 

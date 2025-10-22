@@ -5,7 +5,7 @@ import SummaryCard from "./Components/SummaryCard";
 import Requests from "./Components/Requests";
 import {RequestsList} from "../../Datas";
 
-export default function CustomerDashboard() {
+export default function TechniciansDashboard() {
   return (
     <Box
       sx={{ backgroundColor: "background.default", minHeight: "100vh", p: 2 }}
