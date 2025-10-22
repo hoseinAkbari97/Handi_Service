@@ -15,6 +15,7 @@ build/
 *.env.local
 .env.development
 .env.production
+Handi-Frontend/src/Datas.js
 Handi-Frontend/.vite/
 Handi-Frontend/.env
 

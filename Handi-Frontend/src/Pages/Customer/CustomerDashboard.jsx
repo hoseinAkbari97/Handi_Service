@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 import { Box, Drawer } from "@mui/material";
-import Sidebar from "./Components/Sidebar";
 import ActiveRequestCard from "./Components/ActiveRequestCard";
 import SummaryCard from "./Components/SummaryCard";
 import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
+import Sidebar from "../../Layout/Sidebar";
+import Technicians from "../../Datas";
 
 export default function CustomerDashboard() {
   const [open, setOpen] = useState(false);
 
-  const technicians = [
-    { fullName: "عرفان نشاطی", expertise: "یخچال", rate: "4.9", avatar: "https://i.pravatar.cc/500?img=12" },
-    { fullName: "امیر امیری", expertise: "لباسشویی", rate: "2.9", avatar: "https://i.pravatar.cc/500?img=13" },
-    { fullName: "احمد احمدی", expertise: "کلی", rate: "4", avatar: "https://i.pravatar.cc/500?img=8" },
-  ];
+  const technicians = Technicians
 
   return (
     <Box sx={{ backgroundColor: "#F5EDE1", minHeight: "100vh", p: 2 }}>
+
+      {/* Heaedr */}
       <Header />
 
       {/* Drawer */}
@@ -39,7 +38,7 @@ export default function CustomerDashboard() {
         <SummaryCard iconType="points" label="امتیاز کلاب" value="۱۲۰" />
       </Box>
 
-      {/* Chart & Technicians */}
+      {/* Top Technicians */}
         <TopTechnicians technicians={technicians} />
     </Box>
   );
