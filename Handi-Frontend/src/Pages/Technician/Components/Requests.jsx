@@ -1,6 +1,5 @@
 import { Box, Paper, Typography, Avatar, Divider } from "@mui/material";
 import React from "react";
-import StarIcon from "@mui/icons-material/Star";
 
 export default function Requests({ requests }) {
   return (
