@@ -47,13 +47,11 @@ export default function TechniciansDashboard() {
           sx={{
             flexGrow: "1",
             display: { lg: "grid" },
-            gridTemplateColumns: { lg: "1.5fr 1fr", xl: "1fr 1fr 1fr" },
-            gridTemplateRows: { lg: "auto auto", xl: "auto" },
+            gridTemplateColumns: { lg: "1fr 1fr" },
+            gridTemplateRows: { lg: "auto" },
             gap: 1,
             gridTemplateAreas: {
-              lg: `"active summary"
-                 "topTech summary"`,
-              xl: `"active topTech summary"`,
+              lg: `"summary req"`,
             },
           }}
         >
@@ -67,7 +65,7 @@ export default function TechniciansDashboard() {
               md: "1fr 1fr",
               lg: "1fr",
             }}
-            sx={{ gridArea: { lg: "summary", xl: "summary" } }}
+            sx={{ gridArea: "summary" }}
           >
             <SummaryCard
               iconType="workDone"
@@ -92,7 +90,7 @@ export default function TechniciansDashboard() {
           {/* New Requests */}
           <Box
             sx={{
-              gridArea: { lg: "topTech", xl: "topTech" },
+              gridArea: "req",
               mt: { xs: 2, lg: 0 },
             }}
           >
