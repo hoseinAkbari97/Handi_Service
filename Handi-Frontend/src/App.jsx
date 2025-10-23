@@ -4,7 +4,7 @@ import theme from "./Theme/Theme";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Customer from "./Pages/Customer/CustomerDashboard";
-import Technicians from "./Pages/Technicians";
+import Technicians from "./Pages/Technician/Technicians";
 
 function App() {
   return (

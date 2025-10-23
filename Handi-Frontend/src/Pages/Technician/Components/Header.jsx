@@ -3,16 +3,16 @@ import { Box, IconButton, Button, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import Sidebar from "../../../Layout/Sidebar";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
 
   const user = {
     name: "محمد محمدی",
-    role: "customer",
+    role: "technician",
     avatar: "https://i.pravatar.cc/500?img=52",
   };
-
 
   return (
     <Box
@@ -32,24 +32,19 @@ export default function Header() {
         >
           <MenuIcon />
         </IconButton>
-
-        {/* Drawer */}
-        <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-          <Sidebar role={user.role} user={user} onClose={() => setOpen(false)} />
-        </Drawer>
-
-        <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<AddIcon />}
-          sx={{ borderRadius: 1.5 }}
-        >
-          درخواست تعمیر جدید
-        </Button>
+        <IconButton>
+          <NotificationsIcon color="primary" fontSize="large" />
+        </IconButton>
       </Box>
+
       <Typography variant="h6" fontWeight="bold" color="primary">
-        پنل مشتری
+        پنل تعمیرکار
       </Typography>
+
+      {/* Drawer */}
+      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
+        <Sidebar role={user.role} user={user} onClose={() => setOpen(false)} />
+      </Drawer>
     </Box>
   );
 }

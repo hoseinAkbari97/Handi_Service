@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
-  Drawer,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
   Avatar,
-  IconButton,
   Divider,
   Button,
 } from "@mui/material";
@@ -19,7 +17,6 @@ import {
   Wallet as WalletIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
-  Menu as MenuIcon,
   People as PeopleIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
@@ -29,7 +26,7 @@ export default function Sidebar({ role, user, onClose }) {
 
   const menuItems = {
     customer: [
-      { text: "داشبورد", icon: <HomeIcon />, path: "/customer/dashboard" },
+      { text: "داشبورد", icon: <HomeIcon />, path: "/customer" },
       { text: "درخواست‌های من", icon: <AssignmentIcon />, path: "/customer/requests" },
       { text: "تعمیرکاران", icon: <BuildIcon />, path: "/customer/technicians" },
       { text: "کیف پول", icon: <WalletIcon />, path: "/customer/wallet" },
@@ -37,10 +34,12 @@ export default function Sidebar({ role, user, onClose }) {
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/customer/settings" },
     ],
     technician: [
-      { text: "داشبورد", icon: <HomeIcon />, path: "/technician/dashboard" },
+      { text: "داشبورد", icon: <HomeIcon />, path: "/technician" },
       { text: "درخواست‌ها", icon: <AssignmentIcon />, path: "/technician/requests" },
-      { text: "مشتریان من", icon: <PeopleIcon />, path: "/technician/customers" },
-      { text: "کیف پول", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "تقویم کاری", icon: <PeopleIcon />, path: "/technician/customers" },
+      { text: "گزارش گیری", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "پیام ها", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "پروفایل", icon: <WalletIcon />, path: "/technician/wallet" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],
   };
