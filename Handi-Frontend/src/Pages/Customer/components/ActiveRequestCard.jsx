@@ -16,8 +16,8 @@ export default function ActiveRequestCard() {
         boxShadow: 3,
         m: "0 auto",
         width:{
-          xs:"1fr",
-          sm:"70%",
+          xs:"100%",
+          sm:"100%",
           md:"700px"
         }
       }}

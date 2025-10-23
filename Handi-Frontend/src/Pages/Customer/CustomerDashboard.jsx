@@ -14,22 +14,19 @@ export default function CustomerDashboard() {
       sx={{
         backgroundColor: "background.default",
         minHeight: "100vh",
+        maxWidth:"100%",
         display: "flex",
-        gap:2
+        gap:1
       }}
     >
       {/* SideBar display: desktop & tablet */}
       <Box
         sx={{
           display: { xs: "none", sm: "block" },
-          width: 240,
           flexShrink: 0,
-          borderRight: "1px solid",
-          borderColor: "divider",
           height: "100vh",
           position: "sticky",
           top: 0,
-          backgroundColor: "background.paper",
         }}
       >
         <Sidebar role={UsersList[0].role} user={UsersList[0]} />
@@ -41,8 +38,6 @@ export default function CustomerDashboard() {
         sx={{
           flexGrow: 1,
           p: 2,
-          display: "flex",
-          flexDirection: "column",
         }}
       >
         {/* Heaedr */}
