@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Box, IconButton, Button, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import AddIcon from "@mui/icons-material/Add";
 import Sidebar from "../../../Layout/Sidebar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { UsersList } from "../../../Datas";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -42,8 +42,8 @@ export default function Header() {
       </Typography>
 
       {/* Drawer */}
-      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-        <Sidebar role={user.role} user={user} onClose={() => setOpen(false)} />
+      <Drawer anchor="left" open={open} onClose={() => setOpen(false)} sx={{display:{xs:"block", sm:"none"} }} >
+        <Sidebar role={UsersList[0].role} user={UsersList[0]} onClose={() => setOpen(false)} />
       </Drawer>
     </Box>
   );
