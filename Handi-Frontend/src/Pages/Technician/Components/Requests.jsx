@@ -8,7 +8,7 @@ export default function Requests({ requests }) {
         backgroundColor: "primary.main",
         color: "text.primary",
         p: 3,
-        mt:3,
+        mt:{xl:"0"},
         borderRadius: 3,
         textAlign: "center",
         boxShadow: 3,
@@ -22,7 +22,7 @@ export default function Requests({ requests }) {
           color="text.secondary"
           sx={{ fontWeight: "bold" }}
         >
-          تعمیرکاران برتر
+          درخواست‌های اخیر
         </Typography>
       </Box>
 

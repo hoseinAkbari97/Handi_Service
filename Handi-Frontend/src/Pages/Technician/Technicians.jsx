@@ -3,38 +3,103 @@ import { Box } from "@mui/material";
 import Header from "./Components/Header";
 import SummaryCard from "./Components/SummaryCard";
 import Requests from "./Components/Requests";
-import {RequestsList} from "../../Datas";
+import { RequestsList } from "../../Datas";
+import { UsersList } from "../../Datas";
+import Sidebar from "../../Layout/Sidebar";
 
 export default function TechniciansDashboard() {
   return (
     <Box
-      sx={{ backgroundColor: "background.default", minHeight: "100vh", p: 2 }}
+    sx={{
+      backgroundColor: "background.default",
+      minHeight: "100vh",
+      display: "flex",
+      gap: 1,
+    }}
     >
-      {/* Heaedr */}
-      <Header />
-
-      {/* Summary Section */}
-      <Box mt={3} display="grid" gap={1}>
-        <SummaryCard iconType="workDone" label="کارهای انجام شده" value="۱۲" />
-        <SummaryCard
-          iconType="Income"
-          label="درآمد این ماه"
-          value="۴,۵۰۰,۰۰۰ تومان"
-        />
-        <SummaryCard iconType="rate" label="میانگین امتیاز" value="۴.۹" />
-        <SummaryCard
-          iconType="clock"
-          label="میانگین زمان پاسخگویی"
-          value="۲۵ دقیقه"
-        />
+      {/* SideBar display: desktop & tablet */}
+      <Box
+        sx={{
+          display: { xs: "none", sm: "block" },
+          height: "100vh",
+          position: "sticky",
+          top: 0,
+        }}
+      >
+        <Sidebar role={UsersList[0].role} user={UsersList[0]} />
       </Box>
 
-      {/* Income Chart */}
+      {/* Main Content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 2,
+          overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Heaedr */}
+        <Header />
 
+        <Box
+          sx={{
+            flexGrow: "1",
+            display: { lg: "grid" },
+            gridTemplateColumns: { lg: "1.5fr 1fr", xl: "1fr 1fr 1fr" },
+            gridTemplateRows: { lg: "auto auto", xl: "auto" },
+            gap: 1,
+            gridTemplateAreas: {
+              lg: `"active summary"
+                 "topTech summary"`,
+              xl: `"active topTech summary"`,
+            },
+          }}
+        >
+          {/* Summary Section */}
+          <Box
+            mt={{ xs: 3, lg: 0 }}
+            display="grid"
+            gap={1}
+            gridTemplateColumns={{
+              xs: "1fr",
+              md: "1fr 1fr",
+              lg: "1fr",
+            }}
+            sx={{ gridArea: { lg: "summary", xl: "summary" } }}
+          >
+            <SummaryCard
+              iconType="workDone"
+              label="کارهای انجام شده"
+              value="۱۲"
+            />
+            <SummaryCard
+              iconType="Income"
+              label="درآمد این ماه"
+              value="۴,۵۰۰,۰۰۰ تومان"
+            />
+            <SummaryCard iconType="rate" label="میانگین امتیاز" value="۴.۹" />
+            <SummaryCard
+              iconType="clock"
+              label="میانگین زمان پاسخگویی"
+              value="۲۵ دقیقه"
+            />
+          </Box>
 
-      {/* New Requests */}
-      <Requests requests={RequestsList} />
+          {/* Income Chart */}
 
+          {/* New Requests */}
+          <Box
+            sx={{
+              gridArea: { lg: "topTech", xl: "topTech" },
+              mt: { xs: 2, lg: 0 },
+            }}
+          >
+            <Requests requests={RequestsList} />
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

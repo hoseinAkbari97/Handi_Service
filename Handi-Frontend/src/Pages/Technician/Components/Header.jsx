@@ -8,12 +8,6 @@ import { UsersList } from "../../../Datas";
 export default function Header() {
   const [open, setOpen] = useState(false);
 
-  const user = {
-    name: "محمد محمدی",
-    role: "technician",
-    avatar: "https://i.pravatar.cc/500?img=52",
-  };
-
   return (
     <Box
       display="flex"
@@ -25,6 +19,7 @@ export default function Header() {
         <IconButton
           onClick={() => setOpen(true)}
           sx={{
+            display:{xs:"flex", sm:"none"},
             backgroundColor: "primary.main",
             color: "secondary.main",
             "&:hover": { backgroundColor: "primary.light" },
