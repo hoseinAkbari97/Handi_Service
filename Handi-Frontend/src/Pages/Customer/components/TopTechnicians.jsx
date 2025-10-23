@@ -9,7 +9,7 @@ export default function TopTechnicians({ technicians }) {
         backgroundColor: "primary.main",
         color: "text.primary",
         p: 3,
-        mt:3,
+        mt:{xl:"0"},
         borderRadius: 3,
         textAlign: "center",
         boxShadow: 3,
