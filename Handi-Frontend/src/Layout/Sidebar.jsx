@@ -26,7 +26,7 @@ export default function Sidebar({ role, user, onClose }) {
 
   const menuItems = {
     customer: [
-      { text: "داشبورد", icon: <HomeIcon />, path: "/customer/dashboard" },
+      { text: "داشبورد", icon: <HomeIcon />, path: "/customer" },
       { text: "درخواست‌های من", icon: <AssignmentIcon />, path: "/customer/requests" },
       { text: "تعمیرکاران", icon: <BuildIcon />, path: "/customer/technicians" },
       { text: "کیف پول", icon: <WalletIcon />, path: "/customer/wallet" },
@@ -34,7 +34,7 @@ export default function Sidebar({ role, user, onClose }) {
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/customer/settings" },
     ],
     technician: [
-      { text: "داشبورد", icon: <HomeIcon />, path: "/technician/dashboard" },
+      { text: "داشبورد", icon: <HomeIcon />, path: "/technician" },
       { text: "درخواست‌ها", icon: <AssignmentIcon />, path: "/technician/requests" },
       { text: "تقویم کاری", icon: <PeopleIcon />, path: "/technician/customers" },
       { text: "گزارش گیری", icon: <WalletIcon />, path: "/technician/wallet" },
