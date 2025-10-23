@@ -14,6 +14,12 @@ export default function ActiveRequestCard() {
         borderRadius: 3,
         textAlign: "center",
         boxShadow: 3,
+        m: "0 auto",
+        width:{
+          xs:"1fr",
+          sm:"70%",
+          md:"700px"
+        }
       }}
     >
       <Typography variant="h5" color="secondary" sx={{ mb: 2, fontWeight:"bold" }}>
@@ -24,7 +30,7 @@ export default function ActiveRequestCard() {
       <Typography variant="h5" color="secondary" sx={{ mt: 2, fontWeight:"bold" }}>
         هزینه: ۲۵۰,۰۰۰ تومان
       </Typography>
-      <Button variant="contained" fullWidth color="secondary" sx={{ mt: 2, borderRadius: 1.5, fontSize: 17 }}>
+      <Button variant="contained" color="secondary" sx={{ mt: 2, borderRadius: 1.5, fontSize: 17, width:{xs:"100%", sm:"70%", md:"350px" } }}>
         پرداخت هزینه
       </Button>
     </Box>
