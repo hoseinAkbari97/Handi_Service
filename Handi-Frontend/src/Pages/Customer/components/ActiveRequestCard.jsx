@@ -15,11 +15,7 @@ export default function ActiveRequestCard() {
         textAlign: "center",
         boxShadow: 3,
         m: "0 auto",
-        width:{
-          xs:"100%",
-          sm:"100%",
-          md:"700px"
-        }
+        width:"100%"
       }}
     >
       <Typography variant="h5" color="secondary" sx={{ mb: 2, fontWeight:"bold" }}>

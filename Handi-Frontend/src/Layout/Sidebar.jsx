@@ -48,6 +48,7 @@ export default function Sidebar({ role, user, onClose }) {
     <Box
       sx={{
         width: 260,
+        flexShrink:0,
         bgcolor: "primary.main",
         color: "text.primary",
         height: "100%",

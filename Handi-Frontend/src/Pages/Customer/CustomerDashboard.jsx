@@ -14,7 +14,6 @@ export default function CustomerDashboard() {
       sx={{
         backgroundColor: "background.default",
         minHeight: "100vh",
-        maxWidth:"100%",
         display: "flex",
         gap:1
       }}
@@ -23,7 +22,6 @@ export default function CustomerDashboard() {
       <Box
         sx={{
           display: { xs: "none", sm: "block" },
-          flexShrink: 0,
           height: "100vh",
           position: "sticky",
           top: 0,
@@ -38,6 +36,7 @@ export default function CustomerDashboard() {
         sx={{
           flexGrow: 1,
           p: 2,
+          overflowX:"hidden"
         }}
       >
         {/* Heaedr */}
