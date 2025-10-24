@@ -101,9 +101,7 @@ export default function Login() {
               <InputLabel
                 id="demo-simple-select-label"
                 sx={{
-                  // ⚪ تغییر رنگ Label در حالت عادی
                   color: "secondary.main",
-                  // 🔵 تغییر رنگ Label در حالت فوکوس (Mui-focused)
                   "&.Mui-focused": {
                     color: "secondary.dark",
                   },
@@ -127,7 +125,7 @@ export default function Login() {
                     },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: "secondary.dark",
-                    borderWidth: "2px", // 👈 حتماً ضخامت را تعریف کنید!
+                    borderWidth: "2px",
                   },
                 }}
                 MenuProps={{
@@ -183,15 +181,15 @@ export default function Login() {
                 mt: 2,
                 py: 1.2,
                 "&.MuiButton-containedPrimary": {
-                  backgroundColor: "secondary.main", // 👈 استفاده از رنگ اصلی تم برای پس‌زمینه
-                  color: "text", // 👈 استفاده از رنگ سفید برای متن
+                  backgroundColor: "secondary.main",
+                  color: "text",
                 },
                 "&.MuiButton-containedPrimary:hover": {
-                  backgroundColor: "secondary.light", // 👈 کمی تیره‌تر در حالت Hover
+                  backgroundColor: "secondary.light",
                 },
                 "&.Mui-disabled": {
-                  backgroundColor: "secondary.dark", // 👈 رنگ پس‌زمینه دلخواه شما (مثلاً یک خاکستری روشن)
-                  color: "text.contrastText", // 👈 رنگ متن دکمه در حالت Disabled
+                  backgroundColor: "secondary.dark",
+                  color: "text.contrastText",
                 },
               }}
             >
