@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Container, Grid, Typography, Card, CardContent, CardMedia } from "@mui/material";
 import Header from "./Components/Header";
+import HeroSection from "./Components/HeroSection";
 import { Build, Star, SupportAgent, Bolt, WorkspacePremium } from "@mui/icons-material";
 
 export default function Home() {
@@ -12,7 +13,11 @@ export default function Home() {
         <Header/>
       </Box>
 
-      
+      {/* Hero Section */}
+      <Box>
+        <HeroSection />
+      </Box>
+
     </Box>
   );
 }
