@@ -6,6 +6,7 @@ import PopularService from "./Components/PopularService";
 import WhyUs from "./Components/WhyUs";
 import { Build, Star, SupportAgent, Bolt, WorkspacePremium } from "@mui/icons-material";
 import CTA from "./Components/CTA";
+import Footer from "./Components/Footer";
 
 export default function Home() {
   return (
@@ -34,6 +35,11 @@ export default function Home() {
       {/* CTA */}
       <Box>
         <CTA />
+      </Box>
+
+      {/* Footer */}
+      <Box>
+        <Footer />
       </Box>
 
     </Box>
