@@ -5,6 +5,7 @@ import HeroSection from "./Components/HeroSection";
 import PopularService from "./Components/PopularService";
 import WhyUs from "./Components/WhyUs";
 import { Build, Star, SupportAgent, Bolt, WorkspacePremium } from "@mui/icons-material";
+import CTA from "./Components/CTA";
 
 export default function Home() {
   return (
@@ -28,6 +29,11 @@ export default function Home() {
       {/* Why us? */}
       <Box>
         <WhyUs />
+      </Box>
+
+      {/* CTA */}
+      <Box>
+        <CTA />
       </Box>
 
     </Box>
