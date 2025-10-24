@@ -11,6 +11,7 @@ import {
   Select,
 } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
+import HandymanIcon from '@mui/icons-material/Handyman';
 
 export default function Login() {
   const [role, setRole] = useState("");
@@ -81,11 +82,8 @@ export default function Login() {
         }}
       >
         <Box display={"flex"} justifyContent={"center"} sx={{ mb: 2 }}>
-          <img
-            src="../../public/pictures/Handi-Logo.png"
-            alt="Logo"
-            height={150}
-          />
+          <HandymanIcon sx={{height: 110, width:110, mb:3}} />
+
         </Box>
         <Typography variant="h5" gutterBottom align="center">
           سیستم تعمیرات لوازم خانگی
