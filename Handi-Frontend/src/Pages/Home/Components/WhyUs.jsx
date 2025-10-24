@@ -7,7 +7,7 @@ export default function WhyUs() {
     <Box sx={{ backgroundColor: "primary.main", py: 6 }}>
     <Container>
       <Typography variant="h5" align="center" fontWeight="bold" mb={4} color="secondary.main">
-        چرا Handy Service؟
+        چرا Handi Service؟
       </Typography>
       <Grid container spacing={3} justifyContent="center">
         {[

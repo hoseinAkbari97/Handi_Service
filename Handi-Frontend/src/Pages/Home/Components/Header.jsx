@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Button, Typography } from "@mui/material";
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   return (
@@ -14,17 +15,20 @@ export default function Header() {
           color: "text.primary",
         }}
       >
-        <Typography variant="h6" fontWeight="bold">
-          Handy Service
-        </Typography>
         <Box>
+          <Link to="/login">
           <Button color="secondary" variant="contained" sx={{ mx: 1 }}>
             ورود
           </Button>
+          </Link>
+          
           <Button color="secondary" variant="outlined" sx={{ mx: 1 }}>
             ثبت‌نام
           </Button>
         </Box>
+        <Typography variant="h6" fontWeight="bold" color="text.secondary">
+          Handi Service
+        </Typography>
       </Box>
   )
 }
