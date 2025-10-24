@@ -3,6 +3,7 @@ import { Box, Button, Container, Grid, Typography, Card, CardContent, CardMedia 
 import Header from "./Components/Header";
 import HeroSection from "./Components/HeroSection";
 import PopularService from "./Components/PopularService";
+import WhyUs from "./Components/WhyUs";
 import { Build, Star, SupportAgent, Bolt, WorkspacePremium } from "@mui/icons-material";
 
 export default function Home() {
@@ -22,6 +23,11 @@ export default function Home() {
       {/* Popular service */}
       <Box>
         <PopularService />
+      </Box>
+
+      {/* Why us? */}
+      <Box>
+        <WhyUs />
       </Box>
 
     </Box>
