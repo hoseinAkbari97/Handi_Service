@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { Box, IconButton, Button, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import AddIcon from "@mui/icons-material/Add";
 import Sidebar from "../../../Layout/Sidebar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { UsersList } from "../../../Datas";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-
-  const user = {
-    name: "محمد محمدی",
-    role: "technician",
-    avatar: "https://i.pravatar.cc/500?img=52",
-  };
 
   return (
     <Box
@@ -25,6 +19,7 @@ export default function Header() {
         <IconButton
           onClick={() => setOpen(true)}
           sx={{
+            display:{xs:"flex", sm:"none"},
             backgroundColor: "primary.main",
             color: "secondary.main",
             "&:hover": { backgroundColor: "primary.light" },
@@ -42,8 +37,8 @@ export default function Header() {
       </Typography>
 
       {/* Drawer */}
-      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-        <Sidebar role={user.role} user={user} onClose={() => setOpen(false)} />
+      <Drawer anchor="left" open={open} onClose={() => setOpen(false)} sx={{display:{xs:"block", sm:"none"} }} >
+        <Sidebar role={UsersList[0].role} user={UsersList[0]} onClose={() => setOpen(false)} />
       </Drawer>
     </Box>
   );

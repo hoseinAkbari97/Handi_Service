@@ -1,7 +1,7 @@
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import theme from "./Theme/Theme";
-import Home from "./Pages/Home";
+import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login";
 import Customer from "./Pages/Customer/CustomerDashboard";
 import Technicians from "./Pages/Technician/Technicians";
