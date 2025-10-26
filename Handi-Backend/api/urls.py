@@ -17,9 +17,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    # Example for future routes
-    # path('v1/users/', include('users.urls')),
-    
+    path('auth/', include('core.urls')),
+    path('users/', include('users.urls')),
     # Swagger documentation
     re_path(r'^docs(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
