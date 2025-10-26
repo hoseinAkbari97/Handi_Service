@@ -4,13 +4,13 @@ from .models import Profile
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     # Fields to display in the list view
-    list_display = ('user', 'user_type', 'phone_number', 'city', 'get_user_phone')
+    list_display = ('user', 'user_type', 'city', 'get_user_phone')
     
     # Fields for filtering
     list_filter = ('user_type', 'city')
     
     # Fields for searching
-    search_fields = ('user__phone', 'user__first_name', 'user__last_name', 'phone_number', 'city', 'address')
+    search_fields = ('user__phone', 'user__first_name', 'user__last_name', 'city', 'address')
     
     # Fields that can be edited directly in the list view
     list_editable = ('user_type',)
@@ -21,11 +21,11 @@ class ProfileAdmin(admin.ModelAdmin):
             'fields': ('user', 'user_type', 'get_user_phone')
         }),
         ('Contact Details', {
-            'fields': ('phone_number', 'address', 'city')
+            'fields': ('address', 'city')
         }),
         ('Additional Information', {
             'fields': ('bio',),
-            'classes': ('collapse',)  # Makes this section collapsible
+            'classes': ('collapse',)
         }),
     )
     
@@ -36,9 +36,6 @@ class ProfileAdmin(admin.ModelAdmin):
     def get_user_phone(self, obj):
         return obj.user.phone
     get_user_phone.short_description = 'User Phone'
-    
-    # Custom method to display in list view (alternative to using the method in list_display)
-    # This is already handled by the get_user_phone method above
     
     # Adding some useful admin actions
     actions = ['make_technician', 'make_customer']
