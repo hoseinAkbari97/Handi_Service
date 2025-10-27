@@ -26,7 +26,7 @@ export default function TechniciansDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={UsersList[0].role} user={UsersList[0]} />
+        <Sidebar role={UsersList[1].role} user={UsersList[1]} />
       </Box>
 
       {/* Main Content */}
