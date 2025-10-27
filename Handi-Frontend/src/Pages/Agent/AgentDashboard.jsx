@@ -69,18 +69,18 @@ export default function AgentDashboard() {
           >
             <SummaryCard
               iconType="group"
-              label="کارهای انجام شده"
+              label="تکنسین‌های تیم"
               value="۱۲"
             />
             <SummaryCard
               iconType="checkList"
-              label="درآمد این ماه"
+              label="کارهای فعال امروز"
               value="۴,۵۰۰,۰۰۰ تومان"
             />
-            <SummaryCard iconType="money" label="میانگین امتیاز" value="۴.۹" />
+            <SummaryCard iconType="money" label="درآمد این ماه تیم" value="۴.۹" />
             <SummaryCard
               iconType="rate"
-              label="میانگین زمان پاسخگویی"
+              label="میانگین امتیاز تیم"
               value="۲۵ دقیقه"
             />
           </Box>
