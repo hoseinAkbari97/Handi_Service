@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography, Paper, useTheme } from "@mui/material";
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import GroupsIcon from '@mui/icons-material/Groups';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import StarIcon from '@mui/icons-material/Star';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 // props: iconType, label, value
 export default function SummaryCard({ iconType, label, value }) {
@@ -11,14 +11,14 @@ export default function SummaryCard({ iconType, label, value }) {
   
   const getIcon = () => {
     switch (iconType) {
-      case "workDone":
-        return <FactCheckIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
-      case "Income":
-        return <MonetizationOnIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      case "group":
+        return <GroupsIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      case "checkList":
+        return <AssignmentTurnedInIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       case "rate":
         return <StarIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
-      case "clock":
-        return <WatchLaterIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      case "money":
+        return <AttachMoneyIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       default:
         return <FactCheckIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
     }

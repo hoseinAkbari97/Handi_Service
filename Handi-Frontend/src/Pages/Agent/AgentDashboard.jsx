@@ -68,18 +68,18 @@ export default function AgentDashboard() {
             sx={{ gridArea: "summary" }}
           >
             <SummaryCard
-              iconType="workDone"
+              iconType="group"
               label="کارهای انجام شده"
               value="۱۲"
             />
             <SummaryCard
-              iconType="Income"
+              iconType="checkList"
               label="درآمد این ماه"
               value="۴,۵۰۰,۰۰۰ تومان"
             />
-            <SummaryCard iconType="rate" label="میانگین امتیاز" value="۴.۹" />
+            <SummaryCard iconType="money" label="میانگین امتیاز" value="۴.۹" />
             <SummaryCard
-              iconType="clock"
+              iconType="rate"
               label="میانگین زمان پاسخگویی"
               value="۲۵ دقیقه"
             />
