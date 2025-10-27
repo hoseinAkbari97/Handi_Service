@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import Header from "./Components/Header";
 import SummaryCard from "./Components/SummaryCard";
-import Requests from "./Components/Requests";
+import Works from "./Components/Works";
 import { RequestsList } from "../../Datas";
 import { UsersList } from "../../Datas";
 import Sidebar from "../../Layout/Sidebar";
@@ -70,31 +70,31 @@ export default function AgentDashboard() {
             <SummaryCard
               iconType="group"
               label="تکنسین‌های تیم"
-              value="۱۲"
+              value="۸ نفر"
             />
             <SummaryCard
               iconType="checkList"
               label="کارهای فعال امروز"
-              value="۴,۵۰۰,۰۰۰ تومان"
+              value="۱۲"
             />
-            <SummaryCard iconType="money" label="درآمد این ماه تیم" value="۴.۹" />
+            <SummaryCard iconType="money" label="درآمد این ماه تیم" value="۱۲۰ میلیون تومان" />
             <SummaryCard
               iconType="rate"
               label="میانگین امتیاز تیم"
-              value="۲۵ دقیقه"
+              value="۴.۸"
             />
           </Box>
 
           {/* Income Chart */}
 
-          {/* New Requests */}
+          {/* New Works */}
           <Box
             sx={{
               gridArea: "req",
               mt: { xs: 2, lg: 0 },
             }}
           >
-            <Requests requests={RequestsList} />
+            <Works works={RequestsList} />
           </Box>
         </Box>
       </Box>
