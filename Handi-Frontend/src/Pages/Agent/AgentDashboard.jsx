@@ -2,12 +2,12 @@ import React from "react";
 import { Box } from "@mui/material";
 import Header from "./Components/Header";
 import SummaryCard from "./Components/SummaryCard";
-import Requests from "./Components/Requests";
+import Works from "./Components/Works";
 import { RequestsList } from "../../Datas";
 import { UsersList } from "../../Datas";
 import Sidebar from "../../Layout/Sidebar";
 
-export default function TechniciansDashboard() {
+export default function AgentDashboard() {
   return (
     <Box
     sx={{
@@ -26,7 +26,7 @@ export default function TechniciansDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={UsersList[0].role} user={UsersList[0]} />
+        <Sidebar role={UsersList[1].role} user={UsersList[1]} />
       </Box>
 
       {/* Main Content */}
@@ -68,33 +68,33 @@ export default function TechniciansDashboard() {
             sx={{ gridArea: "summary" }}
           >
             <SummaryCard
-              iconType="workDone"
-              label="کارهای انجام شده"
+              iconType="group"
+              label="تکنسین‌های تیم"
+              value="۸ نفر"
+            />
+            <SummaryCard
+              iconType="checkList"
+              label="کارهای فعال امروز"
               value="۱۲"
             />
+            <SummaryCard iconType="money" label="درآمد این ماه تیم" value="۱۲۰ میلیون تومان" />
             <SummaryCard
-              iconType="Income"
-              label="درآمد این ماه"
-              value="۴,۵۰۰,۰۰۰ تومان"
-            />
-            <SummaryCard iconType="rate" label="میانگین امتیاز" value="۴.۹" />
-            <SummaryCard
-              iconType="clock"
-              label="میانگین زمان پاسخگویی"
-              value="۲۵ دقیقه"
+              iconType="rate"
+              label="میانگین امتیاز تیم"
+              value="۴.۸"
             />
           </Box>
 
           {/* Income Chart */}
 
-          {/* New Requests */}
+          {/* New Works */}
           <Box
             sx={{
               gridArea: "req",
               mt: { xs: 2, lg: 0 },
             }}
           >
-            <Requests requests={RequestsList} />
+            <Works works={RequestsList} />
           </Box>
         </Box>
       </Box>

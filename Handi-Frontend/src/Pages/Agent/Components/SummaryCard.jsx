@@ -1,0 +1,61 @@
+import React from "react";
+import { Box, Typography, Paper, useTheme } from "@mui/material";
+import GroupsIcon from '@mui/icons-material/Groups';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import StarIcon from '@mui/icons-material/Star';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+
+// props: iconType, label, value
+export default function SummaryCard({ iconType, label, value }) {
+  const theme = useTheme();
+  
+  const getIcon = () => {
+    switch (iconType) {
+      case "group":
+        return <GroupsIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      case "checkList":
+        return <AssignmentTurnedInIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      case "rate":
+        return <StarIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      case "money":
+        return <AttachMoneyIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+      default:
+        return <FactCheckIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
+    }
+  };
+
+  return (
+    <Paper
+      elevation={5}
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        p: 2.5,
+        borderRadius: 3,
+        backgroundColor: "primary.main",
+        color: "text.primary",
+        transition: "transform 0.2s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-3px)",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
+        },
+      }}
+    >
+      {/* Left Side (Value + Label) */}
+      <Box m={.75}>
+      <Typography variant="body1">{label}</Typography>
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          sx={{ color: theme.palette.secondary.main }}
+        >
+          {value}
+        </Typography>
+      </Box>
+
+      {/* Right Side (Icon) */}
+      <Box>{getIcon()}</Box>
+    </Paper>
+  );
+}
