@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, IconButton, Button, Typography, Drawer } from "@mui/material";
+import { Box, IconButton, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "../../../Layout/Sidebar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -33,12 +33,12 @@ export default function Header() {
       </Box>
 
       <Typography variant="h6" fontWeight="bold" color="primary">
-        پنل تعمیرکار
+        پنل نماینده
       </Typography>
 
       {/* Drawer */}
       <Drawer anchor="left" open={open} onClose={() => setOpen(false)} sx={{display:{xs:"block", sm:"none"} }} >
-        <Sidebar role={UsersList[1].role} user={UsersList[1]} onClose={() => setOpen(false)} />
+        <Sidebar role={UsersList[2].role} user={UsersList[2]} onClose={() => setOpen(false)} />
       </Drawer>
     </Box>
   );
