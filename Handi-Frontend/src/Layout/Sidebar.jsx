@@ -62,7 +62,7 @@ export default function Sidebar({ role, user, onClose }) {
       {
         text: "تکنسین‌های تیم",
         icon: <AssignmentIcon />,
-        path: "/agent/requests",
+        path: "/agent/team-technicians",
       },
       { text: "مدیریت کارها", icon: <PeopleIcon />, path: "/agent/customers" },
       { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/wallet" },
@@ -107,9 +107,12 @@ export default function Sidebar({ role, user, onClose }) {
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}
           >
-            {role === "technician" ? "تکنسین"
-              : role === "customer" ? "مشتری"
-              : role === "agent" ? "نماینده"
+            {role === "technician"
+              ? "تکنسین"
+              : role === "customer"
+              ? "مشتری"
+              : role === "agent"
+              ? "نماینده"
               : "کاربر مهمان"}
           </Typography>
         </Box>
