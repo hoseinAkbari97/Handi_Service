@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-export default function Sidebar({ role, user, onClose }) {
+export default function Sidebar({ user, onClose }) {
   const menuItems = {
     customer: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/customer" },
@@ -107,11 +107,11 @@ export default function Sidebar({ role, user, onClose }) {
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}
           >
-            {role === "technician"
+            {user.role === "technician"
               ? "تکنسین"
-              : role === "customer"
+              : user.role === "customer"
               ? "مشتری"
-              : role === "agent"
+              : user.role === "agent"
               ? "نماینده"
               : "کاربر مهمان"}
           </Typography>
@@ -120,7 +120,7 @@ export default function Sidebar({ role, user, onClose }) {
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5" }} />
 
         <List>
-          {menuItems[role].map((item, i) => (
+          {menuItems[user.role].map((item, i) => (
             <ListItemButton
               key={i}
               component={Link}
