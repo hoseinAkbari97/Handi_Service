@@ -1,19 +1,25 @@
 import React from "react";
 import TechnicianCard from "../Components/TechnicianCard";
 import { Box } from "@mui/material";
-import {TechniciansList} from "../../../Datas"
+import { TechniciansList } from "../../../Datas";
 
 export default function TeamTechnicians() {
   return (
     <Box
-      display={"flex"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      height={"100%"}
-    >
-      <TechnicianCard technician={TechniciansList[0]}/>
-      {console.log(TechniciansList[0])}
+    sx={{
+      display:"flex" ,
+      justifyContent:"center",
+      alignItems:"center",
+      height:"100%",
+      gap:2
+    }}
       
+    >
+      {TechniciansList.map((technician, index) => (
+        <Box key={index}>
+          <TechnicianCard technician={technician} />
+        </Box>
+      ))}
     </Box>
   );
 }
