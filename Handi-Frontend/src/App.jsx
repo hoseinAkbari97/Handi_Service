@@ -1,24 +1,19 @@
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, useRoutes } from "react-router-dom";
 import theme from "./Theme/Theme";
-import Home from "./Pages/Home/Home";
-import Login from "./Pages/Login";
-import CustomerDashboard from "./Pages/Customer/CustomerDashboard";
-import TechnicianDashboard from "./Pages/Technician/TechnicianDashboard";
-import AgentDashboard from "./Pages/Agent/AgentDashboard"
+import routes from "./routes.jsx";
+
+function AppRoutes() {
+  const router = useRoutes(routes);
+  return router;
+}
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/customer" element={<CustomerDashboard />} />
-          <Route path="/technician" element={<TechnicianDashboard />} />
-          <Route path="/agent" element={<AgentDashboard />} />
-        </Routes>
+        <AppRoutes />
       </BrowserRouter>
     </ThemeProvider>
   );

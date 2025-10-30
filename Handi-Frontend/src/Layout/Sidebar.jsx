@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-export default function Sidebar({ role, user, onClose }) {
+export default function Sidebar({ user, onClose }) {
   const menuItems = {
     customer: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/customer" },
@@ -62,13 +62,13 @@ export default function Sidebar({ role, user, onClose }) {
       {
         text: "تکنسین‌های تیم",
         icon: <AssignmentIcon />,
-        path: "/agent/requests",
+        path: "/agent/team-technicians",
       },
-      { text: "مدیریت کارها", icon: <PeopleIcon />, path: "/agent/customers" },
-      { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/wallet" },
-      { text: "پیام ها", icon: <WalletIcon />, path: "/agent/wallet" },
-      { text: "پروفایل", icon: <WalletIcon />, path: "/agent/wallet" },
-      { text: "تنظیمات", icon: <SettingsIcon />, path: "/agent/settings" },
+      { text: "مدیریت کارها", icon: <PeopleIcon />, path: "/agent/manage-tasks" },
+      { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/messages" },
+      { text: "پیام ها", icon: <WalletIcon />, path: "/agent/profile" },
+      { text: "پروفایل", icon: <WalletIcon />, path: "/agent/reports" },
+      { text: "تنظیمات", icon: <SettingsIcon />, path: "/agent/setting" },
     ],
   };
 
@@ -107,9 +107,12 @@ export default function Sidebar({ role, user, onClose }) {
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}
           >
-            {role === "technician" ? "تکنسین"
-              : role === "customer" ? "مشتری"
-              : role === "agent" ? "نماینده"
+            {user.role === "technician"
+              ? "تکنسین"
+              : user.role === "customer"
+              ? "مشتری"
+              : user.role === "agent"
+              ? "نماینده"
               : "کاربر مهمان"}
           </Typography>
         </Box>
@@ -117,7 +120,7 @@ export default function Sidebar({ role, user, onClose }) {
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5" }} />
 
         <List>
-          {menuItems[role].map((item, i) => (
+          {menuItems[user.role].map((item, i) => (
             <ListItemButton
               key={i}
               component={Link}
