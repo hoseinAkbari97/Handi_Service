@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, ServiceRequest, Wallet, RepresentativeTechnician
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -49,3 +49,36 @@ class ProfileAdmin(admin.ModelAdmin):
         updated = queryset.update(user_type='customer')
         self.message_user(request, f'{updated} profiles were successfully marked as customers.')
     make_customer.short_description = "Mark selected profiles as Customer"
+
+@admin.register(ServiceRequest)
+class ServiceRequestAdmin(admin.ModelAdmin):
+    list_display = (
+        "id", "title", "customer", "technician", "status", "cost", "created_at"
+    )
+    list_filter = ("status", "created_at")
+    search_fields = (
+        "title",
+        "description",
+        "customer__user__phone",
+        "technician__user__phone",
+    )
+    ordering = ("-created_at",)
+    autocomplete_fields = ("customer", "technician")
+
+
+@admin.register(Wallet)
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ("id", "profile", "balance")
+    search_fields = ("profile__user__phone",)
+    ordering = ("-balance",)
+
+
+@admin.register(RepresentativeTechnician)
+class RepresentativeTechnicianAdmin(admin.ModelAdmin):
+    list_display = ("id", "representative", "technician", "date_added")
+    search_fields = (
+        "representative__user__phone",
+        "technician__user__phone",
+    )
+    ordering = ("-date_added",)
+    autocomplete_fields = ("representative", "technician")
