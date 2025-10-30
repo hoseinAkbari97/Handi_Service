@@ -7,11 +7,12 @@ export default function TeamTechnicians() {
   return (
     <Box
     sx={{
-      display:"flex" ,
+      display:"grid" ,
       justifyContent:"center",
       alignItems:"center",
       height:"100%",
-      gap:2
+      gap:1,
+      gridTemplateColumns:"repeat(auto-fit, minmax(220px, 1fr))"
     }}
       
     >

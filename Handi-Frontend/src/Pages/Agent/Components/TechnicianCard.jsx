@@ -9,12 +9,13 @@ export default function TechnicianCard({ technician }) {
     <Box
       sx={{
         display:"flex",
+        justifySelf:"center",
         flexDirection:"column",
         backgroundColor: "primary.main",
         width: 220,
         height: 350,
         borderRadius: 3,
-        pb:0
+        mt:5
       }}
     >
       <Avatar

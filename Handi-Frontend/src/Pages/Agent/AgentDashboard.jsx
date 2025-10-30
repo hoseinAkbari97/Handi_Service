@@ -24,7 +24,7 @@ export default function AgentDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={UsersList[1].role} user={UsersList[1]} />
+        <Sidebar user={UsersList[2]}/>
       </Box>
 
       {/* Main Content */}
