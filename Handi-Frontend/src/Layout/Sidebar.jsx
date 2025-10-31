@@ -65,9 +65,9 @@ export default function Sidebar({ user, onClose }) {
         path: "/agent/team-technicians",
       },
       { text: "مدیریت کارها", icon: <PeopleIcon />, path: "/agent/manage-tasks" },
-      { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/messages" },
-      { text: "پیام ها", icon: <WalletIcon />, path: "/agent/profile" },
-      { text: "پروفایل", icon: <WalletIcon />, path: "/agent/reports" },
+      { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/reports" },
+      { text: "پیام ها", icon: <WalletIcon />, path: "/agent/messages" },
+      { text: "پروفایل", icon: <WalletIcon />, path: "/agent/profile" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/agent/setting" },
     ],
   };
