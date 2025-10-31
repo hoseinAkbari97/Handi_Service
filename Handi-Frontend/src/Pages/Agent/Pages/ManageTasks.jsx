@@ -1,7 +1,13 @@
+import { Box } from '@mui/material'
 import React from 'react'
+import TaskCard from '../Components/TaskCard'
+import { TasksList } from '../../../Datas'
+
 
 export default function ManageTasks() {
   return (
-    <div>ManageTasks</div>
+    <Box>
+      <TaskCard task={TasksList[0]}/>
+    </Box>
   )
 }
