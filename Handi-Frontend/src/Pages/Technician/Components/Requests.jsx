@@ -48,7 +48,7 @@ export default function Requests({ requests }) {
               >
                 <Typography>{request.fullName}</Typography>
                 <Typography variant="caption" mt={0.5} color="text.dark">
-                  درخواست: {request.type} {request.brand}
+                  درخواست: {request.request} {request.device} {request.brand}
                 </Typography>
               </Box>
             </Box>
