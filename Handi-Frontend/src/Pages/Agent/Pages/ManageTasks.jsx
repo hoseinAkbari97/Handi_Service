@@ -7,7 +7,7 @@ import { TasksList } from '../../../Datas'
 export default function ManageTasks() {
   return (
     <Box>
-      <TaskCard task={TasksList[0]}/>
+      <TaskCard task={TasksList[2]}/>
     </Box>
   )
 }
