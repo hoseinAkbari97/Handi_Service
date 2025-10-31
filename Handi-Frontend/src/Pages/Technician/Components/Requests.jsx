@@ -34,7 +34,7 @@ export default function Requests({ requests }) {
             {/* Left Side (avatar + fullName + expertise) */}
             <Box sx={{ display: "flex" }}>
               <Avatar
-                alt={request.fullName}
+                alt={request.customerName}
                 src={request.avatar}
                 sx={{ width: 50, height: 50 }}
               />
@@ -46,7 +46,7 @@ export default function Requests({ requests }) {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography>{request.fullName}</Typography>
+                <Typography>{request.customerName}</Typography>
                 <Typography variant="caption" mt={0.5} color="text.dark">
                   درخواست: {request.request} {request.device} {request.brand}
                 </Typography>
