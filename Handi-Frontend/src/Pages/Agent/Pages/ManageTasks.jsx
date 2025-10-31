@@ -6,8 +6,22 @@ import { TasksList } from '../../../Datas'
 
 export default function ManageTasks() {
   return (
-    <Box>
-      <TaskCard task={TasksList[2]}/>
+    <Box
+    sx={{
+      display:"grid" ,
+      justifyContent:"center",
+      alignItems:"center",
+      height:"100%",
+      gap:1,
+      gridTemplateColumns:"repeat(auto-fit, minmax(280px, 1fr))"
+    }}
+      
+    >
+      {TasksList.map((task, index) => (
+        <Box key={index}>
+          <TaskCard task={task} />
+        </Box>
+      ))}
     </Box>
   )
 }
