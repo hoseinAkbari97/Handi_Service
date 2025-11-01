@@ -20,10 +20,12 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import theme from "../../../Theme/Theme";
 import SummaryReport from "../Components/SummaryReport";
 import Filter from "../Components/Filter";
+import DetailsTable from "../Components/DetailsTable"
 
 export default function Reports() {
   return (
     <Box sx={{ p: 3, direction: "rtl", backgroundColor: "background.default" }}>
+      
       {/* Title */}
       <Typography
         variant="h5"
@@ -75,7 +77,8 @@ export default function Reports() {
         />
       </Box>
 
-      
+      {/* Table Section */}
+      <DetailsTable/>
     </Box>
   );
 }
