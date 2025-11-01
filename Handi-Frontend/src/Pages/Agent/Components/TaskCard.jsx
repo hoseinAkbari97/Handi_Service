@@ -101,7 +101,7 @@ export default function TaskCard({ task }) {
               mt: 0.5,
             }}
           >
-            تکنسین: {task.technician}
+            تکنسین: {task.technicianName}
           </Typography>
         </Box>
       </Box>
