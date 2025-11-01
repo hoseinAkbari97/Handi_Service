@@ -16,6 +16,21 @@ export default function Profile() {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
+  const inputSX = {
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "secondary.main",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "secondary.dark",
+    },
+    "& .MuiInputLabel-root.MuiInputLabel-shrink": {
+      color: "secondary.dark",
+    },
+    "& .MuiInputLabel-root": {
+      color: "secondary.main",
+    },
+  };
+
   return (
     <Box>
       {/* Profile Information */}
@@ -86,7 +101,7 @@ export default function Profile() {
           color: "text.primary",
           p: 3,
           borderRadius: 3,
-          mt: 1
+          mt: 1,
         }}
       >
         <Typography
@@ -103,7 +118,7 @@ export default function Profile() {
             value={formData.name}
             onChange={handleChange}
             fullWidth
-            sx={{ input: { color: "text.primary" } }}
+            sx={inputSX}
           />
           <TextField
             name="phone"
@@ -111,7 +126,7 @@ export default function Profile() {
             value={formData.phone}
             onChange={handleChange}
             fullWidth
-            sx={{ input: { color: "text.primary" } }}
+            sx={inputSX}
           />
           <TextField
             name="email"
@@ -119,7 +134,7 @@ export default function Profile() {
             value={formData.email}
             onChange={handleChange}
             fullWidth
-            sx={{ input: { color: "text.primary" } }}
+            sx={inputSX}
           />
           <TextField
             name="region"
@@ -127,7 +142,7 @@ export default function Profile() {
             value={formData.region}
             onChange={handleChange}
             fullWidth
-            sx={{ input: { color: "text.primary" } }}
+            sx={inputSX}
           />
         </Box>
       </Card>
