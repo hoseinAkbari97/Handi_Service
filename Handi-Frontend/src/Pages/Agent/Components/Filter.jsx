@@ -23,7 +23,7 @@ export default function Filter() {
         mb: 3,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2}}>
         <Box>
           <FormControl fullWidth>
             <InputLabel
