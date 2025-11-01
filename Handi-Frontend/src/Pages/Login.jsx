@@ -109,8 +109,6 @@ export default function Login() {
                 ورود به عنوان
               </InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 value={role}
                 label="ورود به عنوان"
                 onChange={roleChange}
@@ -180,6 +178,7 @@ export default function Login() {
               sx={{
                 mt: 2,
                 py: 1.2,
+                color:"primary.main",
                 "&.MuiButton-containedPrimary": {
                   backgroundColor: "secondary.main",
                   color: "text",

@@ -102,7 +102,7 @@ export default function TechnicianCard({ technician }) {
             justifyContent: "center",
             backgroundColor:
               technician.status === "available"
-                ? "success.main"
+                ? "success.light"
                 : technician.status === "busy"
                 ? "warning.light"
                 : "error.main",
