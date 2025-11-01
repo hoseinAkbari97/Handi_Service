@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Box,
   Card,
@@ -10,6 +10,10 @@ import {
 } from "@mui/material";
 
 export default function Filter() {
+
+  const [period, setPeriod] = useState("ماه جاری");
+  const [technician, setTechnician] = useState("همه تکنسین‌ها");
+
   return (
     <Card
       sx={{
@@ -19,7 +23,7 @@ export default function Filter() {
         mb: 3,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2, }}>
         <Box>
           <FormControl fullWidth>
             <InputLabel
@@ -34,8 +38,10 @@ export default function Filter() {
             </InputLabel>
 
             <Select
-              value="ماه جاری"
+              value={period}
+              onChange={(event)=> setPeriod(event.target.value)}
               label="دوره زمانی"
+              dir="rtl"
               sx={{
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "secondary.main",
@@ -83,8 +89,10 @@ export default function Filter() {
               تکنسین
             </InputLabel>
             <Select
-              value="همه تکنسین‌ها"
+              value={technician}
+              onChange={(event)=> setTechnician(event.target.value)}
               label="تکنسین"
+              dir="rtl"
               sx={{
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "secondary.main",
