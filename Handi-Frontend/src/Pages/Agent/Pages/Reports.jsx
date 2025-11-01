@@ -40,7 +40,42 @@ export default function Reports() {
       {/* Filters Section */}
       <Filter />
 
+      {/* Summary Reports */}
+      <Box sx={{
+        display:"grid" ,
+        justifyContent:"center",
+        alignItems:"center",
+        mb: 3,
+        gap:1,
+        gridTemplateColumns:"repeat(auto-fit, minmax(150px, 1fr))"
+      }}>
+        <SummaryReport
+          title="درآمد کل تیم"
+          value="۱۲۸M"
+          change="افزایش"
+          changeRate={"۱۵٪"}
+        />
+        <SummaryReport
+          title="تعداد کارها"
+          value="۴۵"
+          change="کار بیشتر"
+          changeRate={"۸"}
+        />
+        <SummaryReport
+          title="میانگین امتیاز"
+          value="۴.۸"
+          change="افزایش"
+          changeRate={"۰.۱"}
+        />
+        <SummaryReport
+          title="کارآمدی تیم"
+          value="۹۲٪"
+          change="افزایش"
+          changeRate={"۳٪"}
+        />
+      </Box>
 
+      
     </Box>
   );
 }
