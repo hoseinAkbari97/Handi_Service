@@ -41,10 +41,10 @@ export default function Profile() {
           }}
         />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          مریم احمدی
+          {UsersList[2].name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
-          نماینده منطقه شمال تهران
+          نماینده منطقه {UsersList[2].region}
         </Typography>
 
         <Divider
@@ -86,12 +86,12 @@ export default function Profile() {
           color: "text.primary",
           p: 3,
           borderRadius: 3,
-          direction: "rtl",
+          mt: 1
         }}
       >
         <Typography
           variant="h6"
-          sx={{ color: "secondary.main", mb: 2, fontWeight: "bold" }}
+          sx={{ color: "secondary.main", mb: 4, fontWeight: "bold" }}
         >
           اطلاعات شخصی
         </Typography>
