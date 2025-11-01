@@ -5,6 +5,7 @@ import {
   Card,
   Avatar,
   TextField,
+  Button,
 } from "@mui/material";
 import React, { useState } from "react";
 import { UsersList } from "../../../Datas";
@@ -145,6 +146,33 @@ export default function Profile() {
             sx={inputSX}
           />
         </Box>
+
+        {/* Button*/}
+
+          <Button
+            fullWidth
+            variant="contained"
+            color="secondary"
+            sx={{
+              mt: 4,
+              py: 1.2,
+              color: "primary.main",
+              "&.MuiButton-containedPrimary": {
+                backgroundColor: "secondary.main",
+                color: "text",
+              },
+              "&.MuiButton-containedPrimary:hover": {
+                backgroundColor: "secondary.light",
+              },
+              "&.Mui-disabled": {
+                backgroundColor: "secondary.dark",
+                color: "text.contrastText",
+              },
+            }}
+          >
+            ذخیره تغییرات
+          </Button>
+
       </Card>
     </Box>
   );
