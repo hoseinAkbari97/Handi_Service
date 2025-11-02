@@ -1,7 +1,7 @@
 import { Box, Paper, Typography, Avatar, Divider } from "@mui/material";
 import React from "react";
 
-export default function Works({ works }) {
+export default function Works({ requests }) {
   return (
     <Paper
       sx={{
@@ -26,7 +26,7 @@ export default function Works({ works }) {
         </Typography>
       </Box>
 
-      {works.map((request, index) => (
+      {requests.map((request, index) => (
         <React.Fragment key={index}>
           <Box
             sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
@@ -34,7 +34,7 @@ export default function Works({ works }) {
             {/* Left Side (avatar + fullName + expertise) */}
             <Box sx={{ display: "flex" }}>
               <Avatar
-                alt={request.fullName}
+                alt={request.customerName}
                 src={request.avatar}
                 sx={{ width: 50, height: 50 }}
               />
@@ -46,9 +46,9 @@ export default function Works({ works }) {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography>{request.fullName}</Typography>
+                <Typography>{request.customerName}</Typography>
                 <Typography variant="caption" mt={0.5} color="text.dark">
-                  کار انجام شده: {request.type} {request.brand}
+                  کار انجام شده: {request.request} {request.device} {request.brand}
                 </Typography>
               </Box>
             </Box>
