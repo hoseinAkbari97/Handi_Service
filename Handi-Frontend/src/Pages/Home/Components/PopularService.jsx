@@ -50,8 +50,8 @@ export default function PopularService() {
           gap: 2,
         }}
       >
-        {services.map((service) => (
-          <Box>
+        {services.map((service, index) => (
+          <Box key={index}>
             <Card
               sx={{
                 textAlign: "center",

@@ -20,9 +20,17 @@ import {
   People as PeopleIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 export default function Sidebar({ user, onClose }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("isValid");
+    localStorage.removeItem("role");
+    navigate("/");
+  };
+
   const menuItems = {
     customer: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/customer" },
@@ -64,7 +72,11 @@ export default function Sidebar({ user, onClose }) {
         icon: <AssignmentIcon />,
         path: "/agent/team-technicians",
       },
-      { text: "مدیریت کارها", icon: <PeopleIcon />, path: "/agent/manage-tasks" },
+      {
+        text: "مدیریت کارها",
+        icon: <PeopleIcon />,
+        path: "/agent/manage-tasks",
+      },
       { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/reports" },
       { text: "پیام ها", icon: <WalletIcon />, path: "/agent/messages" },
       { text: "پروفایل", icon: <WalletIcon />, path: "/agent/profile" },
@@ -119,15 +131,27 @@ export default function Sidebar({ user, onClose }) {
 
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5" }} />
 
+        {/* Navigation Menu */}
         <List>
           {menuItems[user.role].map((item, i) => (
             <ListItemButton
               key={i}
-              component={Link}
+              component={NavLink}
               to={item.path}
+              end={item.path}
               onClick={onClose}
               sx={{
-                color: "primary",
+                color: "text.primary",
+                transition: "all 0.2s ease",
+                borderRadius: 4,
+                mx: 1,
+                "&.active": {
+                  bgcolor: "secondary.main",
+                  color: "white",
+                  "& .MuiListItemIcon-root": {
+                    color: "white",
+                  },
+                },
                 "&:hover": {
                   bgcolor: "primary.light",
                 },
@@ -145,6 +169,7 @@ export default function Sidebar({ user, onClose }) {
       <Box sx={{ p: 2 }}>
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5", mb: 1 }} />
         <Button
+          onClick={handleLogout}
           fullWidth
           variant="outlined"
           color="inherit"
@@ -156,6 +181,7 @@ export default function Sidebar({ user, onClose }) {
               borderColor: "secondary.main",
               bgcolor: "secondary.dark",
             },
+            gap: 1,
           }}
         >
           خروج
