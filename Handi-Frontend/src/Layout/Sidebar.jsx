@@ -20,9 +20,17 @@ import {
   People as PeopleIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Sidebar({ user, onClose }) {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem("isValid");
+    localStorage.removeItem("role");
+    navigate("/");
+  };
+
   const menuItems = {
     customer: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/customer" },
@@ -64,7 +72,11 @@ export default function Sidebar({ user, onClose }) {
         icon: <AssignmentIcon />,
         path: "/agent/team-technicians",
       },
-      { text: "مدیریت کارها", icon: <PeopleIcon />, path: "/agent/manage-tasks" },
+      {
+        text: "مدیریت کارها",
+        icon: <PeopleIcon />,
+        path: "/agent/manage-tasks",
+      },
       { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/reports" },
       { text: "پیام ها", icon: <WalletIcon />, path: "/agent/messages" },
       { text: "پروفایل", icon: <WalletIcon />, path: "/agent/profile" },
@@ -145,6 +157,7 @@ export default function Sidebar({ user, onClose }) {
       <Box sx={{ p: 2 }}>
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5", mb: 1 }} />
         <Button
+          onClick={handleLogout}
           fullWidth
           variant="outlined"
           color="inherit"

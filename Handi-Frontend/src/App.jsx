@@ -1,11 +1,11 @@
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import theme from "./Theme/Theme";
-import routes from "./routes.jsx";
+import routes from "./routes/routes";
 
 function AppRoutes() {
-  const router = useRoutes(routes);
-  return router;
+  const routing = useRoutes(routes);
+  return routing;
 }
 
 function App() {

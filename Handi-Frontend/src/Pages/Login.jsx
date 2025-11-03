@@ -55,6 +55,9 @@ export default function Login() {
 
   const verifyHandler = () => {
     if (code === "1234") {
+      localStorage.setItem("isValid", "true");
+      localStorage.setItem("role", role);
+
       if (role === "customer") navigate("/customer");
       else if (role === "technician") navigate("/technician");
       else if (role === "agent") navigate("/agent");
