@@ -20,10 +20,10 @@ import {
   People as PeopleIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 export default function Sidebar({ user, onClose }) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("isValid");
@@ -131,15 +131,27 @@ export default function Sidebar({ user, onClose }) {
 
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5" }} />
 
+        {/* Navigation Menu */}
         <List>
           {menuItems[user.role].map((item, i) => (
             <ListItemButton
               key={i}
-              component={Link}
+              component={NavLink}
               to={item.path}
+              end={item.path}
               onClick={onClose}
               sx={{
-                color: "primary",
+                color: "text.primary",
+                transition: "all 0.2s ease",
+                borderRadius: 4,
+                mx: 1,
+                "&.active": {
+                  bgcolor: "secondary.main",
+                  color: "white",
+                  "& .MuiListItemIcon-root": {
+                    color: "white",
+                  },
+                },
                 "&:hover": {
                   bgcolor: "primary.light",
                 },
@@ -169,6 +181,7 @@ export default function Sidebar({ user, onClose }) {
               borderColor: "secondary.main",
               bgcolor: "secondary.dark",
             },
+            gap: 1,
           }}
         >
           خروج
