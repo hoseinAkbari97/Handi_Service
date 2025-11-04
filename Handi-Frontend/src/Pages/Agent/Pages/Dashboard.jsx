@@ -58,7 +58,7 @@ export default function Dashboard() {
               mt: { xs: 2, lg: 0 },
             }}
           >
-            <Works works={RequestsList} />
+            <Works requests={RequestsList} />
           </Box>
         </Box>
     </>
