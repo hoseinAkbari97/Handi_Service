@@ -4,7 +4,7 @@ from .models import Profile, ServiceRequest, Wallet, RepresentativeTechnician
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     # Fields to display in the list view
-    list_display = ('user', 'user_type', 'city', 'get_user_phone')
+    list_display = ('user', 'user_type', 'city', 'point', 'get_user_phone')
     
     # Fields for filtering
     list_filter = ('user_type', 'city')
@@ -13,7 +13,7 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__phone', 'user__first_name', 'user__last_name', 'city', 'address')
     
     # Fields that can be edited directly in the list view
-    list_editable = ('user_type',)
+    list_editable = ('user_type', 'point')
     
     # Fields organization in the detail form
     fieldsets = (
@@ -24,7 +24,7 @@ class ProfileAdmin(admin.ModelAdmin):
             'fields': ('address', 'city')
         }),
         ('Additional Information', {
-            'fields': ('bio',),
+            'fields': ('bio', 'profile_picture', 'point'),
             'classes': ('collapse',)
         }),
     )

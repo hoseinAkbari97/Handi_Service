@@ -13,6 +13,7 @@ class Profile(models.Model):
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
     point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
