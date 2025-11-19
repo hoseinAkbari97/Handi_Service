@@ -33,7 +33,7 @@ export default function TopTechnicians({ technicians }) {
             sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
           >
             {/* Left Side (avatar + fullName + expertise) */}
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", gap:1 }}>
               <Avatar
                 alt={technician.fullName}
                 src={technician.avatar}
