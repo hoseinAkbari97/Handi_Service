@@ -32,11 +32,15 @@ export default function CustomerDashboard() {
   }, []);
 
   if (loading) {
-    return <Box sx={{ p: 4, textAlign: "center", color:"text.contrastText" }}>در حال بارگذاری...</Box>;
+    return (
+      <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>
+        در حال بارگذاری...
+      </Box>
+    );
   }
 
   if (users.length === 0) {
-    return <Box sx={{ p: 4, textAlign: "center" }}>هیچ کاربری یافت نشد.</Box>;
+    return <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>هیچ کاربری یافت نشد.</Box>;
   }
 
   const currentUser = users[0];
