@@ -4,7 +4,7 @@ from .models import Profile, Wallet, ServiceRequest
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'user_type', 'address', 'city', 'bio']
+        fields = ['id', 'user_type', 'address', 'city', 'bio', 'profile_picture', 'point']
 
 class TechnicianSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source="user.first_name", read_only=True)
@@ -29,3 +29,6 @@ class CustomerPanelSerializer(serializers.Serializer):
     wallet_balance = serializers.IntegerField()
     active_request = ActiveRequestSerializer(allow_null=True)
     top_technicians = TechnicianSerializer(many=True)
+
+    # Nest the full profile data
+    profile = ProfileSerializer()

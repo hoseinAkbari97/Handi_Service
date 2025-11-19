@@ -40,12 +40,14 @@ class CustomerPanelView(APIView):
         # Dummy "top technicians" logic for now (you can later sort by rating)
         top_technicians = Profile.objects.filter(user_type="technician")[:3]
 
+        # The profile picture doesn't work. implement that !!!
         data = {
             "total_requests": total_requests,
             "completed_requests": completed_requests,
             "wallet_balance": wallet_balance,
             "active_request": ActiveRequestSerializer(active_request).data if active_request else None,
             "top_technicians": TechnicianSerializer(top_technicians, many=True).data,
+            "profile": ProfileSerializer(profile, context={"request": request}).data,
         }
 
         serializer = CustomerPanelSerializer(data)
