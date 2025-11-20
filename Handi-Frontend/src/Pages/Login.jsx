@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate, Link, data } from "react-router-dom";
 import HandymanIcon from "@mui/icons-material/Handyman";
+import { UserContext } from "../Contexts/UserContext";
 
 export default function Login() {
   const [role, setRole] = useState("");
@@ -23,6 +24,9 @@ export default function Login() {
 
   const phoneRegex = /^(?:(?:\+98|0098)9\d{9}|09\d{9})$/;
   const isValid = phoneRegex.test(phone);
+
+  const { user, saveUser } = useContext(UserContext);
+
 
   const convertToEnglishDigits = (value) => {
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -57,12 +61,8 @@ export default function Login() {
         if (!Response.ok) {
           throw new Error("Phone sending failed");
         }
-        return Response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-        console.log("کد تأیید برای", phone, "ارسال شد");
         setStep("verify");
+        return Response.json();
       })
       .catch((error) => {
         console.error(error);
@@ -92,14 +92,14 @@ export default function Login() {
             }
             return Response.json();
           })
-          .then((data) => {
-
+          .then((user) => {
+            console.log("Final received user:", user);
+            saveUser(user)
             localStorage.setItem("isValid", "true");
-            localStorage.setItem("role", data.profile.user_type)
+            localStorage.setItem("role", user.profile.user_type);
 
             if (role === "customer") navigate("/customer");
-            else if (role === "technician")
-              navigate("/technician");
+            else if (role === "technician") navigate("/technician");
             else if (role === "agent") navigate("/agent");
           })
           .catch((error) => {

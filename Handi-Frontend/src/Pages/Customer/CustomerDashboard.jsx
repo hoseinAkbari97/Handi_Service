@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { Box } from "@mui/material";
 import ActiveRequestCard from "./Components/ActiveRequestCard";
 import SummaryCard from "./Components/SummaryCard";
@@ -6,44 +6,24 @@ import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { TechniciansList, UsersList } from "../../Datas";
+import { UserContext } from "../../Contexts/UserContext";
 
 export default function CustomerDashboard() {
 
-  const [users, setUsers] = useState([]);
-  const [technicians, setTechnicians] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useContext(UserContext);
+    console.log("UserContext user:", user);
+  // const [technicians, setTechnicians] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const usersData = await UsersList();
-        const technisiansData = await TechniciansList();
 
-        setUsers(usersData);
-        setTechnicians(technisiansData);
-      } catch (error) {
-        console.error("Error Logs:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (!user) {
     return (
-      <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>
-        در حال بارگذاری...
+      <Box sx={{ p: 4, textAlign: "center" }}>
+        در حال دریافت اطلاعات کاربری...
       </Box>
     );
   }
-
-  if (users.length === 0) {
-    return <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>هیچ کاربری یافت نشد.</Box>;
-  }
-
-  const currentUser = users[0];
 
   return (
     <Box
@@ -63,7 +43,7 @@ export default function CustomerDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={currentUser.role} user={currentUser} />
+        <Sidebar role={user.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
@@ -128,7 +108,7 @@ export default function CustomerDashboard() {
               mt: { xs: 2, lg: 0 },
             }}
           >
-            <TopTechnicians technicians={technicians} />
+            {/* <TopTechnicians technicians={technicians} /> */}
           </Box>
         </Box>
       </Box>
