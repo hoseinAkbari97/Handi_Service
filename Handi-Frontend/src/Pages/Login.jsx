@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import {
   Box,
   Button,
@@ -17,7 +17,8 @@ export default function Login() {
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
   const [step, setStep] = useState("login");
-  const [code, setCode] = useState("");
+  const [verifyOTP, setVerifyOTP] = useState("");
+  const [accessCode, setAccessCode] = useState("");
 
   const navigate = useNavigate();
 
@@ -44,7 +45,6 @@ export default function Login() {
   };
 
   const stepHandler = () => {
-
     fetch("http://127.0.0.1:8000/api/auth/request-otp/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -52,7 +52,7 @@ export default function Login() {
     })
       .then((Response) => {
         if (!Response.ok) {
-          throw new Error("OTP sending failed");
+          throw new Error("Phone sending failed");
         }
         return Response.json();
       })
@@ -67,22 +67,44 @@ export default function Login() {
       });
   };
 
-  const codeHandler = (event) => {
+  const codeNormalization = (event) => {
     const normalizedCode = convertToEnglishDigits(event.target.value.trim());
-    setCode(normalizedCode);
+    setVerifyOTP(normalizedCode);
   };
 
   const verifyHandler = () => {
-    if (code === "1234") {
-      localStorage.setItem("isValid", "true");
-      localStorage.setItem("role", role);
+    fetch("http://127.0.0.1:8000/api/auth/verify-otp/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, otp: verifyOTP }),
+    })
+      .then((Response) => {
+        if (!Response.ok) {
+          throw new Error("OTP sending failed");
+        }
+        return Response.json();
+      })
+      .then((data) => {
+        setAccessCode(data.access);
+        console.log(accessCode);
+        
 
-      if (role === "customer") navigate("/customer");
-      else if (role === "technician") navigate("/technician");
-      else if (role === "agent") navigate("/agent");
-    } else {
-      alert("کد تأیید اشتباه است");
-    }
+      });
+
+    // fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
+    //   headers: { Authorization: `Bearer ${accessCode}` },
+    // }).then((Response) => console.log(Response));
+
+    // if (code === "1234") {
+    //   localStorage.setItem("isValid", "true");
+    //   localStorage.setItem("role", role);
+
+    //   if (role === "customer") navigate("/customer");
+    //   else if (role === "technician") navigate("/technician");
+    //   else if (role === "agent") navigate("/agent");
+    // } else {
+    //   alert("کد تأیید اشتباه است");
+    // }
   };
 
   return (
@@ -262,8 +284,8 @@ export default function Login() {
               variant="outlined"
               fullWidth
               margin="normal"
-              value={code}
-              onChange={codeHandler}
+              value={verifyOTP}
+              onChange={codeNormalization}
               sx={{
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "secondary.main",
