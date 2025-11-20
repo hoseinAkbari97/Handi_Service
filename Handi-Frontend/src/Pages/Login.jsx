@@ -110,21 +110,6 @@ export default function Login() {
         console.error(error);
         alert("کد وارد شده نامعتبر است");
       });
-
-    // fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
-    //   headers: { Authorization: `Bearer ${accessCode}` },
-    // }).then((Response) => console.log(Response));
-
-    // if (code === "1234") {
-    //   localStorage.setItem("isValid", "true");
-    //   localStorage.setItem("role", role);
-
-    //   if (role === "customer") navigate("/customer");
-    //   else if (role === "technician") navigate("/technician");
-    //   else if (role === "agent") navigate("/agent");
-    // } else {
-    //   alert("کد تأیید اشتباه است");
-    // }
   };
 
   return (
