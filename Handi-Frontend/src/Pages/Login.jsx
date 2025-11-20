@@ -44,8 +44,8 @@ export default function Login() {
     setPhone(convertToEnglishDigits(event.target.value.trim()));
   };
 
-    const codeHandler = (event) => {
-    setVerifyOTP(convertToEnglishDigits(event.target.value.trim()))
+  const codeHandler = (event) => {
+    setVerifyOTP(convertToEnglishDigits(event.target.value.trim()));
   };
 
   const stepHandler = () => {
@@ -84,8 +84,6 @@ export default function Login() {
         return Response.json();
       })
       .then((data) => {
-        setAccessCode(data.access);  
-
         fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
           headers: { Authorization: `Bearer ${data.access}` },
         })
