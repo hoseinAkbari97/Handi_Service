@@ -88,7 +88,15 @@ export default function Login() {
         setAccessCode(data.access);
         console.log(accessCode);
         
-
+        fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
+          headers: { Authorization: `Bearer ${accessCode}` },
+        }).then((Response) => {
+          if(!Response.ok){
+            throw new Error("The authentication code is incorrect.")
+          }
+          return Response.json();
+        })
+        .then(data=> console.log(data))
       });
 
     // fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
