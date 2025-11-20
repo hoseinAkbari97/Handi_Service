@@ -18,7 +18,6 @@ export default function Login() {
   const [phone, setPhone] = useState("");
   const [step, setStep] = useState("login");
   const [verifyOTP, setVerifyOTP] = useState("");
-  const [accessCode, setAccessCode] = useState("");
 
   const navigate = useNavigate();
 
@@ -94,10 +93,14 @@ export default function Login() {
             return Response.json();
           })
           .then((data) => {
-            if (data.profile.user_type === "customer") navigate("/customer");
-            else if (data.profile.user_type === "technician")
+
+            localStorage.setItem("isValid", "true");
+            localStorage.setItem("role", data.profile.user_type)
+
+            if (role === "customer") navigate("/customer");
+            else if (role === "technician")
               navigate("/technician");
-            else if (data.profile.user_type === "agent") navigate("/agent");
+            else if (role === "agent") navigate("/agent");
           })
           .catch((error) => {
             console.error(error);
