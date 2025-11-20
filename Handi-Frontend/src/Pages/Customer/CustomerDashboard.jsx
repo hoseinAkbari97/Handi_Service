@@ -5,13 +5,12 @@ import SummaryCard from "./Components/SummaryCard";
 import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
-import { TechniciansList, UsersList } from "../../Datas";
+// import { TechniciansList, UsersList } from "../../Datas";
 import { UserContext } from "../../Contexts/UserContext";
 
 export default function CustomerDashboard() {
 
   const { user } = useContext(UserContext);
-    console.log("UserContext user:", user);
   // const [technicians, setTechnicians] = useState([]);
   // const [loading, setLoading] = useState(true);
   

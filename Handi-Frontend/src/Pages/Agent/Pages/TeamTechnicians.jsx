@@ -1,7 +1,7 @@
 import React from "react";
 import TechnicianCard from "../Components/TechnicianCard";
 import { Box } from "@mui/material";
-import { TechniciansList } from "../../../Datas";
+// import { TechniciansList } from "../../../Datas";
 
 export default function TeamTechnicians() {
   return (

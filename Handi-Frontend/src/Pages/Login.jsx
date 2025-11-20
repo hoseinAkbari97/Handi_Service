@@ -93,7 +93,6 @@ export default function Login() {
             return Response.json();
           })
           .then((user) => {
-            console.log("Final received user:", user);
             saveUser(user)
             localStorage.setItem("isValid", "true");
             localStorage.setItem("role", user.profile.user_type);

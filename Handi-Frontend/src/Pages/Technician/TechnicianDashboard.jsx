@@ -3,8 +3,8 @@ import { Box } from "@mui/material";
 import Header from "./Components/Header";
 import SummaryCard from "./Components/SummaryCard";
 import Requests from "./Components/Requests";
-import { RequestsList } from "../../Datas";
-import { UsersList } from "../../Datas";
+// import { RequestsList } from "../../Datas";
+// import { UsersList } from "../../Datas";
 import Sidebar from "../../Layout/Sidebar";
 
 export default function TechniciansDashboard() {
