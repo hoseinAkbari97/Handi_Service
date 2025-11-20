@@ -44,6 +44,10 @@ export default function Login() {
     setPhone(convertToEnglishDigits(event.target.value.trim()));
   };
 
+    const codeHandler = (event) => {
+    setVerifyOTP(convertToEnglishDigits(event.target.value.trim()))
+  };
+
   const stepHandler = () => {
     fetch("http://127.0.0.1:8000/api/auth/request-otp/", {
       method: "POST",
@@ -67,11 +71,6 @@ export default function Login() {
       });
   };
 
-  const codeNormalization = (event) => {
-    const normalizedCode = convertToEnglishDigits(event.target.value.trim());
-    setVerifyOTP(normalizedCode);
-  };
-
   const verifyHandler = () => {
     fetch("http://127.0.0.1:8000/api/auth/verify-otp/", {
       method: "POST",
@@ -85,18 +84,31 @@ export default function Login() {
         return Response.json();
       })
       .then((data) => {
-        setAccessCode(data.access);
-        console.log(accessCode);
-        
+        setAccessCode(data.access);  
+
         fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
-          headers: { Authorization: `Bearer ${accessCode}` },
-        }).then((Response) => {
-          if(!Response.ok){
-            throw new Error("The authentication code is incorrect.")
-          }
-          return Response.json();
+          headers: { Authorization: `Bearer ${data.access}` },
         })
-        .then(data=> console.log(data))
+          .then((Response) => {
+            if (!Response.ok) {
+              throw new Error("An error occurred while retrieving information");
+            }
+            return Response.json();
+          })
+          .then((data) => {
+            if (data.profile.user_type === "customer") navigate("/customer");
+            else if (data.profile.user_type === "technician")
+              navigate("/technician");
+            else if (data.profile.user_type === "agent") navigate("/agent");
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("دریافت اطلاعات با خطا مواجه شد");
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("کد وارد شده نامعتبر است");
       });
 
     // fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
@@ -293,7 +305,7 @@ export default function Login() {
               fullWidth
               margin="normal"
               value={verifyOTP}
-              onChange={codeNormalization}
+              onChange={codeHandler}
               sx={{
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "secondary.main",
