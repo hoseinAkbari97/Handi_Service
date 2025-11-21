@@ -3,23 +3,23 @@ import { Box, IconButton, Button, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import Sidebar from "../../../Layout/Sidebar";
-import { UsersList } from "../../../Datas";
+// import { UsersList } from "../../../Datas";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const users = await UsersList();
-        setUser(users[0]);
-      } catch (error) {
-        console.error("Error Log in get users:", error);
-      }
-    }
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchUser() {
+  //     try {
+  //       const users = await UsersList();
+  //       setUser(users[0]);
+  //     } catch (error) {
+  //       console.error("Error Log in get users:", error);
+  //     }
+  //   }
+  //   fetchUser();
+  // }, []);
 
 
   return (

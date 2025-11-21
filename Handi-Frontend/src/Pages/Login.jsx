@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Button,
@@ -10,19 +10,23 @@ import {
   FormControl,
   Select,
 } from "@mui/material";
-import { useNavigate, Link } from "react-router-dom";
-import HandymanIcon from '@mui/icons-material/Handyman';
+import { useNavigate, Link, data } from "react-router-dom";
+import HandymanIcon from "@mui/icons-material/Handyman";
+import { UserContext } from "../Contexts/UserContext";
 
 export default function Login() {
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
   const [step, setStep] = useState("login");
-  const [code, setCode] = useState("");
+  const [verifyOTP, setVerifyOTP] = useState("");
 
   const navigate = useNavigate();
 
   const phoneRegex = /^(?:(?:\+98|0098)9\d{9}|09\d{9})$/;
   const isValid = phoneRegex.test(phone);
+
+  const { user, saveUser } = useContext(UserContext);
+
 
   const convertToEnglishDigits = (value) => {
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -43,27 +47,69 @@ export default function Login() {
     setPhone(convertToEnglishDigits(event.target.value.trim()));
   };
 
-  const stepHandler = () => {
-    console.log("کد تأیید برای", phone, "ارسال شد");
-    setStep("verify");
+  const codeHandler = (event) => {
+    setVerifyOTP(convertToEnglishDigits(event.target.value.trim()));
   };
 
-  const codeHandler = (event) => {
-    const normalizedCode = convertToEnglishDigits(event.target.value.trim());
-    setCode(normalizedCode);
+  const stepHandler = () => {
+    fetch("http://127.0.0.1:8000/api/auth/request-otp/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone }),
+    })
+      .then((Response) => {
+        if (!Response.ok) {
+          throw new Error("Phone sending failed");
+        }
+        setStep("verify");
+        return Response.json();
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("ارسال پیامک با خطا مواجه شد");
+      });
   };
 
   const verifyHandler = () => {
-    if (code === "1234") {
-      localStorage.setItem("isValid", "true");
-      localStorage.setItem("role", role);
+    fetch("http://127.0.0.1:8000/api/auth/verify-otp/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, otp: verifyOTP }),
+    })
+      .then((Response) => {
+        if (!Response.ok) {
+          throw new Error("OTP sending failed");
+        }
+        return Response.json();
+      })
+      .then((data) => {
+        fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
+          headers: { Authorization: `Bearer ${data.access}` },
+        })
+          .then((Response) => {
+            if (!Response.ok) {
+              throw new Error("An error occurred while retrieving information");
+            }
+            return Response.json();
+          })
+          .then((user) => {
+            saveUser(user)
+            localStorage.setItem("isValid", "true");
+            localStorage.setItem("role", user.profile.user_type);
 
-      if (role === "customer") navigate("/customer");
-      else if (role === "technician") navigate("/technician");
-      else if (role === "agent") navigate("/agent");
-    } else {
-      alert("کد تأیید اشتباه است");
-    }
+            if (role === "customer") navigate("/customer");
+            else if (role === "technician") navigate("/technician");
+            else if (role === "agent") navigate("/agent");
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("دریافت اطلاعات با خطا مواجه شد");
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("کد وارد شده نامعتبر است");
+      });
   };
 
   return (
@@ -86,8 +132,7 @@ export default function Login() {
         }}
       >
         <Box display={"flex"} justifyContent={"center"} sx={{ mb: 2 }}>
-          <HandymanIcon sx={{height: 110, width:110, mb:3}} />
-
+          <HandymanIcon sx={{ height: 110, width: 110, mb: 3 }} />
         </Box>
         <Typography variant="h5" gutterBottom align="center">
           سیستم تعمیرات لوازم خانگی
@@ -181,7 +226,7 @@ export default function Login() {
               sx={{
                 mt: 2,
                 py: 1.2,
-                color:"primary.main",
+                color: "primary.main",
                 "&.MuiButton-containedPrimary": {
                   backgroundColor: "secondary.main",
                   color: "text",
@@ -211,9 +256,9 @@ export default function Login() {
                 to="/register"
                 color="text.primary"
                 sx={{
-                  textDecoration: "none", 
+                  textDecoration: "none",
                   "&:hover": {
-                    color: "secondary.light"
+                    color: "secondary.light",
                   },
                 }}
               >
@@ -222,7 +267,12 @@ export default function Login() {
             </Typography>
 
             <Paper sx={{ mt: 4 }} elevation={5}>
-              <Typography align="center" variant="body2" p={3} color="text.contrastText">
+              <Typography
+                align="center"
+                variant="body2"
+                p={3}
+                color="text.contrastText"
+              >
                 اطلاعات ورود آزمایشی <br />
                 شماره موبایل دلخواه + کد تأیید ۱۲۳۴
               </Typography>
@@ -239,7 +289,7 @@ export default function Login() {
               variant="outlined"
               fullWidth
               margin="normal"
-              value={code}
+              value={verifyOTP}
               onChange={codeHandler}
               sx={{
                 "& .MuiOutlinedInput-notchedOutline": {
@@ -263,7 +313,7 @@ export default function Login() {
               color="secondary"
               fullWidth
               onClick={verifyHandler}
-              sx={{ mt: 2, py: 1.2,  }}
+              sx={{ mt: 2, py: 1.2 }}
             >
               ورود
             </Button>

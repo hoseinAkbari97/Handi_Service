@@ -20,7 +20,7 @@ import {
   People as PeopleIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Sidebar({ user, onClose }) {
   const navigate = useNavigate();
@@ -110,20 +110,20 @@ export default function Sidebar({ user, onClose }) {
             هندى هوم
           </Typography>
           <Avatar
-            src={user?.avatar || ""}
-            alt={user?.name || ""}
+            src={user?.profile?.profile_picture || ""}
+            alt={user?.profile?.first_name || ""}
             sx={{ width: 64, height: 64, mt: 2, mx: "auto" }}
           />
-          <Typography sx={{ mt: 1, cursor: "default" }}>{user.name}</Typography>
+          <Typography sx={{ mt: 1, cursor: "default" }}>{user?.profile?.first_name || "بدون نام"}</Typography>
           <Typography
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}
           >
-            {user.role === "technician"
+            {user?.profile?.user_type === "technician"
               ? "تکنسین"
-              : user.role === "customer"
+              : user?.profile?.user_type === "customer"
               ? "مشتری"
-              : user.role === "agent"
+              : user?.profile?.user_type === "agent"
               ? "نماینده"
               : "کاربر مهمان"}
           </Typography>
@@ -133,7 +133,7 @@ export default function Sidebar({ user, onClose }) {
 
         {/* Navigation Menu */}
         <List>
-          {menuItems[user.role].map((item, i) => (
+          {menuItems[user?.profile?.user_type].map((item, i) => (
             <ListItemButton
               key={i}
               component={NavLink}
