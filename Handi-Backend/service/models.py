@@ -5,10 +5,19 @@ class Profile(models.Model):
     USER_TYPE_CHOICES = [
         ('customer', 'Customer'),
         ('technician', 'Technician'),
-        ("representative", "Representative"),
+        ('representative', 'Representative'),
     ]
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='profile'
+    )
+
+    # MOVED FROM CustomUser
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name = models.CharField(max_length=120, blank=True, null=True)
+
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='customer')
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
@@ -17,9 +26,9 @@ class Profile(models.Model):
     point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.user} ({self.user_type})"
-    
-# A representative manages multiple technicians
+        return f"{self.user.phone} ({self.user_type})"
+
+
 class RepresentativeTechnician(models.Model):
     representative = models.ForeignKey(
         Profile,
@@ -43,7 +52,6 @@ class RepresentativeTechnician(models.Model):
         return f"{self.technician.user.phone} → {self.representative.user.phone}"
 
 
-# Service request 
 class ServiceRequest(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -59,6 +67,7 @@ class ServiceRequest(models.Model):
         related_name="requests",
         limit_choices_to={"user_type": "customer"},
     )
+
     technician = models.ForeignKey(
         Profile,
         on_delete=models.SET_NULL,
@@ -67,6 +76,7 @@ class ServiceRequest(models.Model):
         related_name="assigned_requests",
         limit_choices_to={"user_type": "technician"},
     )
+
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     cost = models.PositiveIntegerField(default=0)
@@ -78,7 +88,6 @@ class ServiceRequest(models.Model):
         return f"{self.title} ({self.customer.user.phone})"
 
 
-# Wallet for the customer
 class Wallet(models.Model):
     profile = models.OneToOneField(
         Profile,
@@ -89,4 +98,4 @@ class Wallet(models.Model):
     balance = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.profile.user.phone} - {self.balance} "
+        return f"{self.profile.user.phone} - {self.balance}"
