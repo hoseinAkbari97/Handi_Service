@@ -1,17 +1,30 @@
 from rest_framework import serializers
 from .models import Profile, Wallet, ServiceRequest
 
-class ProfileSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(source="user.first_name", read_only=True)
-    last_name = serializers.CharField(source="user.last_name", read_only=True)
 
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'first_name', 'last_name', 'user_type', 'address', 'city', 'bio', 'profile_picture', 'point']
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "user_type",
+            "address",
+            "city",
+            "bio",
+            "profile_picture",
+            "point",
+        ]
+        read_only_fields = ("point", "user_type")
+
 
 class TechnicianSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source="user.first_name", read_only=True)
+    name = serializers.SerializerMethodField()
     phone = serializers.CharField(source="user.phone", read_only=True)
+
+    def get_name(self, obj):
+        return f"{obj.first_name or ''} {obj.last_name or ''}".strip()
 
     class Meta:
         model = Profile
@@ -32,8 +45,6 @@ class CustomerPanelSerializer(serializers.Serializer):
     wallet_balance = serializers.IntegerField()
     active_request = ActiveRequestSerializer(allow_null=True)
     top_technicians = TechnicianSerializer(many=True)
-
-    # Nest the full profile data
     profile = ProfileSerializer()
 
 
@@ -47,7 +58,7 @@ class RecentRequestSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "customer_name", "customer_profile_picture", "time_ago"]
 
     def get_customer_name(self, obj):
-        return f"{obj.customer.user.first_name} {obj.customer.user.last_name}".strip()
+        return f"{obj.customer.first_name or ''} {obj.customer.last_name or ''}".strip()
 
     def get_customer_profile_picture(self, obj):
         request = self.context.get("request")
@@ -57,8 +68,8 @@ class RecentRequestSerializer(serializers.ModelSerializer):
 
     def get_time_ago(self, obj):
         from django.utils.timesince import timesince
-        return timesince(obj.created_at) + " پیش"
-    
+        return timesince(obj.created_at)
+
 
 class TechnicianPanelSerializer(serializers.Serializer):
     completed_jobs = serializers.IntegerField()
