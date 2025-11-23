@@ -35,3 +35,35 @@ class CustomerPanelSerializer(serializers.Serializer):
 
     # Nest the full profile data
     profile = ProfileSerializer()
+
+
+class RecentRequestSerializer(serializers.ModelSerializer):
+    customer_name = serializers.SerializerMethodField()
+    customer_profile_picture = serializers.SerializerMethodField()
+    time_ago = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ServiceRequest
+        fields = ["id", "title", "customer_name", "customer_profile_picture", "time_ago"]
+
+    def get_customer_name(self, obj):
+        return f"{obj.customer.user.first_name} {obj.customer.user.last_name}".strip()
+
+    def get_customer_profile_picture(self, obj):
+        request = self.context.get("request")
+        if obj.customer.profile_picture:
+            return request.build_absolute_uri(obj.customer.profile_picture.url)
+        return None
+
+    def get_time_ago(self, obj):
+        from django.utils.timesince import timesince
+        return timesince(obj.created_at) + " پیش"
+    
+
+class TechnicianPanelSerializer(serializers.Serializer):
+    completed_jobs = serializers.IntegerField()
+    monthly_income = serializers.IntegerField()
+    average_rating = serializers.FloatField()
+    average_response_time = serializers.IntegerField()
+    recent_requests = RecentRequestSerializer(many=True)
+    profile = ProfileSerializer()

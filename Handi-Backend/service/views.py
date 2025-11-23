@@ -3,7 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Profile, ServiceRequest, Wallet
-from .serializers import ProfileSerializer, CustomerPanelSerializer, ActiveRequestSerializer, TechnicianSerializer
+from .serializers import ProfileSerializer, CustomerPanelSerializer, ActiveRequestSerializer, TechnicianSerializer, TechnicianPanelSerializer, RecentRequestSerializer
+from django.utils import timezone
+from datetime import timedelta
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
@@ -54,6 +56,48 @@ class CustomerPanelView(APIView):
 
         # CRITICAL FIX ⬇️
         serializer = CustomerPanelSerializer(data=data, context={"request": request})
+        serializer.is_valid(raise_exception=False)
+
+        return Response(serializer.data)
+    
+class TechnicianPanelView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response({"detail": "Only technicians can access this panel."}, status=403)
+
+        # Completed jobs
+        completed_jobs = ServiceRequest.objects.filter(
+            technician=profile, status="completed"
+        ).count()
+
+        # Sample values for now
+        monthly_income = 4500000
+        average_rating = 4.9
+        average_response_time = 25  # minutes
+
+        # Recent 3 requests
+        recent_requests = (
+            ServiceRequest.objects
+            .filter(technician=profile)
+            .order_by("-created_at")[:3]
+        )
+
+        data = {
+            "completed_jobs": completed_jobs,
+            "monthly_income": monthly_income,
+            "average_rating": average_rating,
+            "average_response_time": average_response_time,
+            "recent_requests": RecentRequestSerializer(
+                recent_requests, many=True, context={"request": request}
+            ).data,
+            "profile": ProfileSerializer(profile, context={"request": request}).data,
+        }
+
+        serializer = TechnicianPanelSerializer(data=data, context={"request": request})
         serializer.is_valid(raise_exception=False)
 
         return Response(serializer.data)
