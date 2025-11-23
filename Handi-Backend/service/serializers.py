@@ -2,9 +2,12 @@ from rest_framework import serializers
 from .models import Profile, Wallet, ServiceRequest
 
 class ProfileSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source="user.first_name", read_only=True)
+    last_name = serializers.CharField(source="user.last_name", read_only=True)
+
     class Meta:
         model = Profile
-        fields = ['id', 'user_type', 'address', 'city', 'bio', 'profile_picture', 'point']
+        fields = ['id', 'first_name', 'last_name', 'user_type', 'address', 'city', 'bio', 'profile_picture', 'point']
 
 class TechnicianSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source="user.first_name", read_only=True)
