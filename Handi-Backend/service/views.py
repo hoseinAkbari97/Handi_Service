@@ -2,64 +2,75 @@ from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, ServiceRequest, Wallet
-from .serializers import ProfileSerializer, CustomerPanelSerializer, ActiveRequestSerializer, TechnicianSerializer, TechnicianPanelSerializer, RecentRequestSerializer
-from django.utils import timezone
-from datetime import timedelta
+from .models import Profile, ServiceRequest
+from .serializers import (
+    ProfileSerializer,
+    CustomerPanelSerializer,
+    ActiveRequestSerializer,  # This wasn't used but might be needed by the serializer
+    TechnicianSerializer,     # This wasn't used but might be needed by the serializer
+    TechnicianPanelSerializer,
+    RecentRequestSerializer,  # This wasn't used but might be needed by the serializer
+)
+
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        # Create profile on the fly if missing
         profile, _ = Profile.objects.get_or_create(user=self.request.user)
         return profile
+
 
 class CustomerPanelView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Ensure user is customer
         profile = request.user.profile
+
         if profile.user_type != "customer":
             return Response({"detail": "Only customers can access this panel."}, status=403)
 
-        # Aggregate stats
         total_requests = ServiceRequest.objects.filter(customer=profile).count()
-        completed_requests = ServiceRequest.objects.filter(customer=profile, status="completed").count()
-        wallet_balance = getattr(profile.wallet, "balance", 0)
+        completed_requests = ServiceRequest.objects.filter(
+            customer=profile, status="completed"
+        ).count()
 
-        # Active request
+        # Use hasattr to safely access the related wallet
+        wallet_balance = getattr(profile, 'wallet', None)
+        wallet_balance = wallet_balance.balance if wallet_balance else 0
+
+
         active_request = (
-            ServiceRequest.objects
-            .filter(customer=profile)
+            ServiceRequest.objects.filter(customer=profile)
             .exclude(status__in=["completed", "cancelled"])
             .order_by("-created_at")
             .first()
         )
 
-        # Top technicians
         top_technicians = Profile.objects.filter(user_type="technician")[:3]
 
-        # Build response data
-        data = {
+        # --- FIX ---
+        # 1. Build a dictionary of the RAW objects and data,
+        #    not the already-serialized .data
+        data_to_serialize = {
             "total_requests": total_requests,
             "completed_requests": completed_requests,
             "wallet_balance": wallet_balance,
-            "active_request": ActiveRequestSerializer(active_request).data if active_request else None,
-            "top_technicians": TechnicianSerializer(top_technicians, many=True).data,
-
-            # IMPORTANT: Serialize profile via ProfileSerializer
-            "profile": ProfileSerializer(profile, context={"request": request}).data,
+            "active_request": active_request,    # Pass the object
+            "top_technicians": top_technicians, # Pass the QuerySet
+            "profile": profile,                 # Pass the object
         }
 
-        # CRITICAL FIX ⬇️
-        serializer = CustomerPanelSerializer(data=data, context={"request": request})
-        serializer.is_valid(raise_exception=False)
-
+        # 2. Pass the dictionary as the 'instance' to be serialized.
+        # 3. Pass the 'request' in the context so nested serializers can use it.
+        serializer = CustomerPanelSerializer(
+            instance=data_to_serialize, 
+            context={"request": request}
+        )
         return Response(serializer.data)
-    
+
+
 class TechnicianPanelView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -69,35 +80,30 @@ class TechnicianPanelView(APIView):
         if profile.user_type != "technician":
             return Response({"detail": "Only technicians can access this panel."}, status=403)
 
-        # Completed jobs
         completed_jobs = ServiceRequest.objects.filter(
             technician=profile, status="completed"
         ).count()
 
-        # Sample values for now
-        monthly_income = 4500000
-        average_rating = 4.9
-        average_response_time = 25  # minutes
-
-        # Recent 3 requests
         recent_requests = (
-            ServiceRequest.objects
-            .filter(technician=profile)
+            ServiceRequest.objects.filter(technician=profile)
             .order_by("-created_at")[:3]
         )
 
-        data = {
+        # --- FIX ---
+        # 1. Build a dictionary of the RAW objects and data
+        data_to_serialize = {
             "completed_jobs": completed_jobs,
-            "monthly_income": monthly_income,
-            "average_rating": average_rating,
-            "average_response_time": average_response_time,
-            "recent_requests": RecentRequestSerializer(
-                recent_requests, many=True, context={"request": request}
-            ).data,
-            "profile": ProfileSerializer(profile, context={"request": request}).data,
+            "monthly_income": 4500000,  # Hardcoded value from your code
+            "average_rating": 4.9,      # Hardcoded value from your code
+            "average_response_time": 25, # Hardcoded value from your code
+            "recent_requests": recent_requests, # Pass the QuerySet
+            "profile": profile,                 # Pass the object
         }
 
-        serializer = TechnicianPanelSerializer(data=data, context={"request": request})
-        serializer.is_valid(raise_exception=False)
-
+        # 2. Pass the dictionary as the 'instance' to be serialized.
+        # 3. Pass the 'request' in the context.
+        serializer = TechnicianPanelSerializer(
+            instance=data_to_serialize,
+            context={"request": request}
+        )
         return Response(serializer.data)

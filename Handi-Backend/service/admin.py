@@ -4,13 +4,19 @@ from .models import Profile, ServiceRequest, Wallet, RepresentativeTechnician
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     # Fields to display in the list view
-    list_display = ('user', 'user_type', 'city', 'point', 'get_user_phone')
+    list_display = ('user', 'first_name', 'last_name', 'user_type', 'city', 'point', 'get_user_phone')
     
     # Fields for filtering
     list_filter = ('user_type', 'city')
     
     # Fields for searching
-    search_fields = ('user__phone', 'user__first_name', 'user__last_name', 'city', 'address')
+    search_fields = (
+        'user__phone', 
+        'first_name', 
+        'last_name', 
+        'city', 
+        'address'
+    )
     
     # Fields that can be edited directly in the list view
     list_editable = ('user_type', 'point')
@@ -19,6 +25,9 @@ class ProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         ('User Information', {
             'fields': ('user', 'user_type', 'get_user_phone')
+        }),
+        ('Personal Details', {
+            'fields': ('first_name', 'last_name')
         }),
         ('Contact Details', {
             'fields': ('address', 'city')
@@ -49,6 +58,7 @@ class ProfileAdmin(admin.ModelAdmin):
         updated = queryset.update(user_type='customer')
         self.message_user(request, f'{updated} profiles were successfully marked as customers.')
     make_customer.short_description = "Mark selected profiles as Customer"
+
 
 @admin.register(ServiceRequest)
 class ServiceRequestAdmin(admin.ModelAdmin):
