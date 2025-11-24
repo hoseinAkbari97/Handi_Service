@@ -15,7 +15,8 @@ export default function TechnicianEditProfile() {
   const { user } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
-    full_name: `${user.profile.first_name} ${user.profile.last_name}` || "",
+    first_name: user.profile.first_name || "",
+    last_name: user.profile.last_name || "",
     phone: user.profile.phone || "",
     email: user.profile.email || "",
     region: user.profile.address || "",
@@ -121,9 +122,18 @@ export default function TechnicianEditProfile() {
 
         <Box display="flex" flexDirection="column" gap={2}>
           <TextField
-            name="name"
-            label="نام و نام خانوادگی"
-            value={formData.full_name}
+            name="first_name"
+            label="نام"
+            value={formData.first_name}
+            onChange={handleChange}
+            fullWidth
+            sx={inputSX}
+          />
+
+          <TextField
+            name="last_name"
+            label="نام خانوادگی"
+            value={formData.last_name}
             onChange={handleChange}
             fullWidth
             sx={inputSX}
