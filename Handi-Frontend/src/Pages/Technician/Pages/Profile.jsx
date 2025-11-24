@@ -7,11 +7,15 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import React, { useState } from "react";
-// import { UsersList } from "../../../Datas";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../../../Contexts/UserContext";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
-export default function AgentEditProfile() {
-  const [formData, setFormData] = useState(UsersList[2]);
+export default function TechnicianEditProfile() {
+
+    const { user } = useContext(UserContext)
+
+  const [formData, setFormData] = useState(user);
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -42,11 +46,10 @@ export default function AgentEditProfile() {
           p: 3,
           textAlign: "center",
           color: "secondary.main",
-          direction: "rtl",
         }}
       >
         <Avatar
-          src={UsersList[2].avatar}
+          src={user.profile.profile_picture}
           sx={{
             width: 90,
             height: 91,
@@ -57,10 +60,10 @@ export default function AgentEditProfile() {
           }}
         />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          {UsersList[2].name}
+          {user.profile.first_name} {user.profile.last_name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
-          نماینده منطقه {UsersList[2].region}
+          تعمیرکار منطقه {user?.profile?.address || "(وارد نشده)"}
         </Typography>
 
         <Divider
@@ -76,15 +79,15 @@ export default function AgentEditProfile() {
         >
           <Box>
             <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              ۸
+              {toPersianNumber(user.monthly_income)}
             </Typography>
-            <Typography variant="body2">تکنسین</Typography>
+            <Typography variant="body2">درآمد ماه جاری</Typography>
           </Box>
           <Box>
             <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              ۱۵۰
+              {toPersianNumber(user.completed_jobs)}
             </Typography>
-            <Typography variant="body2">کار مدیریت شده</Typography>
+            <Typography variant="body2">کارهای انجام شده</Typography>
           </Box>
           <Box>
             <Typography variant="h6" sx={{ color: "secondary.main" }}>

@@ -7,7 +7,8 @@ import AgentDashboardPanel from "../Pages/Agent/Pages/Dashboard";
 import TechnicianDashboardPanel from "../Pages/Technician/Pages/Dashboard";
 import ManageTasks from "../Pages/Agent/Pages/ManageTasks";
 import Messages from "../Pages/Agent/Pages/Messages";
-import Profile from "../Pages/Agent/Pages/Profile";
+import AgentEditProfile from "../Pages/Agent/Pages/Profile";
+import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
 import Reports from "../Pages/Agent/Pages/Reports";
 import Setting from "../Pages/Agent/Pages/Setting";
 import TeamTechnicians from "../Pages/Agent/Pages/TeamTechnicians";
@@ -25,7 +26,7 @@ const routes = [
         element: <TechnicianDashboard />,
         children: [
           { index: true, element: <TechnicianDashboardPanel /> },
-          { path: "profile", element: <Profile /> },
+          { path: "profile", element: <TechnicianEditProfile /> },
         ],
       },
       {
@@ -35,7 +36,7 @@ const routes = [
           { index: true, element: <AgentDashboardPanel /> },
           { path: "manage-tasks", element: <ManageTasks /> },
           { path: "messages", element: <Messages /> },
-          { path: "profile", element: <Profile /> },
+          { path: "profile", element: <AgentEditProfile /> },
           { path: "reports", element: <Reports /> },
           { path: "setting", element: <Setting /> },
           { path: "team-technicians", element: <TeamTechnicians /> },
