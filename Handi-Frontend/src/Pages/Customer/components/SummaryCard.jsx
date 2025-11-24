@@ -3,7 +3,7 @@ import { Box, Typography, Paper, useTheme } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 export default function SummaryCard({ iconType, label, value }) {
   const theme = useTheme();
@@ -47,7 +47,7 @@ export default function SummaryCard({ iconType, label, value }) {
           fontWeight="bold"
           sx={{ color: theme.palette.secondary.main }}
         >
-          {value}
+          {toPersianNumber(value)}
         </Typography>
       </Box>
 

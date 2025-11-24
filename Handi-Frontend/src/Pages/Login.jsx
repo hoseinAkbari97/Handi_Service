@@ -13,6 +13,7 @@ import {
 import { useNavigate, Link, data } from "react-router-dom";
 import HandymanIcon from "@mui/icons-material/Handyman";
 import { UserContext } from "../Contexts/UserContext";
+import {toEnglishNumber} from "../Utils/NumberUtils"
 
 export default function Login() {
   const [role, setRole] = useState("");
@@ -27,28 +28,16 @@ export default function Login() {
 
   const { user, saveUser } = useContext(UserContext);
 
-
-  const convertToEnglishDigits = (value) => {
-    const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-    const englishDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-    let result = value;
-    persianDigits.forEach((d, i) => {
-      result = result.replaceAll(d, englishDigits[i]);
-    });
-    return result;
-  };
-
   const roleChange = (event) => {
     setRole(event.target.value);
   };
 
   const phoneHandler = (event) => {
-    setPhone(convertToEnglishDigits(event.target.value.trim()));
+    setPhone(toEnglishNumber(event.target.value.trim()));
   };
 
   const codeHandler = (event) => {
-    setVerifyOTP(convertToEnglishDigits(event.target.value.trim()));
+    setVerifyOTP(toEnglishNumber(event.target.value.trim()));
   };
 
   const stepHandler = () => {
