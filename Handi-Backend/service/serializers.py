@@ -22,6 +22,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class TechnicianSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source="user.phone", read_only=True)
+    rate = serializers.FloatField(default=4.5)
 
     class Meta:
         model = Profile
@@ -35,6 +36,7 @@ class TechnicianSerializer(serializers.ModelSerializer):
             "bio",
             "profile_picture",
             "point",
+            "rate",
         ]
 
 
