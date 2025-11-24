@@ -55,7 +55,7 @@ export default function SummaryCard({ iconType, label, value }) {
           fontWeight="bold"
           sx={{ color: theme.palette.secondary.main }}
         >
-          {toPersianNumber(value)}
+          {value}
         </Typography>
       </Box>
 

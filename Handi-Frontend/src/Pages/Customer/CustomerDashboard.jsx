@@ -7,6 +7,7 @@ import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
 // import { TechniciansList, UsersList } from "../../Datas";
 import { UserContext } from "../../Contexts/UserContext";
+import { toPersianNumber } from "../../Utils/NumberUtils";
 
 export default function CustomerDashboard() {
 
@@ -95,7 +96,7 @@ export default function CustomerDashboard() {
             <SummaryCard
               iconType="wallet"
               label="موجودی کیف پول"
-              value={`${user.wallet_balance} تومان`}
+              value={`${toPersianNumber(user.wallet_balance)} تومان`}
             />
           </Box>
 

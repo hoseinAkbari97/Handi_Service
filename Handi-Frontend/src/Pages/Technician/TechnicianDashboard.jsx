@@ -7,6 +7,7 @@ import Requests from "./Components/Requests";
 // import { UsersList } from "../../Datas";
 import Sidebar from "../../Layout/Sidebar";
 import { UserContext } from "../../Contexts/UserContext";
+import { toPersianNumber } from "../../Utils/NumberUtils";
 
 export default function TechniciansDashboard() {
 
@@ -83,18 +84,18 @@ export default function TechniciansDashboard() {
             <SummaryCard
               iconType="workDone"
               label="کارهای انجام شده"
-              value={user.completed_jobs}
+              value={toPersianNumber(user.completed_jobs)}
             />
             <SummaryCard
               iconType="Income"
               label="درآمد این ماه"
-              value={user.monthly_income}
+              value={`${toPersianNumber(user.monthly_income)} تومان`}
             />
-            <SummaryCard iconType="rate" label="میانگین امتیاز" value={user.average_rating} />
+            <SummaryCard iconType="rate" label="میانگین امتیاز" value={`${toPersianNumber(user.average_rating)}`} />
             <SummaryCard
               iconType="clock"
               label="میانگین زمان پاسخگویی"
-              value={user.average_response_time}
+              value={`${toPersianNumber(user.average_response_time)} دقیقه`}
             />
           </Box>
 
