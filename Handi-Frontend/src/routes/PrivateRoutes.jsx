@@ -1,4 +1,3 @@
-import React from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 
 export default function PrivateRoutes() {
@@ -14,7 +13,7 @@ export default function PrivateRoutes() {
     (location.pathname.startsWith("/technician") && role !== "technician") ||
     (location.pathname.startsWith("/customer") && role !== "customer")
   ) {
-    localStorage.removeItem("isValid");
+    // localStorage.removeItem("isValid");
     localStorage.removeItem("role");
     return <Navigate to="/login" replace />;
   }

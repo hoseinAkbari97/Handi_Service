@@ -7,6 +7,7 @@ import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
 // import { TechniciansList, UsersList } from "../../Datas";
 import { UserContext } from "../../Contexts/UserContext";
+import { toPersianNumber } from "../../Utils/NumberUtils";
 
 export default function CustomerDashboard() {
 
@@ -90,14 +91,13 @@ export default function CustomerDashboard() {
             }}
             sx={{ gridArea: { lg: "summary", xl: "summary" } }}
           >
-            <SummaryCard iconType="requests" label="کل درخواست‌ها" value="۲۴" />
-            <SummaryCard iconType="done" label="خدمات انجام‌شده" value="۱۸" />
+            <SummaryCard iconType="requests" label="کل درخواست‌ها" value={user.total_requests} />
+            <SummaryCard iconType="done" label="خدمات انجام‌شده" value={user.completed_requests} />
             <SummaryCard
               iconType="wallet"
               label="موجودی کیف پول"
-              value="۵۵۰,۰۰۰ تومان"
+              value={`${toPersianNumber(user.wallet_balance)} تومان`}
             />
-            <SummaryCard iconType="points" label="امتیاز کلاب" value="۱۲۰" />
           </Box>
 
           {/* Top Technicians */}
@@ -107,7 +107,7 @@ export default function CustomerDashboard() {
               mt: { xs: 2, lg: 0 },
             }}
           >
-            {/* <TopTechnicians technicians={technicians} /> */}
+            <TopTechnicians technicians={user.top_technicians} />
           </Box>
         </Box>
       </Box>
