@@ -26,7 +26,6 @@ export default function Sidebar({ user, onClose }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("isValid");
     localStorage.removeItem("role");
     navigate("/");
   };
@@ -114,7 +113,7 @@ export default function Sidebar({ user, onClose }) {
             alt={user?.profile?.first_name || ""}
             sx={{ width: 64, height: 64, mt: 2, mx: "auto" }}
           />
-          <Typography sx={{ mt: 1, cursor: "default" }}>{user?.profile?.first_name || "بدون نام"}</Typography>
+          <Typography sx={{ mt: 1, cursor: "default" }}>{(`${user?.profile?.first_name} ${user?.profile?.last_name}`) || "بدون نام"}</Typography>
           <Typography
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}

@@ -97,7 +97,6 @@ export default function Login() {
           })
           .then((user) => {
             saveUser(user)
-            localStorage.setItem("isValid", "true");
             localStorage.setItem("role", user.profile.user_type);
 
             if (role === "customer") navigate("/customer");
