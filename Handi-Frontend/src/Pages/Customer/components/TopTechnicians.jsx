@@ -1,8 +1,12 @@
 import { Box, Paper, Typography, Avatar, Divider } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import StarIcon from "@mui/icons-material/Star";
+import { UserContext } from "../../../Contexts/UserContext";
 
 export default function TopTechnicians({ technicians }) {
+
+  const {user} = useContext(UserContext)
+
   return (
     <Paper
       sx={{
@@ -27,15 +31,15 @@ export default function TopTechnicians({ technicians }) {
         </Typography>
       </Box>
 
-      {technicians.map((technician, index) => (
-        <React.Fragment key={index}>
+      {user.top_technicians.map((technician, index) => (
+        <React.Fragment key={technician.id}>
           <Box
             sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
           >
             {/* Left Side (avatar + fullName + expertise) */}
             <Box sx={{ display: "flex", gap:1 }}>
               <Avatar
-                alt={technician.fullName}
+                alt={technician.name}
                 src={technician.avatar}
                 sx={{ width: 50, height: 50 }}
               />
@@ -47,7 +51,7 @@ export default function TopTechnicians({ technicians }) {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography>{technician.fullName}</Typography>
+                <Typography>{technician.name}</Typography>
                 <Typography variant="caption" mt={0.5} color="text.dark">
                   تخصص: {technician.expertise}
                 </Typography>
@@ -63,7 +67,7 @@ export default function TopTechnicians({ technicians }) {
             </Box>
           </Box>
 
-          {index < technicians.length - 1 && (
+          {index < user.top_technicians.length - 1 && (
             <Divider
               sx={{ mt: 2, width: "80%", mx:"auto",opacity:".5", borderColor: "secondary.dark" }}
             />

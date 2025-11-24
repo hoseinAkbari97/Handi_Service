@@ -106,7 +106,7 @@ export default function CustomerDashboard() {
               mt: { xs: 2, lg: 0 },
             }}
           >
-            {/* <TopTechnicians technicians={technicians} /> */}
+            <TopTechnicians technicians={user.top_technicians} />
           </Box>
         </Box>
       </Box>
