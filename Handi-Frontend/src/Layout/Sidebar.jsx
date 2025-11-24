@@ -26,7 +26,9 @@ export default function Sidebar({ user, onClose }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem("isValid");
     localStorage.removeItem("role");
+    localStorage.removeItem("user");
     navigate("/");
   };
 
