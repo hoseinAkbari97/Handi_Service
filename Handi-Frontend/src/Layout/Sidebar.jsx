@@ -28,6 +28,7 @@ export default function Sidebar({ user, onClose }) {
   const handleLogout = () => {
     localStorage.removeItem("isValid");
     localStorage.removeItem("role");
+    localStorage.removeItem("user");
     navigate("/");
   };
 
@@ -62,7 +63,7 @@ export default function Sidebar({ user, onClose }) {
       },
       { text: "گزارش گیری", icon: <WalletIcon />, path: "/technician/wallet" },
       { text: "پیام ها", icon: <WalletIcon />, path: "/technician/wallet" },
-      { text: "پروفایل", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "پروفایل", icon: <WalletIcon />, path: "/technician/profile" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],
     agent: [
@@ -114,7 +115,7 @@ export default function Sidebar({ user, onClose }) {
             alt={user?.profile?.first_name || ""}
             sx={{ width: 64, height: 64, mt: 2, mx: "auto" }}
           />
-          <Typography sx={{ mt: 1, cursor: "default" }}>{user?.profile?.first_name || "بدون نام"}</Typography>
+          <Typography sx={{ mt: 1, cursor: "default" }}>{(`${user?.profile?.first_name} ${user?.profile?.last_name}`) || "بدون نام"}</Typography>
           <Typography
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}

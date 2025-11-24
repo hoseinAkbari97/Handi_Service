@@ -2,6 +2,7 @@ import { Box, Paper, Typography, Avatar, Divider } from "@mui/material";
 import React from "react";
 
 export default function Requests({ requests }) {
+  
   return (
     <Paper
       sx={{
@@ -26,48 +27,60 @@ export default function Requests({ requests }) {
         </Typography>
       </Box>
 
-      {requests.map((request, index) => (
-        <React.Fragment key={index}>
-          <Box
-            sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
-          >
-            {/* Left Side (avatar + fullName + expertise) */}
-            <Box sx={{ display: "flex" }}>
-              <Avatar
-                alt={request.customerName}
-                src={request.avatar}
-                sx={{ width: 50, height: 50 }}
-              />
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  ml: 2,
-                  alignItems: "flex-start",
-                }}
-              >
-                <Typography>{request.customerName}</Typography>
-                <Typography variant="caption" mt={0.5} color="text.dark">
-                  درخواست: {request.request} {request.device} {request.brand}
+      {requests && requests.length > 0 ? (
+        requests.map((request, index) => (
+          <React.Fragment key={index}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+              {/* Left Side */}
+              <Box sx={{ display: "flex" }}>
+                <Avatar
+                  alt={request.customerName}
+                  src={request.avatar}
+                  sx={{ width: 50, height: 50 }}
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: 2,
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <Typography>{request.customerName}</Typography>
+                  <Typography variant="caption" mt={0.5} color="text.dark">
+                    درخواست: {request.request} {request.device} {request.brand}
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Right Side */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography color="text.secondary" mt={1}>
+                  {request.time} ساعت پیش
                 </Typography>
               </Box>
             </Box>
 
-            {/* Right Side (icon + rate) */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography color="text.secondary" mt={1}>
-                {request.time} ساعت پیش
-              </Typography>
-            </Box>
-          </Box>
+            {index < requests.length - 1 && (
+              <Divider
+                sx={{
+                  mt: 2,
+                  width: "80%",
+                  mx: "auto",
+                  opacity: ".5",
+                  borderColor: "secondary.dark",
+                }}
+              />
+            )}
+          </React.Fragment>
+        ))
+      ) : (
+        <Typography variant="body2" color="text.dark" sx={{ mb: 2, fontWeight: "bold" }}>
+          هیچ درخواست فعالی وجود ندارد
+        </Typography>
+      )}
 
-          {index < requests.length - 1 && (
-            <Divider
-              sx={{ mt: 2, width: "80%", mx:"auto",opacity:".5", borderColor: "secondary.dark" }}
-            />
-          )}
-        </React.Fragment>
-      ))}
+      
     </Paper>
   );
 }
