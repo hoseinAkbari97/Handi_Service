@@ -14,11 +14,11 @@ class Profile(models.Model):
         related_name='profile'
     )
 
-    # MOVED FROM CustomUser
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
 
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='customer')
+    expertise = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)

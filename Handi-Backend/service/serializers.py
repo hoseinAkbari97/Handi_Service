@@ -10,6 +10,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "user_type",
+            "expertise",
             "address",
             "city",
             "bio",
@@ -20,15 +21,21 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class TechnicianSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
     phone = serializers.CharField(source="user.phone", read_only=True)
-
-    def get_name(self, obj):
-        return f"{obj.first_name or ''} {obj.last_name or ''}".strip()
 
     class Meta:
         model = Profile
-        fields = ["id", "name", "phone", "city", "bio"]
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "phone",
+            "expertise",       
+            "city",
+            "bio",
+            "profile_picture",
+            "point",
+        ]
 
 
 class ActiveRequestSerializer(serializers.ModelSerializer):
