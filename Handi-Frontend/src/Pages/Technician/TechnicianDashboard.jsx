@@ -10,7 +10,15 @@ import { UserContext } from "../../Contexts/UserContext";
 
 export default function TechniciansDashboard() {
 
-  const user = useContext(UserContext)
+  const {user} = useContext(UserContext)
+
+  if (!user) {
+      return (
+        <Box sx={{ p: 4, textAlign: "center" }}>
+          در حال دریافت اطلاعات کاربری...
+        </Box>
+      );
+    }
 
   return (
     <Box
@@ -21,6 +29,7 @@ export default function TechniciansDashboard() {
       gap: 1,
     }}
     >
+      
       {/* SideBar display: desktop & tablet */}
       <Box
         sx={{
@@ -30,7 +39,7 @@ export default function TechniciansDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={user.user_type} user={user} />
+        <Sidebar role={user.profile.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
