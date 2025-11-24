@@ -95,7 +95,7 @@ export default function CustomerDashboard() {
             <SummaryCard
               iconType="wallet"
               label="موجودی کیف پول"
-              value={user.wallet_balance}
+              value={`${user.wallet_balance} تومان`}
             />
           </Box>
 

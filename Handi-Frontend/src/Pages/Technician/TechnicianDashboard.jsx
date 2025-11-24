@@ -83,18 +83,18 @@ export default function TechniciansDashboard() {
             <SummaryCard
               iconType="workDone"
               label="کارهای انجام شده"
-              value="۱۲"
+              value={user.completed_jobs}
             />
             <SummaryCard
               iconType="Income"
               label="درآمد این ماه"
-              value="۴,۵۰۰,۰۰۰ تومان"
+              value={user.monthly_income}
             />
-            <SummaryCard iconType="rate" label="میانگین امتیاز" value="۴.۹" />
+            <SummaryCard iconType="rate" label="میانگین امتیاز" value={user.average_rating} />
             <SummaryCard
               iconType="clock"
               label="میانگین زمان پاسخگویی"
-              value="۲۵ دقیقه"
+              value={user.average_response_time}
             />
           </Box>
 
