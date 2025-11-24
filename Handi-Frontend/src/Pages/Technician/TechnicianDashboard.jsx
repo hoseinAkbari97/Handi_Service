@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box } from "@mui/material";
 import Header from "./Components/Header";
 import SummaryCard from "./Components/SummaryCard";
@@ -6,8 +6,12 @@ import Requests from "./Components/Requests";
 // import { RequestsList } from "../../Datas";
 // import { UsersList } from "../../Datas";
 import Sidebar from "../../Layout/Sidebar";
+import { UserContext } from "../../Contexts/UserContext";
 
 export default function TechniciansDashboard() {
+
+  const user = useContext(UserContext)
+
   return (
     <Box
     sx={{
@@ -26,7 +30,7 @@ export default function TechniciansDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={UsersList[1].role} user={UsersList[1]} />
+        <Sidebar role={user.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
@@ -94,7 +98,7 @@ export default function TechniciansDashboard() {
               mt: { xs: 2, lg: 0 },
             }}
           >
-            <Requests requests={RequestsList} />
+            <Requests requests={user.recent_requests} />
           </Box>
         </Box>
       </Box>

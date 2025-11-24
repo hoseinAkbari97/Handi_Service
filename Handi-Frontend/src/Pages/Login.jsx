@@ -13,7 +13,7 @@ import {
 import { useNavigate, Link, data } from "react-router-dom";
 import HandymanIcon from "@mui/icons-material/Handyman";
 import { UserContext } from "../Contexts/UserContext";
-import {toEnglishNumber} from "../Utils/NumberUtils"
+import { toEnglishNumber } from "../Utils/NumberUtils";
 
 export default function Login() {
   const [role, setRole] = useState("");
@@ -46,8 +46,9 @@ export default function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone }),
     })
-      .then((Response) => {        
+      .then((Response) => {
         if (!Response.ok) {
+          alert("ارسال پیامک با خطا مواجه شد");
           throw new Error("Phone sending failed");
         }
         setStep("verify");
@@ -55,7 +56,6 @@ export default function Login() {
       })
       .catch((error) => {
         console.error(error);
-        alert("ارسال پیامک با خطا مواجه شد");
       });
   };
 
@@ -65,42 +65,94 @@ export default function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone, otp: verifyOTP }),
     })
-      .then((Response) => {        
+      .then((Response) => {
         if (!Response.ok) {
-          throw new Error("OTP sending failed");
+          alert("کد وارد شده نامعتبر است");
+          throw new Error("Invalid OTP");
         }
         return Response.json();
       })
-      .then((data) => {        
-        fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
-          headers: { Authorization: `Bearer ${data.access}` },
-        })
-          .then((Response) => {  
-            if (!Response.ok) {
-              if (Response.status === 403) {
-                alert("مشتری با این شماره وجود ندارد")
+      .then((data) => {
+        switch (role) {
+          case "customer":
+            return fetch(
+              "http://127.0.0.1:8000/api/service/dashboard/customer/",
+              {
+                headers: { Authorization: `Bearer ${data.access}` },
               }
-              throw new Error("An error occurred while retrieving information");
-            }
-            return Response.json();
-          })
-          .then((user) => {
-            saveUser(user)
-            localStorage.setItem("role", user.profile.user_type);
-            localStorage.setItem("isValid", "true");
-
-            if (role === "customer") navigate("/customer");
-            else if (role === "technician") navigate("/technician");
-            else if (role === "agent") navigate("/agent");
-          })
-          .catch((error) => {
-            console.error(error);
-            alert("دریافت اطلاعات با خطا مواجه شد");
-          });
+            )
+              .then((Response) => {
+                if (!Response.ok) {
+                  if (Response.status === 403) {
+                    alert("مشتری با این شماره وجود ندارد");
+                  }
+                  throw new Error("This number is not a customer");
+                }
+                return Response.json();
+              })
+              .then((user) => {
+                navigate("/customer");
+                saveUser(user);
+                localStorage.setItem("role", user.profile.user_type);
+                localStorage.setItem("isValid", "true");
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          case "technician":
+            return fetch(
+              "http://127.0.0.1:8000/api/service/dashboard/technician/",
+              {
+                headers: { Authorization: `Bearer ${data.access}` },
+              }
+            )
+              .then((Response) => {
+                if (!Response.ok) {
+                  if (Response.status === 403) {
+                    alert("تعمیرکار با این شماره وجود ندارد");
+                  }
+                  throw new Error("This number is not a technician");
+                }
+                return Response.json();
+              })
+              .then((user) => {
+                navigate("/technician");
+                saveUser(user);
+                localStorage.setItem("role", user.profile.user_type);
+                localStorage.setItem("isValid", "true");
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          // case "agent":
+            return fetch(
+              "http://127.0.0.1:8000/api/service/dashboard/agent/",
+              {
+                headers: { Authorization: `Bearer ${data.access}` },
+              }
+            )
+              .then((Response) => {
+                if (!Response.ok) {
+                  if (Response.status === 403) {
+                    alert("نماینده‌ای با این شماره وجود ندارد");
+                  }
+                  throw new Error("This number is not a agent");
+                }
+                return Response.json();
+              })
+              .then((user) => {
+                navigate("/agent");
+                saveUser(user);
+                localStorage.setItem("role", user.profile.user_type);
+                localStorage.setItem("isValid", "true");
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+        }
       })
       .catch((error) => {
         console.error(error);
-        alert("کد وارد شده نامعتبر است");
       });
   };
 
