@@ -51,7 +51,7 @@ export default function TopTechnicians({ technicians }) {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography>{technician.name}</Typography>
+                <Typography>{technician.first_name} {technician.last_name}</Typography>
                 <Typography variant="caption" mt={0.5} color="text.dark">
                   تخصص: {technician.expertise}
                 </Typography>
