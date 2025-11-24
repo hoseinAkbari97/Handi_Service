@@ -57,7 +57,7 @@ export default function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone }),
     })
-      .then((Response) => {
+      .then((Response) => {        
         if (!Response.ok) {
           throw new Error("Phone sending failed");
         }
@@ -76,18 +76,21 @@ export default function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone, otp: verifyOTP }),
     })
-      .then((Response) => {
+      .then((Response) => {        
         if (!Response.ok) {
           throw new Error("OTP sending failed");
         }
         return Response.json();
       })
-      .then((data) => {
+      .then((data) => {        
         fetch("http://127.0.0.1:8000/api/service/dashboard/customer/", {
           headers: { Authorization: `Bearer ${data.access}` },
         })
-          .then((Response) => {
+          .then((Response) => {  
             if (!Response.ok) {
+              if (Response.status === 403) {
+                alert("مشتری با این شماره وجود ندارد")
+              }
               throw new Error("An error occurred while retrieving information");
             }
             return Response.json();
