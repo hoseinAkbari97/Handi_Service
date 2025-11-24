@@ -5,7 +5,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
-// props: iconType, label, value
 export default function SummaryCard({ iconType, label, value }) {
   const theme = useTheme();
   
@@ -17,8 +16,6 @@ export default function SummaryCard({ iconType, label, value }) {
         return <CheckCircleIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       case "wallet":
         return <AccountBalanceWalletIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
-      case "points":
-        return <EmojiEventsIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
       default:
         return <AssignmentIcon sx={{ fontSize: 50, color: "secondary.main" }} />;
     }

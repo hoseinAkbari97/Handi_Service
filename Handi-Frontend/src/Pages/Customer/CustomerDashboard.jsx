@@ -90,14 +90,13 @@ export default function CustomerDashboard() {
             }}
             sx={{ gridArea: { lg: "summary", xl: "summary" } }}
           >
-            <SummaryCard iconType="requests" label="کل درخواست‌ها" value="۲۴" />
-            <SummaryCard iconType="done" label="خدمات انجام‌شده" value="۱۸" />
+            <SummaryCard iconType="requests" label="کل درخواست‌ها" value={user.total_requests} />
+            <SummaryCard iconType="done" label="خدمات انجام‌شده" value={user.completed_requests} />
             <SummaryCard
               iconType="wallet"
               label="موجودی کیف پول"
-              value="۵۵۰,۰۰۰ تومان"
+              value={user.wallet_balance}
             />
-            <SummaryCard iconType="points" label="امتیاز کلاب" value="۱۲۰" />
           </Box>
 
           {/* Top Technicians */}
