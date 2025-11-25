@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography, Paper, useTheme } from "@mui/material";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import StarIcon from '@mui/icons-material/Star';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import { UserContext } from "../../../Contexts/UserContext";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 // props: iconType, label, value
 export default function SummaryCard({ iconType, label, value }) {
+
+  const { user } = useContext(UserContext)
+
   const theme = useTheme();
   
   const getIcon = () => {
