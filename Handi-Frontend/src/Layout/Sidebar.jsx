@@ -124,7 +124,7 @@ export default function Sidebar({ user, onClose }) {
               ? "تکنسین"
               : user?.profile?.user_type === "customer"
               ? "مشتری"
-              : user?.profile?.user_type === "agent"
+              : user?.profile?.user_type === "representative"
               ? "نماینده"
               : "کاربر مهمان"}
           </Typography>
