@@ -79,8 +79,6 @@ export default function Requests({ requests }) {
           هیچ درخواست فعالی وجود ندارد
         </Typography>
       )}
-
-      
     </Paper>
   );
 }

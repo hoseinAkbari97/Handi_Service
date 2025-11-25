@@ -49,7 +49,7 @@ export default function Sidebar({ user, onClose }) {
       { text: "باشگاه مشتریان", icon: <StarIcon />, path: "/customer/club" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/customer/settings" },
     ],
-    technician: [
+    representative: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/technician" },
       {
         text: "درخواست‌ها",
@@ -120,7 +120,7 @@ export default function Sidebar({ user, onClose }) {
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}
           >
-            {user?.profile?.user_type === "technician"
+            {user?.profile?.user_type === "representative"
               ? "تکنسین"
               : user?.profile?.user_type === "customer"
               ? "مشتری"
@@ -129,6 +129,7 @@ export default function Sidebar({ user, onClose }) {
               : "کاربر مهمان"}
           </Typography>
         </Box>
+        {console.log(user.profile.user_type)}
 
         <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5" }} />
 
