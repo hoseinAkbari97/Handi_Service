@@ -17,6 +17,7 @@ from .serializers import (
     AssignTechnicianSerializer,
     RepresentativeReportSerializer,
     RepresentativeTaskDetailSerializer,
+    RepresentativeEditSerializer,
 )
 
 
@@ -359,3 +360,36 @@ class RepresentativeReportView(APIView):
         )
 
         return Response(serializer.data)
+    
+class RepresentativeEditView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        if profile.user_type != "representative":
+            return Response({"detail": "Only representatives can edit their profile."}, status=403)
+
+        serializer = RepresentativeEditSerializer(
+            instance=profile,
+            context={"request": request}
+        )
+        return Response(serializer.data)
+
+    def post(self, request):
+        profile = request.user.profile
+        if profile.user_type != "representative":
+            return Response({"detail": "Only representatives can edit their profile."}, status=403)
+
+        serializer = RepresentativeEditSerializer(
+            instance=profile,
+            data=request.data,
+            partial=True,
+            context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            "detail": "Profile updated successfully",
+            "data": serializer.data
+        })

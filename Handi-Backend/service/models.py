@@ -16,6 +16,8 @@ class Profile(models.Model):
 
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    area = models.CharField(max_length=255, blank=True, null=True)
 
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='customer')
     expertise = models.CharField(max_length=255, blank=True, null=True)

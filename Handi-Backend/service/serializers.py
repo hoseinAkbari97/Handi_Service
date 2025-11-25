@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Profile, Wallet, ServiceRequest
+from .models import Profile, Wallet, ServiceRequest, RepresentativeTechnician
+from django.utils import timezone
 import random
 
 
@@ -263,3 +264,49 @@ class RepresentativeReportSerializer(serializers.Serializer):
     avg_rating = serializers.FloatField()
     efficiency = serializers.FloatField()
     task_details = RepresentativeTaskDetailSerializer(many=True)
+
+
+class RepresentativeEditSerializer(serializers.Serializer):
+
+    # USER FIELDS
+    phone = serializers.CharField(source="user.phone", read_only=True)
+
+    # PROFILE FIELDS
+    email = serializers.EmailField(required=False, allow_null=True)
+    first_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    area = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    address = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    city = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    bio = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    profile_picture = serializers.ImageField(required=False)
+
+    # EXTRA CALCULATED FIELDS
+    experience = serializers.SerializerMethodField()
+    total_requests = serializers.SerializerMethodField()
+    technician_count = serializers.SerializerMethodField()
+
+    def get_experience(self, profile):
+        diff = timezone.now() - profile.user.date_joined
+        return f"{diff.days} روز"
+
+    def get_total_requests(self, profile):
+        tech_ids = RepresentativeTechnician.objects.filter(
+            representative=profile
+        ).values_list("technician_id", flat=True)
+
+        return ServiceRequest.objects.filter(
+            technician_id__in=tech_ids,
+            status="completed"
+        ).count()
+
+    def get_technician_count(self, profile):
+        return RepresentativeTechnician.objects.filter(representative=profile).count()
+
+    def update(self, instance, validated_data):
+        # Update profile fields
+        for field, value in validated_data.items():
+            setattr(instance, field, value)
+
+        instance.save()
+        return instance

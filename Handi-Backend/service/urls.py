@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileView, CustomerPanelView, TechnicianPanelView, RepresentativePanelView, RepresentativeTeamView, RepresentativeEditTechnicianView, RepresentativeTaskListView, AssignTechnicianToTaskView, RepresentativeReportView
+from .views import ProfileView, CustomerPanelView, TechnicianPanelView, RepresentativePanelView, RepresentativeTeamView, RepresentativeEditTechnicianView, RepresentativeTaskListView, AssignTechnicianToTaskView, RepresentativeReportView, RepresentativeEditView
 
 urlpatterns = [
     path('me/', ProfileView.as_view(), name='profile-me'),
@@ -19,4 +19,5 @@ urlpatterns = [
         name="rep-assign-task"
     ),
     path("dashboard/representative/report/", RepresentativeReportView.as_view(), name="rep-report"),
+    path("dashboard/representative/edit/", RepresentativeEditView.as_view()),
 ]
