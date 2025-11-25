@@ -97,3 +97,51 @@ class RepresentativePanelSerializer(serializers.Serializer):
     recent_team_requests = RecentRequestSerializer(many=True)
     profile = ProfileSerializer()
     technicians = TechnicianSerializer(many=True)
+
+
+class RepresentativeTechnicianFullSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(source="user.phone", read_only=True)
+    rate = serializers.FloatField(default=4.5)
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "phone",
+            "expertise",
+            "city",
+            "bio",
+            "profile_picture",
+            "point",
+            "rate",
+            "status",
+        ]
+
+    def get_status(self, obj):
+        """
+        Dummy logic for now:
+        - If has an active request → "working"
+        - Else always: "ready"
+        """
+        has_active = obj.assigned_requests.filter(
+            status__in=["pending", "assigned", "in_progress"]
+        ).exists()
+
+        return "working" if has_active else "ready"
+    
+
+class TechnicianEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            "first_name",
+            "last_name",
+            "expertise",
+            "city",
+            "bio",
+            "profile_picture",
+            "point",
+        ]

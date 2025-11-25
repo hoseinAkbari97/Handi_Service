@@ -10,7 +10,9 @@ from .serializers import (
     TechnicianSerializer,     
     TechnicianPanelSerializer,
     RecentRequestSerializer,
-    RepresentativePanelSerializer  
+    RepresentativePanelSerializer,
+    RepresentativeTechnicianFullSerializer,
+    TechnicianEditSerializer,
 )
 
 
@@ -176,3 +178,47 @@ class RepresentativePanelView(APIView):
         )
 
         return Response(serializer.data)
+    
+class RepresentativeTeamView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rep = request.user.profile
+
+        if rep.user_type != "representative":
+            return Response({"detail": "Only representatives can access this"}, status=403)
+
+        technicians = Profile.objects.filter(
+            user_type="technician",
+            representative_links__representative=rep
+        )
+
+        serializer = RepresentativeTechnicianFullSerializer(
+            technicians, many=True, context={"request": request}
+        )
+
+        return Response(serializer.data)
+    
+class RepresentativeEditTechnicianView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, technician_id):
+        rep = request.user.profile
+
+        # ensure the technician belongs to this representative
+        technician = Profile.objects.filter(
+            id=technician_id,
+            user_type="technician",
+            representative_links__representative=rep
+        ).first()
+
+        if not technician:
+            return Response({"detail": "Technician not found in your team"}, status=404)
+
+        serializer = TechnicianEditSerializer(
+            technician, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"detail": "Technician updated successfully"})
