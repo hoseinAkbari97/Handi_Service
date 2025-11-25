@@ -7,11 +7,20 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import React, { useState } from "react";
-// import { UsersList } from "../../../Datas";
+import { useContext, useState } from "react";
+import { UserContext } from "../../../Contexts/UserContext";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 export default function AgentEditProfile() {
-  const [formData, setFormData] = useState(UsersList[2]);
+  const { user } = useContext(UserContext);
+
+  const [formData, setFormData] = useState({
+    first_name: user.profile.first_name || "",
+    last_name: user.profile.last_name || "",
+    phone: user.profile.phone || "",
+    email: user.profile.email || "",
+    region: user.profile.address || "",
+  });
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -42,11 +51,10 @@ export default function AgentEditProfile() {
           p: 3,
           textAlign: "center",
           color: "secondary.main",
-          direction: "rtl",
         }}
       >
         <Avatar
-          src={UsersList[2].avatar}
+          src={user.profile.profile_picture}
           sx={{
             width: 90,
             height: 91,
@@ -57,10 +65,10 @@ export default function AgentEditProfile() {
           }}
         />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          {UsersList[2].name}
+          {user.profile.first_name} {user.profile.last_name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
-          نماینده منطقه {UsersList[2].region}
+          نماینده منطقه {user?.profile?.address || "(وارد نشده)"}
         </Typography>
 
         <Divider
@@ -116,7 +124,15 @@ export default function AgentEditProfile() {
           <TextField
             name="name"
             label="نام و نام خانوادگی"
-            value={formData.name}
+            value={formData.first_name}
+            onChange={handleChange}
+            fullWidth
+            sx={inputSX}
+          />
+          <TextField
+            name="last_name"
+            label="نام خانوادگی"
+            value={formData.last_name}
             onChange={handleChange}
             fullWidth
             sx={inputSX}
@@ -149,30 +165,29 @@ export default function AgentEditProfile() {
 
         {/* Button*/}
 
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            sx={{
-              mt: 4,
-              py: 1.2,
-              color: "primary.main",
-              "&.MuiButton-containedPrimary": {
-                backgroundColor: "secondary.main",
-                color: "text",
-              },
-              "&.MuiButton-containedPrimary:hover": {
-                backgroundColor: "secondary.light",
-              },
-              "&.Mui-disabled": {
-                backgroundColor: "secondary.dark",
-                color: "text.contrastText",
-              },
-            }}
-          >
-            ذخیره تغییرات
-          </Button>
-
+        <Button
+          fullWidth
+          variant="contained"
+          color="secondary"
+          sx={{
+            mt: 4,
+            py: 1.2,
+            color: "primary.main",
+            "&.MuiButton-containedPrimary": {
+              backgroundColor: "secondary.main",
+              color: "text",
+            },
+            "&.MuiButton-containedPrimary:hover": {
+              backgroundColor: "secondary.light",
+            },
+            "&.Mui-disabled": {
+              backgroundColor: "secondary.dark",
+              color: "text.contrastText",
+            },
+          }}
+        >
+          ذخیره تغییرات
+        </Button>
       </Card>
     </Box>
   );
