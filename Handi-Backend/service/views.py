@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, ServiceRequest
+from .models import Profile, ServiceRequest, RepresentativeTechnician
 from .serializers import (
     ProfileSerializer,
     CustomerPanelSerializer,
@@ -13,6 +13,8 @@ from .serializers import (
     RepresentativePanelSerializer,
     RepresentativeTechnicianFullSerializer,
     TechnicianEditSerializer,
+    RepresentativeTaskSerializer,
+    AssignTechnicianSerializer,
 )
 
 
@@ -222,3 +224,46 @@ class RepresentativeEditTechnicianView(APIView):
         serializer.save()
 
         return Response({"detail": "Technician updated successfully"})
+    
+class RepresentativeTaskListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rep = request.user.profile
+
+        if rep.user_type != "representative":
+            return Response({"detail": "Only representatives can access this."}, status=403)
+
+        # All tasks where technician belongs to representative
+        technician_ids = RepresentativeTechnician.objects.filter(
+            representative=rep
+        ).values_list("technician_id", flat=True)
+
+        tasks = ServiceRequest.objects.filter(technician_id__in=technician_ids)
+
+        serializer = RepresentativeTaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+    
+class AssignTechnicianToTaskView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, request_id):
+        rep = request.user.profile
+
+        if rep.user_type != "representative":
+            return Response({"detail": "Only representatives can assign tasks."}, status=403)
+
+        # Load task
+        request_obj = ServiceRequest.objects.filter(id=request_id).first()
+        if not request_obj:
+            return Response({"detail": "Task not found."}, status=404)
+
+        # Validate
+        serializer = AssignTechnicianSerializer(
+            data=request.data,
+            context={"representative": rep, "request_obj": request_obj}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"detail": "Task assigned successfully."})
