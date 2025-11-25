@@ -26,7 +26,7 @@ export default function Login() {
   const phoneRegex = /^(?:(?:\+98|0098)9\d{9}|09\d{9})$/;
   const isValid = phoneRegex.test(phone);
 
-  const { user, saveUser } = useContext(UserContext);
+  const { requestOTP, verifyAndLogin } = useContext(UserContext);
 
   const roleChange = (event) => {
     setRole(event.target.value);
@@ -41,115 +41,20 @@ export default function Login() {
   };
 
   const stepHandler = () => {
-    fetch("http://127.0.0.1:8000/api/auth/request-otp/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone }),
-    })
-      .then((Response) => {
-        if (!Response.ok) {
-          alert("ارسال پیامک با خطا مواجه شد");
-          throw new Error("Phone sending failed");
-        }
+    requestOTP(phone)
+      .then(() => {
         setStep("verify");
-        return Response.json();
       })
       .catch((error) => {
+        alert(error.message);
         console.error(error);
       });
   };
 
   const verifyHandler = () => {
-    fetch("http://127.0.0.1:8000/api/auth/verify-otp/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, otp: verifyOTP }),
-    })
-      .then((Response) => {
-        if (!Response.ok) {
-          alert("کد وارد شده نامعتبر است");
-          throw new Error("Invalid OTP");
-        }
-        return Response.json();
-      })
-      .then((data) => {
-        switch (role) {
-          case "customer":
-            return fetch(
-              "http://127.0.0.1:8000/api/service/dashboard/customer/",
-              {
-                headers: { Authorization: `Bearer ${data.access}` },
-              }
-            )
-              .then((Response) => {
-                if (!Response.ok) {
-                  if (Response.status === 403) {
-                    alert("مشتری با این شماره وجود ندارد");
-                  }
-                  throw new Error("This number is not a customer");
-                }
-                return Response.json();
-              })
-              .then((user) => {
-                navigate("/customer");
-                saveUser(user);
-                localStorage.setItem("role", user.profile.user_type);
-                localStorage.setItem("isValid", "true");
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          case "technician":
-            return fetch(
-              "http://127.0.0.1:8000/api/service/dashboard/technician/",
-              {
-                headers: { Authorization: `Bearer ${data.access}` },
-              }
-            )
-              .then((Response) => {
-                if (!Response.ok) {
-                  if (Response.status === 403) {
-                    alert("تعمیرکار با این شماره وجود ندارد");
-                  }
-                  throw new Error("This number is not a technician");
-                }
-                return Response.json();
-              })
-              .then((user) => {
-                navigate("/technician");
-                saveUser(user);
-                localStorage.setItem("role", user.profile.user_type);
-                localStorage.setItem("isValid", "true");
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          // case "agent":
-            return fetch(
-              "http://127.0.0.1:8000/api/service/dashboard/agent/",
-              {
-                headers: { Authorization: `Bearer ${data.access}` },
-              }
-            )
-              .then((Response) => {
-                if (!Response.ok) {
-                  if (Response.status === 403) {
-                    alert("نماینده‌ای با این شماره وجود ندارد");
-                  }
-                  throw new Error("This number is not a agent");
-                }
-                return Response.json();
-              })
-              .then((user) => {
-                navigate("/agent");
-                saveUser(user);
-                localStorage.setItem("role", user.profile.user_type);
-                localStorage.setItem("isValid", "true");
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-        }
+    verifyAndLogin(phone, verifyOTP, role)
+      .then((redirectPath) => {
+        navigate(redirectPath);
       })
       .catch((error) => {
         console.error(error);

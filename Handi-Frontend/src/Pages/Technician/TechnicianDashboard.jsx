@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Box } from "@mui/material";
 import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
@@ -7,7 +7,18 @@ import { Outlet } from "react-router-dom";
 
 export default function TechniciansDashboard() {
 
-  const {user} = useContext(UserContext)
+  const { user, reFetchUser } = useContext(UserContext);
+  
+    useEffect(() => {
+      if (user && user.access) {
+        const intervalId = setInterval(() => {
+          reFetchUser();
+        }, 5000);
+        return () => {
+          clearInterval(intervalId);
+        };
+      }
+    }, [user, reFetchUser]);
 
   if (!user) {
       return (
