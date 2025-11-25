@@ -6,10 +6,13 @@ from .models import Profile, ServiceRequest
 from .serializers import (
     ProfileSerializer,
     CustomerPanelSerializer,
-    ActiveRequestSerializer,  # This wasn't used but might be needed by the serializer
-    TechnicianSerializer,     # This wasn't used but might be needed by the serializer
+    ActiveRequestSerializer,  
+    TechnicianSerializer,     
     TechnicianPanelSerializer,
-    RecentRequestSerializer,  # This wasn't used but might be needed by the serializer
+    RecentRequestSerializer,
+    RepresentativePanelSerializer,
+    RepresentativeTechnicianFullSerializer,
+    TechnicianEditSerializer,
 )
 
 
@@ -107,3 +110,115 @@ class TechnicianPanelView(APIView):
             context={"request": request}
         )
         return Response(serializer.data)
+    
+class RepresentativePanelView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        # Ensure user is representative
+        if profile.user_type != "representative":
+            return Response({"detail": "Only representatives can access this panel."}, status=403)
+
+        # ---------------------------------------------------------
+        # TECHNICIANS OF THIS REPRESENTATIVE
+        # ---------------------------------------------------------
+        technicians = Profile.objects.filter(
+            representative_links__representative=profile
+        )
+
+        team_size = technicians.count()
+
+        # ---------------------------------------------------------
+        # ACTIVE JOBS OF TODAY (assigned to the representative's technicians)
+        # ---------------------------------------------------------
+        from django.utils.timezone import now
+        today = now().date()
+
+        active_jobs_today = ServiceRequest.objects.filter(
+            technician__in=technicians,
+            created_at__date=today
+        ).exclude(status__in=["completed", "cancelled"]).count()
+
+        # ---------------------------------------------------------
+        # TEAM MONTHLY INCOME (dummy for now)
+        # ---------------------------------------------------------
+        monthly_income = 120000000   # Hardcoded value from your code
+
+        # ---------------------------------------------------------
+        # TEAM AVG RATING (dummy)
+        # ---------------------------------------------------------
+        team_average_rating = 4.5
+
+        # ---------------------------------------------------------
+        # RECENT TEAM REQUESTS (latest 3 among all technician requests)
+        # ---------------------------------------------------------
+        recent_requests = (
+            ServiceRequest.objects.filter(technician__in=technicians)
+            .order_by("-created_at")[:3]
+        )
+
+        # ---------------------------------------------------------
+        # Pack into serializer
+        # ---------------------------------------------------------
+        data_to_serialize = {
+            "active_jobs_today": active_jobs_today,
+            "team_size": team_size,
+            "monthly_income": monthly_income,
+            "team_average_rating": team_average_rating,
+            "recent_team_requests": recent_requests,   # objects
+            "profile": profile,                        # representative profile
+            "technicians": technicians,                # team
+        }
+
+        serializer = RepresentativePanelSerializer(
+            instance=data_to_serialize,
+            context={"request": request}
+        )
+
+        return Response(serializer.data)
+    
+class RepresentativeTeamView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rep = request.user.profile
+
+        if rep.user_type != "representative":
+            return Response({"detail": "Only representatives can access this"}, status=403)
+
+        technicians = Profile.objects.filter(
+            user_type="technician",
+            representative_links__representative=rep
+        )
+
+        serializer = RepresentativeTechnicianFullSerializer(
+            technicians, many=True, context={"request": request}
+        )
+
+        return Response(serializer.data)
+    
+class RepresentativeEditTechnicianView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, technician_id):
+        rep = request.user.profile
+
+        # ensure the technician belongs to this representative
+        technician = Profile.objects.filter(
+            id=technician_id,
+            user_type="technician",
+            representative_links__representative=rep
+        ).first()
+
+        if not technician:
+            return Response({"detail": "Technician not found in your team"}, status=404)
+
+        serializer = TechnicianEditSerializer(
+            technician, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"detail": "Technician updated successfully"})
