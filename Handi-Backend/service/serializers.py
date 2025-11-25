@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Profile, Wallet, ServiceRequest
+import random
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -218,3 +219,47 @@ class AssignTechnicianSerializer(serializers.Serializer):
         request_obj.save()
 
         return request_obj
+    
+
+class RepresentativeTaskDetailSerializer(serializers.ModelSerializer):
+    technician_name = serializers.SerializerMethodField()
+    customer_name = serializers.SerializerMethodField()
+    score = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ServiceRequest
+        fields = [
+            "id",
+            "title",
+            "cost",
+            "status",
+            "technician_name",
+            "customer_name",
+            "score",
+            "created_at",
+        ]
+
+    def get_technician_name(self, obj):
+        if obj.technician:
+            return f"{obj.technician.first_name or ''} {obj.technician.last_name or ''}".strip()
+        return "No Technician"
+
+    def get_customer_name(self, obj):
+        return f"{obj.customer.first_name or ''} {obj.customer.last_name or ''}".strip()
+
+    def get_customer_profile_picture(self, obj):
+        request = self.context.get("request")
+        if obj.customer.profile_picture:
+            return request.build_absolute_uri(obj.customer.profile_picture.url)
+        return None
+    
+    def get_score(self, obj):
+        return random.randint(0, 100)
+
+
+class RepresentativeReportSerializer(serializers.Serializer):
+    total_income = serializers.IntegerField()
+    total_tasks = serializers.IntegerField()
+    avg_rating = serializers.FloatField()
+    efficiency = serializers.FloatField()
+    task_details = RepresentativeTaskDetailSerializer(many=True)

@@ -15,6 +15,8 @@ from .serializers import (
     TechnicianEditSerializer,
     RepresentativeTaskSerializer,
     AssignTechnicianSerializer,
+    RepresentativeReportSerializer,
+    RepresentativeTaskDetailSerializer,
 )
 
 
@@ -267,3 +269,93 @@ class AssignTechnicianToTaskView(APIView):
         serializer.save()
 
         return Response({"detail": "Task assigned successfully."})
+    
+from datetime import datetime, timedelta
+from django.utils.timezone import now
+
+class RepresentativeReportView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.user_type != "representative":
+            return Response(
+                {"detail": "Only representatives can access this page."}, status=403
+            )
+
+        # -----------------------------
+        # 1) Parse filters from request
+        # -----------------------------
+        period = request.GET.get("period", "current_month")      # default
+        technician_filter = request.GET.get("technician", "all") # default
+
+        # -----------------------------
+        # 2) Get technicians of this rep
+        # -----------------------------
+        technician_ids = (
+            RepresentativeTechnician.objects
+            .filter(representative=profile)
+            .values_list("technician_id", flat=True)
+        )
+
+        technicians = Profile.objects.filter(id__in=technician_ids)
+
+        # -----------------------------
+        # 3) Build base queryset
+        # -----------------------------
+        tasks = ServiceRequest.objects.filter(technician_id__in=technician_ids)
+
+        # -----------------------------
+        # 4) Apply period filter
+        # -----------------------------
+        today = now().date()
+
+        if period == "today":
+            tasks = tasks.filter(created_at__date=today)
+
+        elif period == "this_week":
+            week_start = today - timedelta(days=today.weekday())
+            tasks = tasks.filter(created_at__date__gte=week_start)
+
+        elif period == "current_month":
+            first_day = today.replace(day=1)
+            tasks = tasks.filter(created_at__date__gte=first_day)
+
+        # else: "all" → no filter
+
+        # -----------------------------
+        # 5) Apply technician filter
+        # -----------------------------
+        if technician_filter != "all":
+            try:
+                tech_id = int(technician_filter)
+                if tech_id in technician_ids:
+                    tasks = tasks.filter(technician_id=tech_id)
+            except:
+                pass  # ignore invalid input
+
+        tasks = tasks.order_by("-created_at")
+
+        # -----------------------------
+        # 6) DUMMY SUMMARY VALUES
+        # -----------------------------
+        total_income = 12880000
+        total_tasks = tasks.count()
+        avg_rating = 4.8
+        efficiency = 92.0
+
+        data = {
+            "total_income": total_income,
+            "total_tasks": total_tasks,
+            "avg_rating": avg_rating,
+            "efficiency": efficiency,
+            "task_details": tasks,
+        }
+
+        serializer = RepresentativeReportSerializer(
+            instance=data,
+            context={"request": request}
+        )
+
+        return Response(serializer.data)
