@@ -1,20 +1,27 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Box } from "@mui/material";
 import ActiveRequestCard from "./Components/ActiveRequestCard";
 import SummaryCard from "./Components/SummaryCard";
 import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
-// import { TechniciansList, UsersList } from "../../Datas";
 import { UserContext } from "../../Contexts/UserContext";
 import { toPersianNumber } from "../../Utils/NumberUtils";
 
 export default function CustomerDashboard() {
+  const { user, reFetchUser } = useContext(UserContext);
 
-  const { user } = useContext(UserContext);
-  // const [technicians, setTechnicians] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  
+  useEffect(() => {
+    if (user && user.access) {
+      const intervalId = setInterval(() => {
+        reFetchUser();
+      }, 5000);
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [user, reFetchUser]);
+
 
 
   if (!user) {
@@ -43,7 +50,7 @@ export default function CustomerDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={user.user_type} user={user} />
+        <Sidebar role={user.profile.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
@@ -91,8 +98,16 @@ export default function CustomerDashboard() {
             }}
             sx={{ gridArea: { lg: "summary", xl: "summary" } }}
           >
-            <SummaryCard iconType="requests" label="کل درخواست‌ها" value={user.total_requests} />
-            <SummaryCard iconType="done" label="خدمات انجام‌شده" value={user.completed_requests} />
+            <SummaryCard
+              iconType="requests"
+              label="کل درخواست‌ها"
+              value={user.total_requests}
+            />
+            <SummaryCard
+              iconType="done"
+              label="خدمات انجام‌شده"
+              value={user.completed_requests}
+            />
             <SummaryCard
               iconType="wallet"
               label="موجودی کیف پول"
