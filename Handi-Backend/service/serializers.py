@@ -87,3 +87,13 @@ class TechnicianPanelSerializer(serializers.Serializer):
     average_response_time = serializers.IntegerField()
     recent_requests = RecentRequestSerializer(many=True)
     profile = ProfileSerializer()
+
+
+class RepresentativePanelSerializer(serializers.Serializer):
+    active_jobs_today = serializers.IntegerField()
+    team_size = serializers.IntegerField()
+    monthly_income = serializers.IntegerField()
+    team_average_rating = serializers.FloatField()
+    recent_team_requests = RecentRequestSerializer(many=True)
+    profile = ProfileSerializer()
+    technicians = TechnicianSerializer(many=True)
