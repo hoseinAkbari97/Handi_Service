@@ -7,8 +7,26 @@ export const toEnglishNumber = (value) => {
   return value.replace(/[۰-۹]/g, (d) => english[persian.indexOf(d)]);
 };
 
-export const toPersianNumber = (num) => {
-  if (num === null || num === undefined) return "";
+export function toPersianNumber(input) {
 
-  return new Intl.NumberFormat("fa-IR").format(num);
-};
+  const persianDigits = {
+    0: "۰",
+    1: "۱",
+    2: "۲",
+    3: "۳",
+    4: "۴",
+    5: "۵",
+    6: "۶",
+    7: "۷",
+    8: "۸",
+    9: "۹",
+  };
+
+  return String(input).replace(/\d+/g, (num) => {
+    // جداکننده هزارگان روی نسخه انگلیسی
+    const formatted = Number(num).toLocaleString("en-US");
+
+    // تبدیل همه رقم‌ها به فارسی
+    return formatted.replace(/[0-9]/g, (d) => persianDigits[d]);
+  });
+}

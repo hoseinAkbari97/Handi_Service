@@ -9,11 +9,11 @@ export default function PrivateRoutes() {
     return <Navigate to="/" replace />;
   }
   if (
-    (location.pathname.startsWith("/agent") && role !== "agent") ||
+    (location.pathname.startsWith("/agent") && role !== "representative") ||
     (location.pathname.startsWith("/technician") && role !== "technician") ||
     (location.pathname.startsWith("/customer") && role !== "customer")
   ) {
-    // localStorage.removeItem("isValid");
+    localStorage.removeItem("isValid");
     localStorage.removeItem("role");
     return <Navigate to="/login" replace />;
   }

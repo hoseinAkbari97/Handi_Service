@@ -1,11 +1,23 @@
-import React from "react";
+import { useContext, useEffect } from "react";
 import { Box } from "@mui/material";
 import Header from "./Components/Header";
-// import { UsersList } from "../../Datas";
 import Sidebar from "../../Layout/Sidebar";
+import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
+import DataRefresher from "../../Components/DataRefresher";
 
 export default function AgentDashboard() {
+
+  const { user } = useContext(UserContext);
+  
+  if (!user) {
+      return (
+        <Box sx={{ p: 4, textAlign: "center" }}>
+          در حال دریافت اطلاعات کاربری...
+        </Box>
+      );
+    }
+
   return (
     <Box
     sx={{
@@ -15,6 +27,9 @@ export default function AgentDashboard() {
       gap: 1,
     }}
     >
+
+      <DataRefresher/>
+
       {/* SideBar display: desktop & tablet */}
       <Box
         sx={{
@@ -24,7 +39,7 @@ export default function AgentDashboard() {
           top: 0,
         }}
       >
-        <Sidebar user={UsersList[2]}/>
+        <Sidebar role={user.profile.user_type} user={user} />
       </Box>
 
       {/* Main Content */}

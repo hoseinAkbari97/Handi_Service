@@ -7,14 +7,103 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import React, { useState } from "react";
-// import { UsersList } from "../../../Datas";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../../Contexts/UserContext";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 export default function AgentEditProfile() {
-  const [formData, setFormData] = useState(UsersList[2]);
+  const { user } = useContext(UserContext);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    phone: "",
+    email: "",
+    address: "",
+  });
+
+  useEffect(() => {
+    if (!user || !user.access) {
+      setLoading(false);
+      setError("اطلاعات کاربری موجود نیست.");
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/service/dashboard/representative/edit/",
+          {
+            headers: { Authorization: `Bearer ${user.access}` },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("خطا در دریافت اطلاعات پروفایل.");
+        }
+
+        const data = await response.json();
+        setUserData(data);
+
+        setFormData({
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          phone: data.phone || "",
+          email: data.email || "",
+          address: data.address || "",
+        });
+      } catch (e) {
+        console.error("Fetch error:", e);
+        setError(e.message || "خطای ناشناخته در دریافت داده.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name] : value }); 
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/service/me/",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.access}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "خطا در ذخیره تغییرات.");
+      }
+
+      setUserData((prev) => ({ ...prev, ...formData })); 
+      alert("تغییرات با موفقیت ذخیره شد!");
+
+    } catch (e) {
+      console.error("Submit error:", e);
+      setError(e.message || "خطای ناشناخته در ذخیره داده.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputSX = {
@@ -32,9 +121,21 @@ export default function AgentEditProfile() {
     },
   };
 
+  if (loading) {
+    return <Typography sx={{ mt: 4 }}>در حال بارگذاری اطلاعات...</Typography>;
+  }
+
+  if (error) {
+    return (
+      <Typography color="error" sx={{ mt: 4 }}>
+        خطا: {error}
+      </Typography>
+    );
+  }
+  const profileData = userData || user.profile;
+
   return (
     <Box>
-      {/* Profile Information */}
       <Card
         sx={{
           backgroundColor: "primary.main",
@@ -42,11 +143,10 @@ export default function AgentEditProfile() {
           p: 3,
           textAlign: "center",
           color: "secondary.main",
-          direction: "rtl",
         }}
       >
         <Avatar
-          src={UsersList[2].avatar}
+          src={profileData?.profile_picture}
           sx={{
             width: 90,
             height: 91,
@@ -57,10 +157,10 @@ export default function AgentEditProfile() {
           }}
         />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          {UsersList[2].name}
+          {profileData?.first_name} {profileData?.last_name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
-          نماینده منطقه {UsersList[2].region}
+          نماینده منطقه {userData?.address || "(وارد نشده)"}
         </Typography>
 
         <Divider
@@ -76,21 +176,21 @@ export default function AgentEditProfile() {
         >
           <Box>
             <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              ۸
+              {toPersianNumber(userData.technician_count)}
             </Typography>
             <Typography variant="body2">تکنسین</Typography>
           </Box>
           <Box>
             <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              ۱۵۰
+              {toPersianNumber(userData.total_requests)}
             </Typography>
             <Typography variant="body2">کار مدیریت شده</Typography>
           </Box>
           <Box>
             <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              ۳
+              {toPersianNumber(userData.experience)}
             </Typography>
-            <Typography variant="body2">سال سابقه</Typography>
+            <Typography variant="body2">سابقه</Typography>
           </Box>
         </Box>
       </Card>
@@ -114,9 +214,17 @@ export default function AgentEditProfile() {
 
         <Box display="flex" flexDirection="column" gap={2}>
           <TextField
-            name="name"
-            label="نام و نام خانوادگی"
-            value={formData.name}
+            name="first_name"
+            label="نام"
+            value={formData.first_name}
+            onChange={handleChange}
+            fullWidth
+            sx={inputSX}
+          />
+          <TextField
+            name="last_name"
+            label="نام خانوادگی"
+            value={formData.last_name}
             onChange={handleChange}
             fullWidth
             sx={inputSX}
@@ -140,7 +248,7 @@ export default function AgentEditProfile() {
           <TextField
             name="region"
             label="منطقه تحت پوشش"
-            value={formData.region}
+            value={formData.address}
             onChange={handleChange}
             fullWidth
             sx={inputSX}
@@ -148,31 +256,31 @@ export default function AgentEditProfile() {
         </Box>
 
         {/* Button*/}
-
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            sx={{
-              mt: 4,
-              py: 1.2,
-              color: "primary.main",
-              "&.MuiButton-containedPrimary": {
-                backgroundColor: "secondary.main",
-                color: "text",
-              },
-              "&.MuiButton-containedPrimary:hover": {
-                backgroundColor: "secondary.light",
-              },
-              "&.Mui-disabled": {
-                backgroundColor: "secondary.dark",
-                color: "text.contrastText",
-              },
-            }}
-          >
-            ذخیره تغییرات
-          </Button>
-
+        <Button
+          fullWidth
+          variant="contained"
+          color="secondary"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          sx={{
+            mt: 4,
+            py: 1.2,
+            color: "primary.main",
+            "&.MuiButton-containedPrimary": {
+              backgroundColor: "secondary.main",
+              color: "text",
+            },
+            "&.MuiButton-containedPrimary:hover": {
+              backgroundColor: "secondary.light",
+            },
+            "&.Mui-disabled": {
+              backgroundColor: "secondary.dark",
+              color: "text.contrastText",
+            },
+          }}
+        >
+          {isSubmitting ? "در حال ذخیره..." : "ذخیره تغییرات"}
+        </Button>
       </Card>
     </Box>
   );

@@ -21,7 +21,6 @@ export default function Header() {
   //   fetchUser();
   // }, []);
 
-
   return (
     <Box
       display="flex"
@@ -33,7 +32,7 @@ export default function Header() {
         <IconButton
           onClick={() => setOpen(true)}
           sx={{
-            display:{xs:"flex", sm:"none"},
+            display: { xs: "flex", sm: "none" },
             backgroundColor: "primary.main",
             color: "secondary.main",
             "&:hover": { backgroundColor: "primary.light" },
@@ -47,7 +46,11 @@ export default function Header() {
           variant="contained"
           color="secondary"
           startIcon={<AddIcon />}
-          sx={{ borderRadius: 1.5, gap:1, display: { xs: "none", sm: "flex" } }}
+          sx={{
+            borderRadius: 1.5,
+            gap: 1,
+            display: { xs: "none", sm: "flex" },
+          }}
         >
           درخواست تعمیر جدید
         </Button>
@@ -69,8 +72,23 @@ export default function Header() {
       </Typography>
 
       {/* Drawer */}
-      <Drawer anchor="left" open={open} onClose={() => setOpen(false)} sx={{display:{xs:"block", sm:"none"} }} >
-        {user? (<Sidebar role={user.role} user={user} onClose={() => setOpen(false)} />) : (<Box sx={{ p: 4, textAlign: "center", color:"text.contrastText" }}>در حال بارگذاری...</Box>)}
+      <Drawer
+        anchor="left"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{ display: { xs: "block", sm: "none" } }}
+      >
+        {user ? (
+          <Sidebar
+            role={user.role}
+            user={user}
+            onClose={() => setOpen(false)}
+          />
+        ) : (
+          <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>
+            در حال بارگذاری...
+          </Box>
+        )}
       </Drawer>
     </Box>
   );

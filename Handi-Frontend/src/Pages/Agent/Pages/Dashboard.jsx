@@ -1,9 +1,14 @@
-import React from 'react'
+import { useContext } from "react";
 import SummaryCard from "../Components/SummaryCard";
 import Works from "../Components/Works";
 import { Box } from "@mui/material";
+import { UserContext } from "../../../Contexts/UserContext";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 export default function AgentDashboardPanel() {
+
+  const {user} = useContext(UserContext)
+
   return (
     <>
             <Box
@@ -57,7 +62,7 @@ export default function AgentDashboardPanel() {
               mt: { xs: 2, lg: 0 },
             }}
           >
-            <Works requests={RequestsList} />
+            <Works requests={user.recent_team_requests} />
           </Box>
         </Box>
     </>
