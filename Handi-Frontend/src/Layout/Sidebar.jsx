@@ -66,7 +66,7 @@ export default function Sidebar({ user, onClose }) {
       { text: "پروفایل", icon: <WalletIcon />, path: "/technician/profile" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],
-    agent: [
+    representative: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/agent" },
       {
         text: "تکنسین‌های تیم",
@@ -124,7 +124,7 @@ export default function Sidebar({ user, onClose }) {
               ? "تکنسین"
               : user?.profile?.user_type === "customer"
               ? "مشتری"
-              : user?.profile?.user_type === "agent"
+              : user?.profile?.user_type === "representative"
               ? "نماینده"
               : "کاربر مهمان"}
           </Typography>

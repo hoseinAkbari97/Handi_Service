@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Box, IconButton, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Sidebar from "../../../Layout/Sidebar";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-// import { UsersList } from "../../../Datas";
+import { UserContext } from "../../../Contexts/UserContext";
 
 export default function Header() {
+  const { user } = useContext(UserContext);
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,11 +44,17 @@ export default function Header() {
         onClose={() => setOpen(false)}
         sx={{ display: { xs: "block", sm: "none" } }}
       >
-        <Sidebar
-          role={UsersList[2].role}
-          user={UsersList[2]}
-          onClose={() => setOpen(false)}
-        />
+        {user ? (
+          <Sidebar
+            role={user.role}
+            user={user}
+            onClose={() => setOpen(false)}
+          />
+        ) : (
+          <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>
+            در حال بارگذاری...
+          </Box>
+        )}
       </Drawer>
     </Box>
   );

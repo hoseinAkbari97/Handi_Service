@@ -26,7 +26,8 @@ export default function Works({ requests }) {
         </Typography>
       </Box>
 
-      {requests.map((request, index) => (
+      {requests && requests.length > 0 ?(
+        requests.map((request, index) => (
         <React.Fragment key={index}>
           <Box
             sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}
@@ -67,7 +68,12 @@ export default function Works({ requests }) {
             />
           )}
         </React.Fragment>
-      ))}
+      ))
+      ) : (
+        <Typography variant="body2" color="text.dark" sx={{ mb: 2, fontWeight: "bold" }}>
+          هیچ درخواست فعالی وجود ندارد
+        </Typography>
+      )}
     </Paper>
   );
 }
