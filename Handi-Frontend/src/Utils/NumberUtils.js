@@ -7,8 +7,20 @@ export const toEnglishNumber = (value) => {
   return value.replace(/[۰-۹]/g, (d) => english[persian.indexOf(d)]);
 };
 
-export const toPersianNumber = (num) => {
-  if (num === null || num === undefined) return "";
+export function toPersianNumber(str) {
 
-  return new Intl.NumberFormat("fa-IR").format(num);
-};
+  const persianMap = {
+    0: "۰",
+    1: "۱",
+    2: "۲",
+    3: "۳",
+    4: "۴",
+    5: "۵",
+    6: "۶",
+    7: "۷",
+    8: "۸",
+    9: "۹",
+  };
+
+  return String(str).replace(/[0-9]/g, (digit) => persianMap[digit]);
+}

@@ -190,7 +190,7 @@ export default function AgentEditProfile() {
             <Typography variant="h6" sx={{ color: "secondary.main" }}>
               {toPersianNumber(userData.experience)}
             </Typography>
-            <Typography variant="body2">سال سابقه</Typography>
+            <Typography variant="body2">سابقه</Typography>
           </Box>
         </Box>
       </Card>
