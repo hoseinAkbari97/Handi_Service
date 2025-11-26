@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 // { title: "درآمد کل تیم", value: "۱۲۸M", change: "۱۵٪ افزایش" },
 // { title: "تعداد کارها", value: "۴۵", change: "۸ کار بیشتر" },
@@ -25,7 +26,7 @@ export default function SummaryReport({ title, value, change, changeRate }) {
             {title}
           </Typography>
           <Typography variant="h5" sx={{ my: 1, fontWeight: "bold" }}>
-            {value}
+            {toPersianNumber(value)}
           </Typography>
           <Box
             sx={{

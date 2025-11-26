@@ -7,9 +7,9 @@ export const toEnglishNumber = (value) => {
   return value.replace(/[۰-۹]/g, (d) => english[persian.indexOf(d)]);
 };
 
-export function toPersianNumber(str) {
+export function toPersianNumber(input) {
 
-  const persianMap = {
+  const persianDigits = {
     0: "۰",
     1: "۱",
     2: "۲",
@@ -22,5 +22,11 @@ export function toPersianNumber(str) {
     9: "۹",
   };
 
-  return String(str).replace(/[0-9]/g, (digit) => persianMap[digit]);
+  return String(input).replace(/\d+/g, (num) => {
+    // جداکننده هزارگان روی نسخه انگلیسی
+    const formatted = Number(num).toLocaleString("en-US");
+
+    // تبدیل همه رقم‌ها به فارسی
+    return formatted.replace(/[0-9]/g, (d) => persianDigits[d]);
+  });
 }
