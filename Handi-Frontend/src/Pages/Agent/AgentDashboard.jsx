@@ -4,22 +4,12 @@ import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
+import DataRefresher from "../../Components/DataRefresher";
 
 export default function AgentDashboard() {
 
-  const { user, reFetchUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   
-    useEffect(() => {
-      if (user && user.access) {
-        const intervalId = setInterval(() => {
-          reFetchUser();
-        }, 5000);
-        return () => {
-          clearInterval(intervalId);
-        };
-      }
-    }, [user, reFetchUser]);
-
   if (!user) {
       return (
         <Box sx={{ p: 4, textAlign: "center" }}>
@@ -37,6 +27,9 @@ export default function AgentDashboard() {
       gap: 1,
     }}
     >
+
+      <DataRefresher/>
+
       {/* SideBar display: desktop & tablet */}
       <Box
         sx={{

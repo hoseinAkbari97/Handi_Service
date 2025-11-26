@@ -136,8 +136,8 @@ export default function UserProvider({ children }) {
         dashboardUrl =
           "http://127.0.0.1:8000/api/service/dashboard/technician/";
         break;
-      case "agent":
-        dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/agent/";
+      case "representative":
+        dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/representative/";
         break;
       default:
         return;

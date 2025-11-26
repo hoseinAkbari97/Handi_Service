@@ -23,7 +23,7 @@ export default function AgentEditProfile() {
     last_name: "",
     phone: "",
     email: "",
-    region: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function AgentEditProfile() {
           last_name: data.last_name || "",
           phone: data.phone || "",
           email: data.email || "",
-          region: data.area || "",
+          address: data.address || "",
         });
       } catch (e) {
         console.error("Fetch error:", e);
@@ -67,11 +67,11 @@ export default function AgentEditProfile() {
     };
 
     fetchData();
-  }, [user]);
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name === 'region' ? 'address' : name]: value }); 
+    setFormData({ ...formData, [name] : value }); 
   };
 
   const handleSubmit = async () => {
@@ -79,9 +79,9 @@ export default function AgentEditProfile() {
     setError(null);
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/service/dashboard/representative/edit/",
+        "http://127.0.0.1:8000/api/service/me/",
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${user.access}`,
@@ -160,7 +160,7 @@ export default function AgentEditProfile() {
           {profileData?.first_name} {profileData?.last_name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
-          نماینده منطقه {profileData?.area || "(وارد نشده)"}
+          نماینده منطقه {userData?.address || "(وارد نشده)"}
         </Typography>
 
         <Divider
