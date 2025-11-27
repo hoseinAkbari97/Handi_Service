@@ -63,6 +63,7 @@ export default function AgentDashboardPanel() {
             }}
           >
             <Works requests={user.recent_team_requests} />
+            {console.log(user)}
           </Box>
         </Box>
     </>
