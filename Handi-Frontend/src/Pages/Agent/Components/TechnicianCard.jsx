@@ -19,8 +19,8 @@ export default function TechnicianCard({ technician }) {
       }}
     >
       <Avatar
-        src={technician?.avatar || ""}
-        alt={technician?.name || ""}
+        src={technician?.profile_picture || ""}
+        alt={technician?.first_name || ""}
         sx={{ width: 74, height: 75, mt: -4, mx: "auto" }}
       />
 
@@ -34,7 +34,7 @@ export default function TechnicianCard({ technician }) {
             color: "text.secondary",
           }}
         >
-          {technician.fullName}
+          {technician.first_name} {technician.last_name}
         </Typography>
 
         <Typography
@@ -113,7 +113,7 @@ export default function TechnicianCard({ technician }) {
           <Typography>
             {technician.status === "available"
               ? "آماده به کار"
-              : technician.status === "busy"
+              : technician.status === "working"
               ? "درحال انجام کار"
               : "آفلاین"}
           </Typography>
