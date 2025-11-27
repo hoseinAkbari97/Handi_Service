@@ -103,7 +103,7 @@ export default function TechnicianCard({ technician }) {
             backgroundColor:
               technician.status === "available"
                 ? "success.light"
-                : technician.status === "busy"
+                : technician.status === "working"
                 ? "warning.light"
                 : "error.main",
             borderRadius: 10,
@@ -114,7 +114,7 @@ export default function TechnicianCard({ technician }) {
             {technician.status === "available"
               ? "آماده به کار"
               : technician.status === "working"
-              ? "درحال انجام کار"
+              ? "مشغول به کار"
               : "آفلاین"}
           </Typography>
         </Box>
