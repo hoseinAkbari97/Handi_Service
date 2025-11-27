@@ -18,17 +18,18 @@ export default function Reports() {
   });
 
   useEffect(() => {
+    if (!user || !user.access) return;
+
     fetch("http://127.0.0.1:8000/api/service/dashboard/representative/report", {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())
       .then((data) => setReportData(data))
       .catch((error) => console.error("Error fetching data:", error));
-  }, [user.access]);
+  }, []);
 
   return (
     <Box sx={{ p: 3, direction: "rtl", backgroundColor: "background.default" }}>
-
       {/* Title */}
       <Typography
         variant="h5"
@@ -43,7 +44,7 @@ export default function Reports() {
       </Typography>
 
       {/* Filters Section */}
-      <Filter />
+      <Filter technicians={user.technicians} />
 
       {/* Summary Reports */}
       <Box

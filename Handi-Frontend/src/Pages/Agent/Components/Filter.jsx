@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 
-export default function Filter() {
+export default function Filter({technicians}) {
 
   const [period, setPeriod] = useState("ماه جاری");
   const [technician, setTechnician] = useState("همه تکنسین‌ها");
@@ -121,9 +121,9 @@ export default function Filter() {
               }}
             >
               <MenuItem value="همه تکنسین‌ها">همه تکنسین‌ها</MenuItem>
-              <MenuItem value="رضا اکبری">رضا اکبری</MenuItem>
-              <MenuItem value="سارا محمدی">سارا محمدی</MenuItem>
-              <MenuItem value="علی رضایی">علی رضایی</MenuItem>
+              {technicians.map(technician=>
+                <MenuItem value={technician.first_name}>{technician.first_name} {technician.last_name}</MenuItem>
+              )}
             </Select>
           </FormControl>
         </Box>

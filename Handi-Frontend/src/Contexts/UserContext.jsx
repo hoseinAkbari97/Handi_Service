@@ -43,6 +43,7 @@ export default function UserProvider({ children, navigate }) {
   }, []);
 
     const logout = useCallback(() => {
+      alert("مدت زمان زیادی از ورود شما می‌گذرد! لطفا دوباره وارد شوید")
     setUser(null);
     localStorage.removeItem("isValid");
     localStorage.removeItem("role");

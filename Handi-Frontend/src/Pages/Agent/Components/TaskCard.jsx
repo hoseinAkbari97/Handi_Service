@@ -30,7 +30,6 @@ export default function TaskCard({ task }) {
         px: 2,
       }}
     >
-      {console.log(task)}
       <Box>
         <Typography
           sx={{
