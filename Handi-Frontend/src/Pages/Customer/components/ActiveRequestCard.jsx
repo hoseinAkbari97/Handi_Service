@@ -1,8 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
+import BuildIcon from '@mui/icons-material/Build';
+import ErrorIcon from '@mui/icons-material/Error';
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { UserContext } from "../../../Contexts/UserContext";
 import { useContext } from "react";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 export default function ActiveRequestCard() {
   const { user } = useContext(UserContext);
@@ -36,6 +38,7 @@ export default function ActiveRequestCard() {
 
       {user.active_request ? (
         <>
+        {console.log(user)}
           <Box>
             <Typography
               sx={{
@@ -44,9 +47,22 @@ export default function ActiveRequestCard() {
                 alignItems: "center",
               }}
             >
-              <AcUnitIcon fontSize="small" sx={{ mr: 0.5 }} /> تعمیر یخچال فریزر
-              سامسونگ
+              <BuildIcon fontSize="small" sx={{ mr: 0.5 }} />
+              {user.active_request.title}
             </Typography>
+
+              <Typography
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 1,
+              }}
+            >
+              <EngineeringIcon sx={{ mr: 0.5 }} />
+              مشکل: {user.active_request.description}
+            </Typography>
+            
             <Typography
               sx={{
                 display: "flex",
@@ -55,14 +71,15 @@ export default function ActiveRequestCard() {
                 mt: 1,
               }}
             >
-              <EngineeringIcon sx={{ mr: 0.5 }} /> تعمیرکار: علی رضایی
+              <EngineeringIcon sx={{ mr: 0.5 }} />
+             تعمیرکار: {user.active_request.technician.first_name} {user.active_request.technician.last_name}
             </Typography>
             <Typography
               variant="h5"
               color="secondary"
               sx={{ mt: 2, fontWeight: "bold" }}
             >
-              هزینه: ۲۵۰,۰۰۰ تومان
+            هزینه: {toPersianNumber(user.active_request.cost)} تومان
             </Typography>
           </Box>
           <Box>
