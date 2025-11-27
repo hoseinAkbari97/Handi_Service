@@ -38,7 +38,6 @@ export default function ActiveRequestCard() {
 
       {user.active_request ? (
         <>
-        {console.log(user)}
           <Box>
             <Typography
               sx={{

@@ -1,18 +1,25 @@
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login";
+import PrivateRoutes from "./PrivateRoutes";
+
 import CustomerDashboard from "../Pages/Customer/CustomerDashboard";
+import CustomerDashboardPanel from "../Pages/Customer/Pages/Dashboard";
+import RequestPage from "../Pages/Customer/Pages/RequestPage";
+
 import TechnicianDashboard from "../Pages/Technician/TechnicianDashboard";
+import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
+import TechnicianDashboardPanel from "../Pages/Technician/Pages/Dashboard";
+
 import AgentDashboard from "../Pages/Agent/AgentDashboard";
 import AgentDashboardPanel from "../Pages/Agent/Pages/Dashboard";
-import TechnicianDashboardPanel from "../Pages/Technician/Pages/Dashboard";
 import ManageTasks from "../Pages/Agent/Pages/ManageTasks";
 import Messages from "../Pages/Agent/Pages/Messages";
 import AgentEditProfile from "../Pages/Agent/Pages/Profile";
-import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
 import Reports from "../Pages/Agent/Pages/Reports";
 import Setting from "../Pages/Agent/Pages/Setting";
 import TeamTechnicians from "../Pages/Agent/Pages/TeamTechnicians";
-import PrivateRoutes from "./PrivateRoutes";
+
+
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -20,7 +27,13 @@ const routes = [
   {
     element: <PrivateRoutes />,
     children: [
-      { path: "/customer", element: <CustomerDashboard /> },
+      { path: "/customer",
+        element: <CustomerDashboard />,
+        children:[
+          {index: true, element: <CustomerDashboardPanel/>},
+          { path: "request-page", element: <RequestPage /> },
+        ]
+      },
       {
         path: "/technician",
         element: <TechnicianDashboard />,
