@@ -21,7 +21,7 @@ export default function TaskCard({ task }) {
         borderTop: 5,
         borderColor: task.status === "complete"
         ? "success.light"
-        : task.status === "current"
+        : task.status === "assigned"
         ? "warning.light"
         : "error.main",
         borderRadius: 3,
@@ -40,7 +40,7 @@ export default function TaskCard({ task }) {
             color: "text.secondary",
           }}
         >
-          {task.request.request} {task.request.device} {task.request.brand}
+          {task.title}
         </Typography>
 
         <Box
@@ -59,11 +59,11 @@ export default function TaskCard({ task }) {
               mt: 0.5,
             }}
           >
-            نام مشتری: {task.customerName}
+            نام مشتری: {task.customer_name}
           </Typography>
         </Box>
 
-        {task.request.requestType && (
+
           <Box
             sx={{
               display: "flex",
@@ -80,10 +80,10 @@ export default function TaskCard({ task }) {
                 mt: 0.5,
               }}
             >
-              مشکل: {task.request.requestType}
+              مشکل: {task.description}
             </Typography>
           </Box>
-        )}
+
 
         <Box
           sx={{
@@ -101,7 +101,7 @@ export default function TaskCard({ task }) {
               mt: 0.5,
             }}
           >
-            تکنسین: {task.technicianName}
+            تکنسین: {task.technician_name}
           </Typography>
         </Box>
       </Box>
@@ -119,7 +119,7 @@ export default function TaskCard({ task }) {
             backgroundColor:
               task.status === "complete"
                 ? "success.light"
-                : task.status === "current"
+                : task.status === "assigned"
                 ? "warning.light"
                 : "error.main",
             borderRadius: 10,
@@ -129,7 +129,7 @@ export default function TaskCard({ task }) {
           <Typography>
             {task.status === "complete"
               ? "تکمیل شده"
-              : task.status === "current"
+              : task.status === "assigned"
               ? "درحال انجام"
               : "تخصیص داده نشده"}
           </Typography>

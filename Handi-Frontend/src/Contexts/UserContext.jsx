@@ -5,11 +5,11 @@ import {
   useCallback,
 useMemo
 } from "react";
-import { Navigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
-export default function UserProvider({ children }) {
+export default function UserProvider({ children, navigate }) {
+
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -41,6 +41,15 @@ export default function UserProvider({ children }) {
       throw error;
     }
   }, []);
+
+    const logout = useCallback(() => {
+      alert("مدت زمان زیادی از ورود شما می‌گذرد! لطفا دوباره وارد شوید")
+    setUser(null);
+    localStorage.removeItem("isValid");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
+    navigate("/");
+  }, [navigate]);
 
   const verifyAndLogin = useCallback(
     async (phone, otp, role) => {
@@ -119,7 +128,7 @@ export default function UserProvider({ children }) {
 
   const reFetchUser = useCallback(async () => {
     if (!user || !user.access || !user.profile || !user.profile.user_type) {
-      console.error("User or Access Token not available for refetch.");
+      console.error("User or Access Token not available for reFetch.");
       return;
     }
 
@@ -158,17 +167,9 @@ export default function UserProvider({ children }) {
 
       saveUser({ ...newUserData, access: accessToken });
     } catch (error) {
-      console.error("Error during user refetch:", error);
+      console.error("Error during user reFetch:", error);
     }
-  }, [user, saveUser]);
-
-  const logout = useCallback(() => {
-    setUser(null);
-    localStorage.removeItem("isValid");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user");
-    Navigate((to = "/"));
-  }, [Navigate]);
+  }, [user, saveUser, logout]);
 
   const contextValue = useMemo(
     () => ({

@@ -7,6 +7,7 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 export default function DetailsTable({tasks}) {
 
@@ -19,6 +20,7 @@ export default function DetailsTable({tasks}) {
         p: 2,
       }}
     >
+
       <Typography dir="rtl" variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
         جزئیات کارها
       </Typography>
@@ -33,20 +35,21 @@ export default function DetailsTable({tasks}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {tasks.map((task, index) => (
-            <TableRow key={index}>
+          {tasks.map((task) => (
+                  
+            <TableRow key={task.id}>
               <TableCell sx={{ color: "text.primary" }}>
-                {task.technicianName}
+                {task.technician_name}
               </TableCell>
               <TableCell sx={{ color: "text.primary" }}>
-                {task.customerName}
+                {task.customer_name}
               </TableCell>
               <TableCell sx={{ color: "text.primary" }}>
-                {task.request.device}
+                {task.title}
               </TableCell>
-              <TableCell sx={{ color: "text.primary" }}>{task.cost}</TableCell>
+              <TableCell sx={{ color: "text.primary" }}>{toPersianNumber(task.cost)}</TableCell>
               <TableCell sx={{ color: "text.primary" }}>
-                {task.taskRate}
+                {task.rate || "ثبت نشده"}
               </TableCell>
             </TableRow>
           ))}

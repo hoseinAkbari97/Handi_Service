@@ -36,7 +36,7 @@ export default function Works({ requests }) {
             <Box sx={{ display: "flex" }}>
               <Avatar
                 alt={request.customerName}
-                src={request.avatar}
+                src={request.customer_profile_picture}
                 sx={{ width: 50, height: 50 }}
               />
               <Box
@@ -47,9 +47,9 @@ export default function Works({ requests }) {
                   alignItems: "flex-start",
                 }}
               >
-                <Typography>{request.customerName}</Typography>
+                <Typography>{request.customer_name}</Typography>
                 <Typography variant="caption" mt={0.5} color="text.dark">
-                  کار انجام شده: {request.request} {request.device} {request.brand}
+                  کار انجام شده: {request.title} {request.device} {request.brand}
                 </Typography>
               </Box>
             </Box>
@@ -57,7 +57,7 @@ export default function Works({ requests }) {
             {/* Right Side (icon + rate) */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Typography color="text.secondary" mt={1}>
-                {request.time} ساعت پیش
+                {request.time_ago} پیش
               </Typography>
             </Box>
           </Box>
