@@ -42,7 +42,7 @@ export default function Header() {
         </IconButton>
 
         {/* display: desktop & tablet */}
-        <Link to="/request-page" style={{ textDecoration: "none" }}>
+        <Link to="/customer/request-page" style={{ textDecoration: "none" }}>
           <Button
             variant="contained"
             color="secondary"
