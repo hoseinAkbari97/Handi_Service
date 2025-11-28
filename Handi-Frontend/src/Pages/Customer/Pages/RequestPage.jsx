@@ -16,6 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import jalaliday from "jalaliday";
 
 // Leaflet
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
@@ -32,17 +33,18 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+dayjs.extend(jalaliday);
+
 // Fake Data
 const deviceTypes = ["یخچال", "ماشین لباسشویی", "تلویزیون", "جاروبرقی"];
 const brands = ["سامسونگ", "ال‌جی", "اسنوا", "دوو"];
 const problems = ["روشن نمی‌شود", "صدا می‌دهد", "عیب برق", "مشکل برد"];
-const dates = ["امروز", "فردا", "پس‌فردا"];
 
 export default function CreateRequest() {
   const [deviceType, setDeviceType] = useState("");
   const [brand, setBrand] = useState("");
   const [problemType, setProblemType] = useState("");
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(dayjs().calendar("jalali"));
   const [description, setDescription] = useState("");
 
   const [markerPosition, setMarkerPosition] = useState([35.6892, 51.389]); // Tehran center
@@ -67,7 +69,7 @@ export default function CreateRequest() {
         p: 2,
       }}
     >
-      {/* نوع دستگاه */}
+      {/* Device type */}
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
           <InputLabel
@@ -132,7 +134,7 @@ export default function CreateRequest() {
         </FormControl>
       </Grid>
 
-      {/* برند */}
+      {/* Brand */}
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
           <InputLabel
@@ -197,7 +199,7 @@ export default function CreateRequest() {
         </FormControl>
       </Grid>
 
-      {/* نوع مشکل */}
+      {/* Problem Type */}
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
           <InputLabel
@@ -262,12 +264,16 @@ export default function CreateRequest() {
         </FormControl>
       </Grid>
 
-      {/* تاریخ */}
+      {/* Date */}
 
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fa">
         <DemoContainer components={["DatePicker"]}>
           <DatePicker
             label="تاریخ مورد نظر"
+            value={selectedDate}
+            onChange={(newValue) => setSelectedDate(newValue)}
+            calendar="jalali"
+            format="YYYY/MM/DD"
             sx={{
               borderRadius: "5px",
               width: "100%",
@@ -353,7 +359,7 @@ export default function CreateRequest() {
         </DemoContainer>
       </LocalizationProvider>
 
-      {/* شرح مشکل */}
+      {/* Problem description */}
       <Grid item xs={12}>
         <TextField
           multiline
@@ -364,6 +370,33 @@ export default function CreateRequest() {
           onChange={(e) => setDescription(e.target.value)}
           sx={{
             bgcolor: "primary.main",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "secondary.main",
+            },
+            "& .MuiOutlinedInput-input":{
+              color: "secondary.main"
+            },
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+              {
+                borderColor: "secondary.dark",
+              },
+          }}
+        />
+      </Grid>
+
+      <Box component="form" noValidate autoComplete="off">
+        
+        <TextField
+                  multiline
+          minRows={2}
+          fullWidth
+          label="آدرس دقیق"
+          variant="outlined"
+          sx={{
+            bgcolor: "primary.main",
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "text.primary"
+            },
             "& .MuiSelect-icon": {
               color: "secondary.main",
             },
@@ -379,35 +412,15 @@ export default function CreateRequest() {
               borderWidth: "2px",
             },
           }}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: "primary.light",
-                "& .MuiMenuItem-root": {
-                  color: "text.primary",
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                  },
-                },
-                "& .MuiMenuItem-root.Mui-selected": {
-                  backgroundColor: "secondary.dark",
-                  color: "white",
-                  "&:hover": {
-                    bgcolor: "secondary.main",
-                  },
-                },
-              },
-            },
-          }}
         />
-      </Grid>
+      </Box>
 
-      {/* نقشه */}
+      {/* Map */}
       <Grid item xs={12}>
         <Typography sx={{ mb: 1 }}>محل انجام خدمت</Typography>
 
         <MapContainer
-          center={[35.6892, 51.389]} // Tehran Default
+          center={[35.6892, 51.389]}
           zoom={13}
           scrollWheelZoom={true}
           style={{
@@ -421,7 +434,7 @@ export default function CreateRequest() {
         </MapContainer>
       </Grid>
 
-      {/* دکمه */}
+      {/* Button */}
       <Grid item xs={12}>
         <Button
           fullWidth
