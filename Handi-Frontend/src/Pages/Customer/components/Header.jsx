@@ -3,7 +3,7 @@ import { Box, IconButton, Button, Typography, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import Sidebar from "../../../Layout/Sidebar";
-// import { UsersList } from "../../../Datas";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -42,18 +42,20 @@ export default function Header() {
         </IconButton>
 
         {/* display: desktop & tablet */}
-        <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<AddIcon />}
-          sx={{
-            borderRadius: 1.5,
-            gap: 1,
-            display: { xs: "none", sm: "flex" },
-          }}
-        >
-          درخواست تعمیر جدید
-        </Button>
+        <Link to="/customer/request-page" style={{ textDecoration: "none" }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<AddIcon />}
+            sx={{
+              borderRadius: 1.5,
+              gap: 1,
+              display: { xs: "none", sm: "flex" },
+            }}
+          >
+            درخواست تعمیر جدید
+          </Button>
+        </Link>
 
         {/* display: Mobile*/}
         <IconButton

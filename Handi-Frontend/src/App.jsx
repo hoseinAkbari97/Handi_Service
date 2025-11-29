@@ -5,6 +5,8 @@ import theme from "./Theme/Theme";
 import routes from "./routes/routes";
 import rtlCache from "./Theme/RTLCache";
 import UserProvider from "./Contexts/UserContext";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function AppRoutes() {
   const routing = useRoutes(routes);
@@ -22,11 +24,13 @@ function App() {
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
-          <UserProviderWrapper>
-            <AppRoutes />
-          </UserProviderWrapper>
-        </BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <BrowserRouter>
+            <UserProviderWrapper>
+              <AppRoutes />
+            </UserProviderWrapper>
+          </BrowserRouter>
+        </LocalizationProvider>
       </ThemeProvider>
     </CacheProvider>
   );

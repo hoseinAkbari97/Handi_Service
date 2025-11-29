@@ -48,7 +48,7 @@ export default function UserProvider({ children, navigate }) {
     localStorage.removeItem("isValid");
     localStorage.removeItem("role");
     localStorage.removeItem("user");
-    navigate("/");
+    navigate("/login");
   }, [navigate]);
 
   const verifyAndLogin = useCallback(

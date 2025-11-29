@@ -10,7 +10,7 @@ import {
   FormControl,
   Select,
 } from "@mui/material";
-import { useNavigate, Link, data } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import HandymanIcon from "@mui/icons-material/Handyman";
 import { UserContext } from "../Contexts/UserContext";
 import { toEnglishNumber } from "../Utils/NumberUtils";
@@ -94,47 +94,13 @@ export default function Login() {
             </Typography>
 
             <FormControl fullWidth>
-              <InputLabel
-                id="demo-simple-select-label"
-                sx={{
-                  color: "secondary.main",
-                  "&.Mui-focused": {
-                    color: "secondary.dark",
-                  },
-                }}
-              >
+              <InputLabel id="demo-simple-select-label">
                 ورود به عنوان
               </InputLabel>
               <Select
                 value={role}
                 label="ورود به عنوان"
                 onChange={roleChange}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "secondary.dark",
-                    },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.dark",
-                    borderWidth: "2px",
-                  },
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    sx: {
-                      backgroundColor: "primary.dark",
-                      "& .MuiMenuItem-root": {
-                        color: "text.primary",
-                        "&:hover": {
-                          backgroundColor: "secondary.dark",
-                        },
-                      },
-                    },
-                  },
-                }}
               >
                 <MenuItem value={"customer"}>کاربر</MenuItem>
                 <MenuItem value={"technician"}>تکنسین</MenuItem>
@@ -149,21 +115,6 @@ export default function Login() {
               margin="normal"
               value={phone}
               onChange={phoneHandler}
-              sx={{
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "secondary.main",
-                },
-                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
-                    borderColor: "secondary.dark",
-                  },
-                "& .MuiInputLabel-root.MuiInputLabel-shrink": {
-                  color: "secondary.dark",
-                },
-                "& .MuiInputLabel-root": {
-                  color: "secondary.main",
-                },
-              }}
             />
 
             <Button
@@ -175,18 +126,6 @@ export default function Login() {
               sx={{
                 mt: 2,
                 py: 1.2,
-                color: "primary.main",
-                "&.MuiButton-containedPrimary": {
-                  backgroundColor: "secondary.main",
-                  color: "text",
-                },
-                "&.MuiButton-containedPrimary:hover": {
-                  backgroundColor: "secondary.light",
-                },
-                "&.Mui-disabled": {
-                  backgroundColor: "secondary.dark",
-                  color: "text.contrastText",
-                },
               }}
             >
               ارسال کد تأیید
@@ -240,21 +179,6 @@ export default function Login() {
               margin="normal"
               value={verifyOTP}
               onChange={codeHandler}
-              sx={{
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "secondary.main",
-                },
-                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
-                    borderColor: "secondary.dark",
-                  },
-                "& .MuiInputLabel-root.MuiInputLabel-shrink": {
-                  color: "secondary.dark",
-                },
-                "& .MuiInputLabel-root": {
-                  color: "secondary.main",
-                },
-              }}
             />
 
             <Button

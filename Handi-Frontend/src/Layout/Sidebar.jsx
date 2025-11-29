@@ -38,7 +38,7 @@ export default function Sidebar({ user, onClose }) {
       {
         text: "درخواست‌های من",
         icon: <AssignmentIcon />,
-        path: "/customer/requests",
+        path: "/customer/my-requests",
       },
       {
         text: "تعمیرکاران",
