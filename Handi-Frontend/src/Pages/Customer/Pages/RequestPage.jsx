@@ -3,12 +3,9 @@ import {
   Box,
   Grid,
   TextField,
-  MenuItem,
   Button,
   Typography,
-  Select,
-  InputLabel,
-  FormControl,
+  ThemeProvider,
 } from "@mui/material";
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -17,25 +14,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import jalaliday from "jalaliday";
-
-// Leaflet
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import L from "leaflet";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import markerRetina from "leaflet/dist/images/marker-icon-2x.png";
-
-// Fix default marker icons
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerRetina,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
-
 dayjs.extend(jalaliday);
 
-// Fake Data
+import ServiceSelection from "../Components/ServiceSelection";
+import MapInput from "../Components/MapInput";
+
+//  Fake Data
 const deviceTypes = ["یخچال", "ماشین لباسشویی", "تلویزیون", "جاروبرقی"];
 const brands = ["سامسونگ", "ال‌جی", "اسنوا", "دوو"];
 const problems = ["روشن نمی‌شود", "صدا می‌دهد", "عیب برق", "مشکل برد"];
@@ -46,17 +30,22 @@ export default function CreateRequest() {
   const [problemType, setProblemType] = useState("");
   const [selectedDate, setSelectedDate] = useState(dayjs().calendar("jalali"));
   const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [markerPosition, setMarkerPosition] = useState([35.6892, 51.389]); // مرکز تهران
 
-  const [markerPosition, setMarkerPosition] = useState([35.6892, 51.389]); // Tehran center
-
-  function LocationMarker() {
-    useMapEvents({
-      click(e) {
-        setMarkerPosition([e.latlng.lat, e.latlng.lng]);
-      },
+  const handleSubmit = () => {
+    console.log("Request Data:", {
+      deviceType,
+      brand,
+      problemType,
+      selectedDate: selectedDate.format("YYYY/MM/DD"),
+      description,
+      address,
+      latitude: markerPosition[0],
+      longitude: markerPosition[1],
     });
-    return markerPosition ? <Marker position={markerPosition} /> : null;
-  }
+    alert("درخواست شما ثبت شد! (اطلاعات در کنسول نمایش داده شده است)");
+  };
 
   return (
     <Box
@@ -69,203 +58,29 @@ export default function CreateRequest() {
         p: 2,
       }}
     >
-      {/* Device type */}
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <InputLabel
-            id="demo-simple-select-label"
-            sx={{
-              color: "secondary.main",
-              "&.Mui-focused": {
-                color: "text.primary",
-              },
-            }}
-          >
-            نوع دستگاه
-          </InputLabel>
-          <Select
-            value={deviceType}
-            label="نوع دستگاه"
-            sx={{
-              bgcolor: "primary.main",
-              "& .MuiSelect-icon": {
-                color: "secondary.main",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "secondary.main",
-              },
-              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "secondary.dark",
-                },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "secondary.dark",
-                borderWidth: "2px",
-              },
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  backgroundColor: "primary.light",
-                  "& .MuiMenuItem-root": {
-                    color: "text.primary",
-                    "&:hover": {
-                      backgroundColor: "secondary.main",
-                    },
-                  },
-                  "& .MuiMenuItem-root.Mui-selected": {
-                    backgroundColor: "secondary.dark",
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: "secondary.main",
-                    },
-                  },
-                },
-              },
-            }}
-            onChange={(e) => setDeviceType(e.target.value)}
-          >
-            {deviceTypes.map((item, index) => (
-              <MenuItem value={item} key={index}>
-                {item}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+      <Typography
+        variant="h5"
+        component="h1"
+        align="center"
+        sx={{ mb: 1, color: "secondary.dark" }}
+      >
+        ثبت درخواست خدمات فنی
+      </Typography>
 
-      {/* Brand */}
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <InputLabel
-            id="demo-simple-select-label"
-            sx={{
-              color: "secondary.main",
-              "&.Mui-focused": {
-                color: "text.primary",
-              },
-            }}
-          >
-            برند
-          </InputLabel>
-          <Select
-            value={brand}
-            label="برند"
-            onChange={(e) => setBrand(e.target.value)}
-            sx={{
-              bgcolor: "primary.main",
-              "& .MuiSelect-icon": {
-                color: "secondary.main",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "secondary.main",
-              },
-              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "secondary.dark",
-                },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "secondary.dark",
-                borderWidth: "2px",
-              },
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  backgroundColor: "primary.light",
-                  "& .MuiMenuItem-root": {
-                    color: "text.primary",
-                    "&:hover": {
-                      backgroundColor: "secondary.main",
-                    },
-                  },
-                  "& .MuiMenuItem-root.Mui-selected": {
-                    backgroundColor: "secondary.dark",
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: "secondary.main",
-                    },
-                  },
-                },
-              },
-            }}
-          >
-            {brands.map((item, index) => (
-              <MenuItem value={item} key={index}>
-                {item}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+      {/* Select Service */}
+      <ServiceSelection
+        deviceType={deviceType}
+        setDeviceType={setDeviceType}
+        brand={brand}
+        setBrand={setBrand}
+        problemType={problemType}
+        setProblemType={setProblemType}
+        deviceTypes={deviceTypes}
+        brands={brands}
+        problems={problems}
+      />
 
-      {/* Problem Type */}
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <InputLabel
-            id="demo-simple-select-label"
-            sx={{
-              color: "secondary.main",
-              "&.Mui-focused": {
-                color: "text.primary",
-              },
-            }}
-          >
-            نوع مشکل
-          </InputLabel>
-          <Select
-            value={problemType}
-            label="نوع مشکل"
-            onChange={(e) => setProblemType(e.target.value)}
-            sx={{
-              bgcolor: "primary.main",
-              "& .MuiSelect-icon": {
-                color: "secondary.main",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "secondary.main",
-              },
-              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "secondary.dark",
-                },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "secondary.dark",
-                borderWidth: "2px",
-              },
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  backgroundColor: "primary.light",
-                  "& .MuiMenuItem-root": {
-                    color: "text.primary",
-                    "&:hover": {
-                      backgroundColor: "secondary.main",
-                    },
-                  },
-                  "& .MuiMenuItem-root.Mui-selected": {
-                    backgroundColor: "secondary.dark",
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: "secondary.main",
-                    },
-                  },
-                },
-              },
-            }}
-          >
-            {problems.map((item, index) => (
-              <MenuItem value={item} key={index}>
-                {item}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-
-      {/* Date */}
-
+      {/* Select Date */}
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fa">
         <DemoContainer components={["DatePicker"]}>
           <DatePicker
@@ -306,7 +121,6 @@ export default function CreateRequest() {
                   "& .MuiIconButton-root": {
                     color: "secondary.main",
                   },
-
                   "& .MuiIconButton-root:hover": {
                     backgroundColor: "secondary.main",
                     color: "text.primary",
@@ -322,23 +136,22 @@ export default function CreateRequest() {
 
               day: {
                 sx: {
-                  // رنگ روزهای معمولی
                   color: "text.primary",
                   "&:hover": {
                     backgroundColor: "secondary.main",
                   },
 
-                  // امروز
                   "&.MuiPickersDay-today": {
                     borderColor: "secondary.main",
                     borderWidth: "2px",
                     borderStyle: "solid",
                   },
 
-                  // روز انتخاب‌شده
                   "&.Mui-selected": {
                     backgroundColor: "primary.main",
+
                     color: "secondary.light",
+
                     "&:hover": {
                       backgroundColor: "secondary.dark",
                     },
@@ -346,7 +159,6 @@ export default function CreateRequest() {
                 },
               },
 
-              // پنل انتخاب سال / ماه
               toolbar: {
                 sx: {
                   "& .MuiPickersToolbar-title": {
@@ -359,98 +171,50 @@ export default function CreateRequest() {
         </DemoContainer>
       </LocalizationProvider>
 
-      {/* Problem description */}
-      <Grid item xs={12}>
-        <TextField
-          multiline
-          minRows={4}
-          fullWidth
-          placeholder="مشکل خود را با جزئیات توضیح دهید..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          sx={{
-            bgcolor: "primary.main",
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "secondary.main",
-            },
-            "& .MuiOutlinedInput-input":{
-              color: "secondary.main"
-            },
-            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-              {
-                borderColor: "secondary.dark",
-              },
-          }}
-        />
-      </Grid>
+      {/* Description */}
+      <TextField
+        multiline
+        minRows={4}
+        fullWidth
+        label="مشکل خود را با جزئیات توضیح دهید..."
+        placeholder="شرح کامل مشکل..."
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        variant="outlined"
+      />
 
-      <Box component="form" noValidate autoComplete="off">
-        
-        <TextField
-                  multiline
-          minRows={2}
-          fullWidth
-          label="آدرس دقیق"
-          variant="outlined"
-          sx={{
-            bgcolor: "primary.main",
-            "& .MuiInputLabel-root.Mui-focused": {
-              color: "text.primary"
-            },
-            "& .MuiSelect-icon": {
-              color: "secondary.main",
-            },
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "secondary.main",
-            },
-            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-              {
-                borderColor: "secondary.dark",
-              },
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "secondary.dark",
-              borderWidth: "2px",
-            },
-          }}
+      {/* Address */}
+      <TextField
+        multiline
+        minRows={2}
+        fullWidth
+        label="آدرس دقیق"
+        placeholder="آدرس دقیق جهت اعزام کارشناس"
+        variant="outlined"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+
+      {/* Map Select */}
+      <Box>
+        <Typography sx={{ mb: 1 }}>
+          محل انجام خدمت (روی نقشه کلیک کنید)
+        </Typography>
+        <MapInput
+          markerPosition={markerPosition}
+          setMarkerPosition={setMarkerPosition}
         />
       </Box>
 
-      {/* Map */}
-      <Grid item xs={12}>
-        <Typography sx={{ mb: 1 }}>محل انجام خدمت</Typography>
-
-        <MapContainer
-          center={[35.6892, 51.389]}
-          zoom={13}
-          scrollWheelZoom={true}
-          style={{
-            height: "380px",
-            borderRadius: "12px",
-            overflow: "hidden",
-          }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <LocationMarker />
-        </MapContainer>
-      </Grid>
-
-      {/* Button */}
-      <Grid item xs={12}>
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{
-            bgcolor: "secondary.main",
-            color: "#000",
-            fontSize: "16px",
-            py: 1.4,
-            borderRadius: "10px",
-            "&:hover": { bgcolor: "secondary.light" },
-          }}
-        >
-          ثبت نهایی درخواست
-        </Button>
-      </Grid>
+      {/* Submit Button */}
+      <Button
+        fullWidth
+        variant="contained"
+        onClick={handleSubmit}
+        sx={{ mt: 2, py: 1.2 }}
+      >
+        ثبت نهایی درخواست
+      </Button>
     </Box>
   );
 }
