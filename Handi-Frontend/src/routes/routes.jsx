@@ -6,6 +6,7 @@ import CustomerDashboard from "../Pages/Customer/CustomerDashboard";
 import CustomerDashboardPanel from "../Pages/Customer/Pages/Dashboard";
 import CreateRequest from "../Pages/Customer/Pages/CreateRequest";
 import MyRequests from "../Pages/Customer/Pages/MyRequests";
+import CustomerEditProfile from "../Pages/Customer/Pages/Profile"
 
 import TechnicianDashboard from "../Pages/Technician/TechnicianDashboard";
 import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
@@ -34,6 +35,7 @@ const routes = [
           {index: true, element: <CustomerDashboardPanel/>},
           { path: "request-page", element: <CreateRequest /> },
           { path: "my-requests", element: <MyRequests /> },
+          { path: "profile", element: <CustomerEditProfile /> },
         ]
       },
       {

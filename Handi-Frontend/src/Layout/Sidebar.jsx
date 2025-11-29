@@ -41,9 +41,9 @@ export default function Sidebar({ user, onClose }) {
         path: "/customer/my-requests",
       },
       {
-        text: "تعمیرکاران",
+        text: "پروفایل من",
         icon: <BuildIcon />,
-        path: "/customer/technicians",
+        path: "/customer/profile",
       },
       { text: "کیف پول", icon: <WalletIcon />, path: "/customer/wallet" },
       { text: "باشگاه مشتریان", icon: <StarIcon />, path: "/customer/club" },
