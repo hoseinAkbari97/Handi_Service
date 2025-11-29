@@ -1,12 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Box } from "@mui/material";
-import ActiveRequestCard from "./Components/ActiveRequestCard";
-import SummaryCard from "./Components/SummaryCard";
-import TopTechnicians from "./Components/TopTechnicians";
 import Header from "./Components/Header";
 import Sidebar from "../../Layout/Sidebar";
 import { UserContext } from "../../Contexts/UserContext";
-import { toPersianNumber } from "../../Utils/NumberUtils";
 import { Outlet } from "react-router-dom";
 
 export default function CustomerDashboard() {

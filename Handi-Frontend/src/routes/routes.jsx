@@ -4,7 +4,8 @@ import PrivateRoutes from "./PrivateRoutes";
 
 import CustomerDashboard from "../Pages/Customer/CustomerDashboard";
 import CustomerDashboardPanel from "../Pages/Customer/Pages/Dashboard";
-import RequestPage from "../Pages/Customer/Pages/RequestPage";
+import CreateRequest from "../Pages/Customer/Pages/CreateRequest";
+import MyRequests from "../Pages/Customer/Pages/MyRequests";
 
 import TechnicianDashboard from "../Pages/Technician/TechnicianDashboard";
 import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
@@ -31,7 +32,8 @@ const routes = [
         element: <CustomerDashboard />,
         children:[
           {index: true, element: <CustomerDashboardPanel/>},
-          { path: "request-page", element: <RequestPage /> },
+          { path: "request-page", element: <CreateRequest /> },
+          { path: "my-requests", element: <MyRequests /> },
         ]
       },
       {
