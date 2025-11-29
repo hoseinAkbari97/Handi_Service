@@ -1,28 +1,23 @@
 import React, { useState } from "react";
 import {
   Box,
-  Grid,
   TextField,
   Button,
   Typography,
-  ThemeProvider,
 } from "@mui/material";
 
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import jalaliday from "jalaliday";
 dayjs.extend(jalaliday);
 
 import ServiceSelection from "../Components/ServiceSelection";
 import MapInput from "../Components/MapInput";
+import SelectDate from "../Components/SelectDate";
 
 //  Fake Data
 const deviceTypes = ["یخچال", "ماشین لباسشویی", "تلویزیون", "جاروبرقی"];
 const brands = ["سامسونگ", "ال‌جی", "اسنوا", "دوو"];
-const problems = ["روشن نمی‌شود", "صدا می‌دهد", "عیب برق", "مشکل برد"];
+const problems = ["روشن نمی‌شود", "صدا می‌دهد", "ایراد برقی", "مشکل برد"];
 
 export default function CreateRequest() {
   const [deviceType, setDeviceType] = useState("");
@@ -31,7 +26,7 @@ export default function CreateRequest() {
   const [selectedDate, setSelectedDate] = useState(dayjs().calendar("jalali"));
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
-  const [markerPosition, setMarkerPosition] = useState([35.6892, 51.389]); // مرکز تهران
+  const [markerPosition, setMarkerPosition] = useState([35.6892, 51.389]);
 
   const handleSubmit = () => {
     console.log("Request Data:", {
@@ -44,7 +39,7 @@ export default function CreateRequest() {
       latitude: markerPosition[0],
       longitude: markerPosition[1],
     });
-    alert("درخواست شما ثبت شد! (اطلاعات در کنسول نمایش داده شده است)");
+    alert("درخواست شما ثبت شد! (Console.log)");
   };
 
   return (
@@ -56,15 +51,17 @@ export default function CreateRequest() {
         gap: 2,
         minHeight: "100vh",
         p: 2,
+        borderRadius: 4,
+        boxShadow: "5"
       }}
     >
       <Typography
         variant="h5"
         component="h1"
         align="center"
-        sx={{ mb: 1, color: "secondary.dark" }}
+        sx={{ mb: 1, color: "secondary.main" }}
       >
-        ثبت درخواست خدمات فنی
+        ثبت درخواست تعمیر
       </Typography>
 
       {/* Select Service */}
@@ -81,95 +78,7 @@ export default function CreateRequest() {
       />
 
       {/* Select Date */}
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fa">
-        <DemoContainer components={["DatePicker"]}>
-          <DatePicker
-            label="تاریخ مورد نظر"
-            value={selectedDate}
-            onChange={(newValue) => setSelectedDate(newValue)}
-            calendar="jalali"
-            format="YYYY/MM/DD"
-            sx={{
-              borderRadius: "5px",
-              width: "100%",
-              bgcolor: "primary.main",
-              "& .MuiIconButton-root": {
-                color: "secondary.main",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "text.primary",
-              },
-              "& .MuiInputBase-root": {
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "solid 2px",
-                  borderColor: "secondary.main",
-                },
-              },
-            }}
-            slotProps={{
-              desktopPaper: {
-                sx: {
-                  borderRadius: 4,
-                  backgroundColor: "primary.light",
-                  border: "solid 1px",
-                  borderColor: "secondary.dark",
-                },
-              },
-
-              calendarHeader: {
-                sx: {
-                  "& .MuiIconButton-root": {
-                    color: "secondary.main",
-                  },
-                  "& .MuiIconButton-root:hover": {
-                    backgroundColor: "secondary.main",
-                    color: "text.primary",
-                  },
-                  "& .MuiIconButton-root": {
-                    color: "text.primary",
-                  },
-                  "& .MuiPickersCalendarHeader-label": {
-                    color: "text.primary",
-                  },
-                },
-              },
-
-              day: {
-                sx: {
-                  color: "text.primary",
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                  },
-
-                  "&.MuiPickersDay-today": {
-                    borderColor: "secondary.main",
-                    borderWidth: "2px",
-                    borderStyle: "solid",
-                  },
-
-                  "&.Mui-selected": {
-                    backgroundColor: "primary.main",
-
-                    color: "secondary.light",
-
-                    "&:hover": {
-                      backgroundColor: "secondary.dark",
-                    },
-                  },
-                },
-              },
-
-              toolbar: {
-                sx: {
-                  "& .MuiPickersToolbar-title": {
-                    color: "primary.main",
-                  },
-                },
-              },
-            }}
-          />
-        </DemoContainer>
-      </LocalizationProvider>
+      <SelectDate selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
 
       {/* Description */}
       <TextField
