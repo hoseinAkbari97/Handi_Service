@@ -21,7 +21,7 @@ export default function CustomerEditProfile() {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
-    phone: "",
+    city: "",
     email: "",
     address: "",
   });
@@ -37,12 +37,9 @@ export default function CustomerEditProfile() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/api/service/me/",
-          {
-            headers: { Authorization: `Bearer ${user.access}` },
-          }
-        );
+        const response = await fetch("http://127.0.0.1:8000/api/service/me/", {
+          headers: { Authorization: `Bearer ${user.access}` },
+        });
 
         if (!response.ok) {
           throw new Error("خطا در دریافت اطلاعات پروفایل.");
@@ -54,7 +51,7 @@ export default function CustomerEditProfile() {
         setFormData({
           first_name: data.first_name || "",
           last_name: data.last_name || "",
-          phone: data.phone || "",
+          city: data.city || "",
           email: data.email || "",
           address: data.address || "",
         });
@@ -71,33 +68,29 @@ export default function CustomerEditProfile() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name] : value }); 
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/service/me/",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.access}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:8000/api/service/me/", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || "خطا در ذخیره تغییرات.");
       }
 
-      setUserData((prev) => ({ ...prev, ...formData })); 
+      setUserData((prev) => ({ ...prev, ...formData }));
       alert("تغییرات با موفقیت ذخیره شد!");
-
     } catch (e) {
       console.error("Submit error:", e);
       setError(e.message || "خطای ناشناخته در ذخیره داده.");
@@ -159,40 +152,7 @@ export default function CustomerEditProfile() {
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {profileData?.first_name} {profileData?.last_name}
         </Typography>
-        <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
-          نماینده منطقه {userData?.address || "(وارد نشده)"}
-        </Typography>
 
-        <Divider
-          sx={{ backgroundColor: "secondary.dark", my: 2, opacity: 0.7 }}
-        />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-around",
-            color: "text.primary",
-          }}
-        >
-          <Box>
-            <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              {toPersianNumber(userData.technician_count)}
-            </Typography>
-            <Typography variant="body2">تکنسین</Typography>
-          </Box>
-          <Box>
-            <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              {toPersianNumber(userData.total_requests)}
-            </Typography>
-            <Typography variant="body2">کار مدیریت شده</Typography>
-          </Box>
-          <Box>
-            <Typography variant="h6" sx={{ color: "secondary.main" }}>
-              {toPersianNumber(userData.experience)}
-            </Typography>
-            <Typography variant="body2">سابقه</Typography>
-          </Box>
-        </Box>
       </Card>
 
       {/* Profile Form */}
@@ -230,14 +190,6 @@ export default function CustomerEditProfile() {
             sx={inputSX}
           />
           <TextField
-            name="phone"
-            label="شماره تماس"
-            value={formData.phone}
-            onChange={handleChange}
-            fullWidth
-            sx={inputSX}
-          />
-          <TextField
             name="email"
             label="ایمیل"
             value={formData.email}
@@ -246,7 +198,15 @@ export default function CustomerEditProfile() {
             sx={inputSX}
           />
           <TextField
-            name="region"
+            name="city"
+            label="شهر"
+            value={formData.city}
+            onChange={handleChange}
+            fullWidth
+            sx={inputSX}
+          />
+          <TextField
+            name="address"
             label="آدرس"
             value={formData.address}
             onChange={handleChange}
