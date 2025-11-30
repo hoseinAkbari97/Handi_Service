@@ -7,6 +7,8 @@ import CustomerDashboardPanel from "../Pages/Customer/Pages/Dashboard";
 import CreateRequest from "../Pages/Customer/Pages/CreateRequest";
 import MyRequests from "../Pages/Customer/Pages/MyRequests";
 import CustomerEditProfile from "../Pages/Customer/Pages/Profile"
+import CustomerWallet from "../Pages/Customer/Pages/Wallet";
+import CustomerSettings from "../Pages/Customer/Pages/Settings";
 
 import TechnicianDashboard from "../Pages/Technician/TechnicianDashboard";
 import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
@@ -18,7 +20,7 @@ import ManageTasks from "../Pages/Agent/Pages/ManageTasks";
 import Messages from "../Pages/Agent/Pages/Messages";
 import AgentEditProfile from "../Pages/Agent/Pages/Profile";
 import Reports from "../Pages/Agent/Pages/Reports";
-import Setting from "../Pages/Agent/Pages/Setting";
+import AgentSettings from "../Pages/Agent/Pages/Setting";
 import TeamTechnicians from "../Pages/Agent/Pages/TeamTechnicians";
 
 
@@ -36,6 +38,8 @@ const routes = [
           { path: "request-page", element: <CreateRequest /> },
           { path: "my-requests", element: <MyRequests /> },
           { path: "profile", element: <CustomerEditProfile /> },
+          { path: "wallet", element: <CustomerWallet /> },
+          { path: "settings", element: <CustomerSettings /> },
         ]
       },
       {
@@ -55,7 +59,7 @@ const routes = [
           { path: "messages", element: <Messages /> },
           { path: "profile", element: <AgentEditProfile /> },
           { path: "reports", element: <Reports /> },
-          { path: "setting", element: <Setting /> },
+          { path: "settings", element: <AgentSettings /> },
           { path: "team-technicians", element: <TeamTechnicians /> },
         ],
       },
