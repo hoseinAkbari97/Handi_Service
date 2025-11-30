@@ -1,7 +1,8 @@
 import { useEffect, useContext } from "react";
 import { Box } from "@mui/material";
-import Header from "./Components/Header";
+import DashboardHeader from "../../Components/Common/DashboardHeader";
 import Sidebar from "../../Layout/Sidebar";
+import { HeaderBtn } from "./Components/HeaderBtn";
 import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
 
@@ -62,7 +63,7 @@ export default function CustomerDashboard() {
         }}
       >
         {/* Heaedr */}
-        <Header />
+        <DashboardHeader title="پنل مشتری" button={<HeaderBtn />}/>
 
         <Outlet />
       </Box>
