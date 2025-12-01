@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Box } from "@mui/material";
 import HeaderBtn from "./Components/HeaderBtn";
+import DashboardHeader from "../../Components/Common/DashboardHeader";
 import DashboardSidebar from "../../Components/Common/DashboardSidebar";
 import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
@@ -52,7 +53,7 @@ export default function AgentDashboard() {
         }}
       >
         {/* Heaedr */}
-        <Header title={"پنل نماینده"} button={<HeaderBtn />} />
+        <DashboardHeader title={"پنل نماینده"} button={<HeaderBtn />} />
 
         <Outlet />
       </Box>
