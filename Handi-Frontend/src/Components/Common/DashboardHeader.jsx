@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { Box, Typography, Drawer, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Sidebar from "./DashboardSidebar";
+import DashboardSidebarDrawer from "./DashboardSidebarDrawer"
 import { UserContext } from "../../Contexts/UserContext";
 
-export default function Header({ title, button }) {
+export default function DashboardHeader({ title, button }) {
   const { user } = useContext(UserContext);
 
   const [open, setOpen] = useState(false);
@@ -38,24 +38,8 @@ export default function Header({ title, button }) {
       </Typography>
 
       {/* Sidebar Drawer (just mobile display) */}
-      <Drawer
-        anchor="left"
-        open={open}
-        onClose={() => setOpen(false)}
-        sx={{ display: { xs: "block", sm: "none" } }}
-      >
-        {user ? (
-          <Sidebar
-            role={user.role}
-            user={user}
-            onClose={() => setOpen(false)}
-          />
-        ) : (
-          <Box sx={{ p: 4, textAlign: "center", color: "text.contrastText" }}>
-            در حال بارگذاری...
-          </Box>
-        )}
-      </Drawer>
+      <DashboardSidebarDrawer open={open} setOpen={setOpen} />
+
     </Box>
   );
 }
