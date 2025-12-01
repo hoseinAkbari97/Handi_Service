@@ -1,34 +1,32 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Box } from "@mui/material";
-import Header from "./Components/Header";
-import Sidebar from "../../Layout/Sidebar";
+import HeaderBtn from "./Components/HeaderBtn";
+import DashboardSidebar from "../../Components/Common/DashboardSidebar";
 import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
 import DataRefresher from "../../Components/DataRefresher";
 
 export default function AgentDashboard() {
-
   const { user } = useContext(UserContext);
-  
+
   if (!user) {
-      return (
-        <Box sx={{ p: 4, textAlign: "center" }}>
-          در حال دریافت اطلاعات کاربری...
-        </Box>
-      );
-    }
+    return (
+      <Box sx={{ p: 4, textAlign: "center" }}>
+        در حال دریافت اطلاعات کاربری...
+      </Box>
+    );
+  }
 
   return (
     <Box
-    sx={{
-      backgroundColor: "background.default",
-      minHeight: "100vh",
-      display: "flex",
-      gap: 1,
-    }}
+      sx={{
+        backgroundColor: "background.default",
+        minHeight: "100vh",
+        display: "flex",
+        gap: 1,
+      }}
     >
-
-      <DataRefresher/>
+      <DataRefresher />
 
       {/* SideBar display: desktop & tablet */}
       <Box
@@ -39,7 +37,7 @@ export default function AgentDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={user.profile.user_type} user={user} />
+        <DashboardSidebar role={user.profile.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
@@ -54,7 +52,7 @@ export default function AgentDashboard() {
         }}
       >
         {/* Heaedr */}
-        <Header />
+        <Header title={"پنل نماینده"} button={<HeaderBtn />} />
 
         <Outlet />
       </Box>

@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 import { Box } from "@mui/material";
 import DashboardHeader from "../../Components/Common/DashboardHeader";
-import Sidebar from "../../Layout/Sidebar";
+import DashboardSidebar from "../../Components/Common/DashboardSidebar";
 import { HeaderBtn } from "./Components/HeaderBtn";
 import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
@@ -19,8 +19,6 @@ export default function CustomerDashboard() {
       };
     }
   }, [user, reFetchUser]);
-
-
 
   if (!user) {
     return (
@@ -48,7 +46,7 @@ export default function CustomerDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={user.profile.user_type} user={user} />
+        <DashboardSidebar role={user.profile.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
@@ -63,7 +61,7 @@ export default function CustomerDashboard() {
         }}
       >
         {/* Heaedr */}
-        <DashboardHeader title="پنل مشتری" button={<HeaderBtn />}/>
+        <DashboardHeader title="پنل مشتری" button={<HeaderBtn />} />
 
         <Outlet />
       </Box>

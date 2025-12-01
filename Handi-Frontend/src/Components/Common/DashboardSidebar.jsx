@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   List,
@@ -22,7 +21,7 @@ import {
 } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router-dom";
 
-export default function Sidebar({ user, onClose }) {
+export default function DashboardSidebar({ user, onClose }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
