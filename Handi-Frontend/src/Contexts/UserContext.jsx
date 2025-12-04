@@ -19,6 +19,16 @@ export default function UserProvider({ children, navigate }) {
     }
   }, []);
 
+  useEffect(() => {
+  if (!user || !user.access) return;
+
+  const intervalId = setInterval(() => {
+    reFetchUser();
+  }, 5000);
+
+  return () => clearInterval(intervalId);
+}, [user?.access]);
+
   const saveUser = useCallback((userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));

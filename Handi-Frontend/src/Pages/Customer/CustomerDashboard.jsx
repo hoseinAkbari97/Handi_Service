@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 import { Box } from "@mui/material";
 import DashboardHeader from "../../Components/Common/DashboardHeader";
 import DashboardSidebar from "../../Components/Common/DashboardSidebar";
@@ -8,17 +8,6 @@ import { Outlet } from "react-router-dom";
 
 export default function CustomerDashboard() {
   const { user, reFetchUser } = useContext(UserContext);
-
-  useEffect(() => {
-    if (user && user.access) {
-      const intervalId = setInterval(() => {
-        reFetchUser();
-      }, 5000);
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, [user, reFetchUser]);
 
   if (!user) {
     return (

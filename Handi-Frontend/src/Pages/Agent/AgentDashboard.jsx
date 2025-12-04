@@ -5,7 +5,6 @@ import DashboardHeader from "../../Components/Common/DashboardHeader";
 import DashboardSidebar from "../../Components/Common/DashboardSidebar";
 import { UserContext } from "../../Contexts/UserContext";
 import { Outlet } from "react-router-dom";
-import DataRefresher from "../../Components/DataRefresher";
 
 export default function AgentDashboard() {
   const { user } = useContext(UserContext);
@@ -27,7 +26,6 @@ export default function AgentDashboard() {
         gap: 1,
       }}
     >
-      <DataRefresher />
 
       {/* SideBar display: desktop & tablet */}
       <Box
