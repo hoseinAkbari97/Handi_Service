@@ -310,3 +310,51 @@ class RepresentativeEditSerializer(serializers.Serializer):
 
         instance.save()
         return instance
+    
+class ServiceRequestCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServiceRequest
+        fields = [
+            "id",
+            "device_type",
+            "brand",
+            "problem_type",
+            "preferred_date",
+            "preferred_time",
+            "description",   
+            "full_address",  
+            "latitude",
+            "longitude",
+            "attachment",
+        ]
+        read_only_fields = ("id",)
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        profile = getattr(request.user, "profile", None)
+
+        if not profile or profile.user_type != "customer":
+            raise serializers.ValidationError("Only customers can create service requests.")
+
+        return attrs
+
+    def create(self, validated_data):
+        request = self.context["request"]
+        customer_profile = request.user.profile
+
+        # Generate a human-readable title from device/problem
+        device = validated_data.get("device_type") or "Service Request"
+        problem = validated_data.get("problem_type") or ""
+        if problem:
+            title = f"{device} - {problem}"
+        else:
+            title = device
+
+        service_request = ServiceRequest.objects.create(
+            customer=customer_profile,
+            title=title,
+            status="pending",   
+            **validated_data,
+        )
+        return service_request
