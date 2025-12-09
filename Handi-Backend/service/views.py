@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +19,7 @@ from .serializers import (
     RepresentativeReportSerializer,
     RepresentativeTaskDetailSerializer,
     RepresentativeEditSerializer,
+    ServiceRequestCreateSerializer,
 )
 
 
@@ -393,3 +395,19 @@ class RepresentativeEditView(APIView):
             "detail": "Profile updated successfully",
             "data": serializer.data
         })
+    
+class ServiceRequestCreateView(generics.CreateAPIView):
+    """
+    API endpoint for customers to submit a new service request.
+    Only users with profile.user_type == "customer" are allowed.
+    """
+    serializer_class = ServiceRequestCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        profile = self.request.user.profile
+        if profile.user_type != "customer":
+            raise PermissionDenied("Only customers can create service requests.")
+
+        # Serializer will use request.user.profile internally for `customer`
+        serializer.save()
