@@ -33,7 +33,7 @@ export default function ActiveRequestCard() {
         color="secondary"
         sx={{ mb: 2, fontWeight: "bold" }}
       >
-        درخواست فعال شما
+        آخرین درخواست فعال شما
       </Typography>
 
       {user.active_request ? (

@@ -23,10 +23,8 @@ export function toPersianNumber(input) {
   };
 
   return String(input).replace(/\d+/g, (num) => {
-    // جداکننده هزارگان روی نسخه انگلیسی
     const formatted = Number(num).toLocaleString("en-US");
 
-    // تبدیل همه رقم‌ها به فارسی
     return formatted.replace(/[0-9]/g, (d) => persianDigits[d]);
   });
 }

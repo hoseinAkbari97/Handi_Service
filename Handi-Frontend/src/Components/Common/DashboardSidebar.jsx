@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   List,
@@ -22,7 +21,7 @@ import {
 } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router-dom";
 
-export default function Sidebar({ user, onClose }) {
+export default function DashboardSidebar({ user, onClose }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -41,14 +40,15 @@ export default function Sidebar({ user, onClose }) {
         path: "/customer/my-requests",
       },
       {
-        text: "تعمیرکاران",
+        text: "پروفایل من",
         icon: <BuildIcon />,
-        path: "/customer/technicians",
+        path: "/customer/profile",
       },
       { text: "کیف پول", icon: <WalletIcon />, path: "/customer/wallet" },
-      { text: "باشگاه مشتریان", icon: <StarIcon />, path: "/customer/club" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/customer/settings" },
     ],
+
+
     technician: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/technician" },
       {
@@ -66,6 +66,8 @@ export default function Sidebar({ user, onClose }) {
       { text: "پروفایل", icon: <WalletIcon />, path: "/technician/profile" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],
+
+
     representative: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/agent" },
       {
@@ -81,7 +83,7 @@ export default function Sidebar({ user, onClose }) {
       { text: "گزارش گیری تیم", icon: <WalletIcon />, path: "/agent/reports" },
       { text: "پیام ها", icon: <WalletIcon />, path: "/agent/messages" },
       { text: "پروفایل", icon: <WalletIcon />, path: "/agent/profile" },
-      { text: "تنظیمات", icon: <SettingsIcon />, path: "/agent/setting" },
+      { text: "تنظیمات", icon: <SettingsIcon />, path: "/agent/settings" },
     ],
   };
 
@@ -121,7 +123,7 @@ export default function Sidebar({ user, onClose }) {
             sx={{ color: "text.dark", cursor: "default" }}
           >
             {user?.profile?.user_type === "technician"
-              ? "تکنسین"
+              ? "تعمیرکار"
               : user?.profile?.user_type === "customer"
               ? "مشتری"
               : user?.profile?.user_type === "representative"

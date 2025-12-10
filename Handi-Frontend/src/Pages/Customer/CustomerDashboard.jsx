@@ -1,29 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { Box } from "@mui/material";
-import ActiveRequestCard from "./Components/ActiveRequestCard";
-import SummaryCard from "./Components/SummaryCard";
-import TopTechnicians from "./Components/TopTechnicians";
-import Header from "./Components/Header";
-import Sidebar from "../../Layout/Sidebar";
+import DashboardHeader from "../../Components/Common/DashboardHeader";
+import DashboardSidebar from "../../Components/Common/DashboardSidebar";
+import { HeaderBtn } from "./Components/HeaderBtn";
 import { UserContext } from "../../Contexts/UserContext";
-import { toPersianNumber } from "../../Utils/NumberUtils";
 import { Outlet } from "react-router-dom";
 
 export default function CustomerDashboard() {
   const { user, reFetchUser } = useContext(UserContext);
-
-  useEffect(() => {
-    if (user && user.access) {
-      const intervalId = setInterval(() => {
-        reFetchUser();
-      }, 5000);
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, [user, reFetchUser]);
-
-
 
   if (!user) {
     return (
@@ -51,7 +35,7 @@ export default function CustomerDashboard() {
           top: 0,
         }}
       >
-        <Sidebar role={user.profile.user_type} user={user} />
+        <DashboardSidebar role={user.profile.user_type} user={user} />
       </Box>
 
       {/* Main Content */}
@@ -66,7 +50,7 @@ export default function CustomerDashboard() {
         }}
       >
         {/* Heaedr */}
-        <Header />
+        <DashboardHeader title="پنل مشتری" button={<HeaderBtn />} />
 
         <Outlet />
       </Box>
