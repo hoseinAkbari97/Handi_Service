@@ -28,6 +28,7 @@ export default function ActiveRequestCard() {
         justifyContent: "center",
       }}
     >
+      
       <Typography
         variant="h5"
         color="secondary"
@@ -71,7 +72,7 @@ export default function ActiveRequestCard() {
               }}
             >
               <EngineeringIcon sx={{ mr: 0.5 }} />
-             تعمیرکار: {user.active_request.technician.first_name} {user.active_request.technician.last_name}
+             تعمیرکار: {user?.active_request?.technician?.first_name} {user?.active_request?.technician?.last_name}
             </Typography>
             <Typography
               variant="h5"

@@ -1,10 +1,5 @@
-import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-} from "@mui/material";
+import React, { useContext, useState } from "react";
+import { Box, TextField, Button, Typography } from "@mui/material";
 
 import dayjs from "dayjs";
 import jalaliday from "jalaliday";
@@ -13,6 +8,7 @@ dayjs.extend(jalaliday);
 import ServiceSelection from "../Components/ServiceSelection";
 import MapInput from "../Components/MapInput";
 import SelectDate from "../Components/SelectDate";
+import { UserContext } from "../../../Contexts/UserContext";
 
 //  Fake Data
 const deviceTypes = ["یخچال", "ماشین لباسشویی", "تلویزیون", "جاروبرقی"];
@@ -20,6 +16,7 @@ const brands = ["سامسونگ", "ال‌جی", "اسنوا", "دوو"];
 const problems = ["روشن نمی‌شود", "صدا می‌دهد", "ایراد برقی", "مشکل برد"];
 
 export default function CreateRequest() {
+  const { user } = useContext(UserContext);
   const [deviceType, setDeviceType] = useState("");
   const [brand, setBrand] = useState("");
   const [problemType, setProblemType] = useState("");
@@ -29,6 +26,24 @@ export default function CreateRequest() {
   const [markerPosition, setMarkerPosition] = useState([35.6892, 51.389]);
 
   const handleSubmit = () => {
+    fetch("http://127.0.0.1:8000/api/service/requests/create/", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${user.access}` },
+      body: JSON.stringify({
+        id: 3,
+        device_type: deviceType,
+        brand: brand,
+        problem_type: problemType,
+        preferred_date: selectedDate,
+        preferred_time: null,
+        description: description,
+        full_address: address,
+        latitude: markerPosition[0],
+        longitude: markerPosition[1],
+        attachment: null,
+      }),
+    });
+
     console.log("Request Data:", {
       deviceType,
       brand,
@@ -52,7 +67,7 @@ export default function CreateRequest() {
         minHeight: "100vh",
         p: 2,
         borderRadius: 4,
-        boxShadow: "5"
+        boxShadow: "5",
       }}
     >
       <Typography
@@ -78,7 +93,10 @@ export default function CreateRequest() {
       />
 
       {/* Select Date */}
-      <SelectDate selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+      <SelectDate
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
 
       {/* Description */}
       <TextField
