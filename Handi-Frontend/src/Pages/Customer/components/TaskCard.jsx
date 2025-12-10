@@ -64,17 +64,6 @@ export default function TaskCard({ task }) {
 
         {task.technician && (
           <Box>
-            <Typography
-              sx={{
-                fontSize: 18,
-                fontWeight: "bold",
-                mt: 2,
-                textAlign: "center",
-                color: "text.secondary",
-              }}
-            >
-              در انتظار تخصیص به تعمیرکار
-            </Typography>
             <Box
               sx={{
                 display: "flex",
@@ -147,7 +136,7 @@ export default function TaskCard({ task }) {
               fontWeight: "bold",
               mt: 2,
               textAlign: "center",
-              color: "text.secondary",
+              color: "warning.light",
             }}
           >
             در انتظار تخصیص به تعمیرکار
@@ -164,18 +153,27 @@ export default function TaskCard({ task }) {
             justifyContent: "center",
             backgroundColor:
               task.status === "completed"
-                ? "success.light"
+                ? "success"
+                : task.status === "pending"
+                ? "warning.main"
                 : task.status === "assigned"
-                ? "warning.light"
+                ? "success.light"
+                : task.status === "in_progress"
+                ? "info.main"
                 : "error.main",
             borderRadius: 10,
             mx: "auto",
           }}
         >
+          {console.log(task)}
           <Typography>
             {task.status === "completed"
               ? "تکمیل شده"
+              : task.status === "pending"
+              ? "در انتظار تأیید تعمیرکار"
               : task.status === "assigned"
+              ? "تخصیص داده شد"
+              : task.status === "in_progress"
               ? "درحال انجام"
               : "تخصیص داده نشده"}
           </Typography>
