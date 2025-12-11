@@ -94,11 +94,11 @@ export default function TaskCard() {
           size="large"
           variant="contained"
           aria-label="Basic button group"
-          color="secondary"
+          color="primary.main"
           sx={{ mt: 1, justifySelf: "center" }}
         >
-          <Button sx={{minWidth:"50%", textWrap:"nowrap"}}>قبول درخواست</Button>
-          <Button sx={{minWidth:"50%", textWrap:"nowrap"}}>رد درخواست</Button>
+          <Button sx={{minWidth:"50%", textWrap:"nowrap", backgroundColor:"success.main"}}>قبول درخواست</Button>
+          <Button sx={{minWidth:"50%", textWrap:"nowrap", backgroundColor:"error.main"}}>رد درخواست</Button>
         </ButtonGroup>
       </Box>
     </Box>
