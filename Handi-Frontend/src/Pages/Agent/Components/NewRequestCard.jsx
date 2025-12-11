@@ -2,8 +2,14 @@ import { Box, Typography, Button, ButtonGroup } from "@mui/material";
 import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
+import NewRequestModal from "./NewRequestModal";
+import { useState } from "react";
 
 export default function NewRequestCard({ task }) {
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   return (
     <Box
       sx={{
@@ -138,6 +144,7 @@ export default function NewRequestCard({ task }) {
           sx={{ mt: 1, justifySelf: "center" }}
         >
           <Button
+            onClick={handleOpenModal}
             sx={{
               minWidth: "50%",
               textWrap: "nowrap",
@@ -157,6 +164,8 @@ export default function NewRequestCard({ task }) {
           </Button>
         </ButtonGroup>
       </Box>
+
+      <NewRequestModal openModal={openModal} closeModal={handleCloseModal} task={task}/>
     </Box>
   );
 }

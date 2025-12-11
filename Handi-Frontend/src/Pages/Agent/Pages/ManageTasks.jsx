@@ -38,8 +38,8 @@ export default function ManageTasks() {
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       }}
     >
-      {pendingTasks.map(task => <NewRequestCard task={task}/> )}
-      {checkedTasks.map(task => <TaskCard task={task}/> )}
+      {pendingTasks.map(task => <NewRequestCard task={task} key={task.id}/> )}
+      {checkedTasks.map(task => <TaskCard task={task} key={task.id}/> )}
 
     </Box>
   );
