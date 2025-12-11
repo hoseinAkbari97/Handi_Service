@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import TaskCard from "../Components/TaskCard";
+import NewRequestCard from "../Components/NewRequestCard"
 import { Box } from "@mui/material";
 import { UserContext } from "../../../Contexts/UserContext";
 
@@ -27,6 +28,8 @@ export default function ManageTasks() {
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       }}
     >
+      <NewRequestCard />
+
       {Tasks.map((task, index) => (
         <Box key={index}>
           <TaskCard task={task} />
