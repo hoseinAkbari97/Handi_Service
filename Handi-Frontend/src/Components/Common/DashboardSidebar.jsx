@@ -132,7 +132,7 @@ export default function DashboardSidebar({ user, onClose }) {
           </Typography>
         </Box>
 
-        <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5" }} />
+        <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5", width:"70%", mx:"auto" }} />
 
         {/* Navigation Menu */}
         <List>
