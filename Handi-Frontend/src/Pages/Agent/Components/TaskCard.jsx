@@ -1,11 +1,7 @@
-import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { Engineering, Star } from "@mui/icons-material";
-import PhoneIcon from "@mui/icons-material/Phone";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
-import { blue } from "@mui/material/colors";
 
 export default function TaskCard({ task }) {
   return (
