@@ -3,14 +3,14 @@ import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
 
-export default function NewRequestCard({task}) {
+export default function NewRequestCard({ task }) {
   return (
     <Box
       sx={{
         display: "flex",
         justifySelf: "center",
         flexDirection: "column",
-        backgroundColor: "secondary.dark",
+        backgroundColor: "secondary.main",
         justifyContent: "space-between",
         width: 280,
         height: 380,
@@ -56,7 +56,27 @@ export default function NewRequestCard({task}) {
               mt: 0.5,
             }}
           >
-            نام مشتری:
+            نام مشتری: {task.customer_name}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mt: 2,
+            gap: 0.3,
+          }}
+        >
+          <PersonIcon fontSize="small" />
+          <Typography
+            sx={{
+              fontSize: 14,
+              mt: 0.5,
+            }}
+          >
+            تلفن مشتری: {task.customer_phone}
           </Typography>
         </Box>
 
@@ -76,7 +96,27 @@ export default function NewRequestCard({task}) {
               mt: 0.5,
             }}
           >
-            مشکل:
+            موضوع درخواست: {task.title}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 0.5,
+            mt: 2,
+          }}
+        >
+          <ErrorIcon fontSize="small" />
+          <Typography
+            sx={{
+              fontSize: 14,
+              mt: 0.5,
+            }}
+          >
+            مشکل: {task.description}
           </Typography>
         </Box>
       </Box>
@@ -97,8 +137,24 @@ export default function NewRequestCard({task}) {
           color="primary.main"
           sx={{ mt: 1, justifySelf: "center" }}
         >
-          <Button sx={{minWidth:"50%", textWrap:"nowrap", backgroundColor:"success.main"}}>قبول درخواست</Button>
-          <Button sx={{minWidth:"50%", textWrap:"nowrap", backgroundColor:"error.main"}}>رد درخواست</Button>
+          <Button
+            sx={{
+              minWidth: "50%",
+              textWrap: "nowrap",
+              backgroundColor: "success.main",
+            }}
+          >
+            قبول درخواست
+          </Button>
+          <Button
+            sx={{
+              minWidth: "50%",
+              textWrap: "nowrap",
+              backgroundColor: "error.main",
+            }}
+          >
+            رد درخواست
+          </Button>
         </ButtonGroup>
       </Box>
     </Box>
