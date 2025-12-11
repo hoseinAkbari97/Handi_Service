@@ -27,6 +27,7 @@ export default function TeamTechnicians() {
         gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
       }}
     >
+      
       {technicianTeam.map((technician, index) => (
         <Box key={index}>
           <TechnicianCard technician={technician} />

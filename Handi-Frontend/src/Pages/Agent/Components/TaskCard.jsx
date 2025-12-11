@@ -1,11 +1,7 @@
-import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { Engineering, Star } from "@mui/icons-material";
-import PhoneIcon from "@mui/icons-material/Phone";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
-import { blue } from "@mui/material/colors";
 
 export default function TaskCard({ task }) {
   return (
@@ -19,11 +15,16 @@ export default function TaskCard({ task }) {
         width: 280,
         height: 380,
         borderTop: 5,
-        borderColor: task.status === "complete"
-        ? "success.light"
-        : task.status === "assigned"
-        ? "warning.light"
-        : "error.main",
+        borderColor:
+          task.status === "pending"
+            ? "secondary.main"
+            : task.status === "assigned"
+            ? "success.dark"
+            : task.status === "in_progress"
+            ? "warning.light"
+            : task.status === "completed"
+            ? "success.light"
+            : "error.main",
         borderRadius: 3,
         mt: 2,
         pb: 2,
@@ -63,27 +64,25 @@ export default function TaskCard({ task }) {
           </Typography>
         </Box>
 
-
-          <Box
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 0.5,
+            mt: 2,
+          }}
+        >
+          <ErrorIcon fontSize="small" />
+          <Typography
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 0.5,
-              mt: 2,
+              fontSize: 14,
+              mt: 0.5,
             }}
           >
-            <ErrorIcon fontSize="small" />
-            <Typography
-              sx={{
-                fontSize: 14,
-                mt: 0.5,
-              }}
-            >
-              مشکل: {task.description}
-            </Typography>
-          </Box>
-
+            مشکل: {task.description}
+          </Typography>
+        </Box>
 
         <Box
           sx={{
@@ -117,21 +116,29 @@ export default function TaskCard({ task }) {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor:
-              task.status === "complete"
-                ? "success.light"
+              task.status === "pending"
+                ? "secondary.main"
                 : task.status === "assigned"
+                ? "success.dark"
+                : task.status === "in_progress"
                 ? "warning.light"
+                : task.status === "completed"
+                ? "success.light"
                 : "error.main",
             borderRadius: 10,
             mx: "auto",
           }}
         >
           <Typography>
-            {task.status === "complete"
-              ? "تکمیل شده"
+            {task.status === "pending"
+              ? "درحال بررسی"
               : task.status === "assigned"
+              ? "اختصاص داده شده"
+              : task.status === "in_progress"
               ? "درحال انجام"
-              : "تخصیص داده نشده"}
+              : task.status === "completed"
+              ? "تکمیل شده"
+              : "رد شده"}
           </Typography>
         </Box>
 
