@@ -1,7 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import { Engineering, Phone } from "@mui/icons-material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
 import { toPersianNumber } from "../../../Utils/NumberUtils";
 
@@ -18,10 +17,14 @@ export default function TaskCard({ task }) {
         height: 380,
         borderTop: 5,
         borderColor:
-          task.status === "completed"
-            ? "success.light"
+          task.status === "pending"
+            ? "secondary.main"
             : task.status === "assigned"
+            ? "success.main"
+            : task.status === "in_progress"
             ? "warning.light"
+            : task.status === "completed"
+            ? "success.light"
             : "error.main",
         borderRadius: 3,
         mt: 2,
@@ -152,20 +155,19 @@ export default function TaskCard({ task }) {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor:
-              task.status === "completed"
-                ? "success"
-                : task.status === "pending"
-                ? "warning.main"
+              task.status === "pending"
+                ? "secondary.main"
                 : task.status === "assigned"
-                ? "success.light"
+                ? "success.main"
                 : task.status === "in_progress"
-                ? "info.main"
+                ? "warning.light"
+                : task.status === "completed"
+                ? "success.light"
                 : "error.main",
             borderRadius: 10,
             mx: "auto",
           }}
         >
-          {console.log(task)}
           <Typography>
             {task.status === "completed"
               ? "تکمیل شده"
@@ -178,6 +180,17 @@ export default function TaskCard({ task }) {
               : "تخصیص داده نشده"}
           </Typography>
         </Box>
+
+        {task.status === "assigned" && (
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            sx={{ mt: 2, py: 1.2 }}
+          >
+            مشاهده پکیج ها
+          </Button>
+        )}
       </Box>
     </Box>
   );

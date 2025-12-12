@@ -17,9 +17,9 @@ export default function MyRequests() {
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       }}
     >
-        <Box>
-          <TaskCard task={user.active_request} />
-        </Box>
+      <Box>
+        <TaskCard task={user.active_request} />
+      </Box>
     </Box>
   );
 }
