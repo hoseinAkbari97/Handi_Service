@@ -23,6 +23,26 @@ export default function NewRequestModal({ task, openModal, closeModal }) {
             p: 2,
           }}
         >
+          <Box
+            sx={{
+              backgroundColor: "primary.main",
+              width: "100%",
+              height: "5rem",
+              borderRadius: 3,
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center"
+            }}
+          >
+            <Typography
+              sx={{
+                color: "secondary.main",
+                fontWeight: "bold",
+              }}
+            >
+              پکیج عادی
+            </Typography>
+          </Box>
           <Typography color="black">Text in a modal</Typography>
           <Typography color="black">
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
