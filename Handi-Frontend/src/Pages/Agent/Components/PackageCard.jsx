@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 
-export default function PackageCard({ title, technicians }) {
+export default function PackageCard({ title, technicians, bgColor, txtColor }) {
   const [technician, setTechnician] = useState("");
 
   const handleChange = (event) => {
@@ -14,7 +14,7 @@ export default function PackageCard({ title, technicians }) {
     <Box
       sx={{
         display: "flex",
-        backgroundColor: "primary.main",
+        backgroundColor: bgColor,
         width: "100%",
         height: "33%",
         borderRadius: 3,
@@ -25,7 +25,7 @@ export default function PackageCard({ title, technicians }) {
     >
       <Typography
         sx={{
-          color: "secondary.main",
+          color: txtColor,
           fontWeight: "bold",
           width: "50%",
         }}

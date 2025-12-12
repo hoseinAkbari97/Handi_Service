@@ -31,9 +31,9 @@ export default function NewRequestModal({ openModal, closeModal }) {
           }}
         >
 
-          <PackageCard title={"پکیج عادی"} technicians={user.technicians} />
-          <PackageCard title={"پکیج نقره‌ای"} technicians={user.technicians} />
-          <PackageCard title={"پکیج طلایی"} technicians={user.technicians} />
+          <PackageCard title={"پکیج عادی"} technicians={user.technicians} bgColor={"info.main"} txtColor={"text.primary"} />
+          <PackageCard title={"پکیج نقره‌ای"} technicians={user.technicians} bgColor={"#C0C0C0"} txtColor={"#646464"} />
+          <PackageCard title={"پکیج طلایی"} technicians={user.technicians} bgColor={"secondary.dark"} txtColor={"secondary.light"} />
         </Box>
       </Modal>
     </>
