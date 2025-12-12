@@ -3,9 +3,16 @@ import { Engineering, Phone } from "@mui/icons-material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ErrorIcon from "@mui/icons-material/Error";
 import { toPersianNumber } from "../../../Utils/NumberUtils";
+import PackageModal from "./PackageModal";
+import { useState } from "react";
 
 export default function TaskCard({ task }) {
+  const [openModal , setOpenModal] = useState(false)
+  const handleOpenModal = () => setOpenModal(true)
+  const handleCloseModal = () => setOpenModal(false)
+
   return (
+    <>
     <Box
       sx={{
         display: "flex",
@@ -184,7 +191,7 @@ export default function TaskCard({ task }) {
         {task.status === "assigned" && (
           <Button
             variant="contained"
-            color="secondary"
+            onClick={handleOpenModal}
             fullWidth
             sx={{ mt: 2, py: 1.2 }}
           >
@@ -193,5 +200,9 @@ export default function TaskCard({ task }) {
         )}
       </Box>
     </Box>
+
+    <PackageModal openModal={openModal} closeModal={handleCloseModal} />
+    </>
+    
   );
 }
