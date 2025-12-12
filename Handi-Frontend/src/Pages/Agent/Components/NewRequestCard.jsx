@@ -166,11 +166,10 @@ export default function NewRequestCard({ task }) {
           </ButtonGroup>
         </Box>
       </Box>
-      
+
       <NewRequestModal
         openModal={openModal}
         closeModal={handleCloseModal}
-        task={task}
       />
     </>
   );
