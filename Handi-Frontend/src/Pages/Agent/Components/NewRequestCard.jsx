@@ -1,5 +1,4 @@
 import { Box, Typography, Button, ButtonGroup } from "@mui/material";
-import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
 import NewRequestModal from "./NewRequestModal";
@@ -22,11 +21,6 @@ export default function NewRequestCard({ task }) {
           width: 280,
           height: 380,
           borderTop: 5,
-          // borderColor: task.status === "complete"
-          // ? "success.light"
-          // : task.status === "assigned"
-          // ? "warning.light"
-          // : "error.main",
           borderColor: "primary.light",
           borderRadius: 3,
           mt: 2,
@@ -52,6 +46,7 @@ export default function NewRequestCard({ task }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              color: "text.contrastText",
               mt: 2,
               gap: 0.3,
             }}
@@ -72,6 +67,7 @@ export default function NewRequestCard({ task }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              color: "text.contrastText",
               mt: 2,
               gap: 0.3,
             }}
@@ -91,6 +87,7 @@ export default function NewRequestCard({ task }) {
             sx={{
               display: "flex",
               justifyContent: "center",
+              color: "text.contrastText",
               alignItems: "center",
               gap: 0.5,
               mt: 2,
@@ -112,6 +109,7 @@ export default function NewRequestCard({ task }) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              color: "text.contrastText",
               gap: 0.5,
               mt: 2,
             }}
@@ -167,10 +165,7 @@ export default function NewRequestCard({ task }) {
         </Box>
       </Box>
 
-      <NewRequestModal
-        openModal={openModal}
-        closeModal={handleCloseModal}
-      />
+      <NewRequestModal openModal={openModal} closeModal={handleCloseModal} />
     </>
   );
 }
