@@ -170,7 +170,7 @@ export default function TaskCard({ task }) {
             {task.status === "completed"
               ? "تکمیل شده"
               : task.status === "pending"
-              ? "در انتظار تأیید تعمیرکار"
+              ? "در انتظار تأیید"
               : task.status === "assigned"
               ? "تخصیص داده شد"
               : task.status === "in_progress"
