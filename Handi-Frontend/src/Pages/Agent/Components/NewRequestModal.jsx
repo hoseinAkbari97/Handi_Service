@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
 import { useContext } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import PackageCard from "./PackageCard";
+import { Typography } from "@mui/material";
 
 export default function NewRequestModal({ openModal, closeModal }) {
   const { user } = useContext(UserContext);
@@ -30,6 +30,9 @@ export default function NewRequestModal({ openModal, closeModal }) {
             p: 2,
           }}
         >
+            <Typography variant="h5" color="text.contrastText" fontWeight={"bold"} mb={1}>
+                تخصیص به تکنسین ها
+            </Typography>
 
           <PackageCard title={"پکیج عادی"} technicians={user.technicians} bgColor={"info.main"} txtColor={"text.primary"} />
           <PackageCard title={"پکیج نقره‌ای"} technicians={user.technicians} bgColor={"#C0C0C0"} txtColor={"#646464"} />
