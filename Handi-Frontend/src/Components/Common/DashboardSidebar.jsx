@@ -54,14 +54,14 @@ export default function DashboardSidebar({ user, onClose }) {
       {
         text: "درخواست‌ها",
         icon: <AssignmentIcon />,
-        path: "/technician/requests",
+        path: "/technician/manage-tasks",
       },
       {
         text: "تقویم کاری",
         icon: <PeopleIcon />,
-        path: "/technician/customers",
+        path: "/technician/work-calendar",
       },
-      { text: "پیام ها", icon: <WalletIcon />, path: "/technician/wallet" },
+      { text: "پیام ها", icon: <WalletIcon />, path: "/technician/messages" },
       { text: "پروفایل", icon: <WalletIcon />, path: "/technician/profile" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],

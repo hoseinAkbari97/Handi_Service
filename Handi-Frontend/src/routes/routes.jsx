@@ -51,7 +51,11 @@ const routes = [
         element: <TechnicianDashboard />,
         children: [
           { index: true, element: <TechnicianDashboardPanel /> },
+          { path: "manage-tasks", element: <TechnicianManageTasks /> },
+          { path: "work-calendar", element: <TechnicianWorkCalendar /> },
+          { path: "messages", element: <TechnicianMessages /> },
           { path: "profile", element: <TechnicianEditProfile /> },
+          { path: "settings", element: <TechnicianSettings /> },
         ],
       },
       {
