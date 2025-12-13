@@ -23,7 +23,7 @@ export default function NewRequestModal({ openModal, closeModal }) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "secondary.main",
+            backgroundColor: "background.default",
             width: "70%",
             maxWidth: "60rem",
             height: "70%",
