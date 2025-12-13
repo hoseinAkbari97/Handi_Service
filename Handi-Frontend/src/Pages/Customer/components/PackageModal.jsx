@@ -24,7 +24,7 @@ export default function PackageModal({ openModal, closeModal }) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "secondary.main",
+            backgroundColor: "background.default",
             width: "70%",
             maxWidth: "60rem",
             height: "70%",
@@ -43,7 +43,7 @@ export default function PackageModal({ openModal, closeModal }) {
 
           <PackageCard
             title="پکیج عادی"
-            // technicians={user.technicians}
+            comment="تعمیرکار مورد تآیید + ۱ ماه گارانتی (نرخ اتحادیه)"
             bgColor="info.main"
             txtColor="text.primary"
             selected={selectedPackage === "normal"}
@@ -51,7 +51,7 @@ export default function PackageModal({ openModal, closeModal }) {
           />
           <PackageCard
             title="پکیج نقره‌ای"
-            // technicians=user.technicians
+            comment="تعمیرکار با ۲ سال سابقه + ۳ ماه گارانتی (۲۰٪ الی ۴۰٪ بالاتر از نرخ اتحادیه)"
             bgColor="#C0C0C0"
             txtColor="#646464"
             selected={selectedPackage === "silver"}
@@ -59,7 +59,7 @@ export default function PackageModal({ openModal, closeModal }) {
           />
           <PackageCard
             title="پکیج طلایی"
-            // technicians=user.technicians
+            comment="تعمیرکار با ۵ سال سابقه + ۶ ماه گارانتی (۵۰٪ الی ۸۰٪ بالاتر از نرخ اتحادیه)"
             bgColor="secondary.dark"
             txtColor="secondary.light"
             selected={selectedPackage === "gold"}
