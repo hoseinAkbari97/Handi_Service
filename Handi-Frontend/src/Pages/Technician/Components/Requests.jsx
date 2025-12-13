@@ -46,9 +46,9 @@ export default function Requests({ requests }) {
                     alignItems: "flex-start",
                   }}
                 >
-                  <Typography>{request.customerName}</Typography>
+                  <Typography>{request.customer_name}</Typography>
                   <Typography variant="caption" mt={0.5} color="text.dark">
-                    درخواست: {request.request} {request.device} {request.brand}
+                    درخواست: {request.title}
                   </Typography>
                 </Box>
               </Box>
@@ -56,7 +56,7 @@ export default function Requests({ requests }) {
               {/* Right Side */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Typography color="text.secondary" mt={1}>
-                  {request.time} ساعت پیش
+                  {request.time_ago} ساعت پیش
                 </Typography>
               </Box>
             </Box>
