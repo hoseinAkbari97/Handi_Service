@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Box, Typography, Paper, useTheme } from "@mui/material";
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import StarIcon from '@mui/icons-material/Star';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { UserContext } from "../../../Contexts/UserContext";
-import { toPersianNumber } from "../../../Utils/NumberUtils";
 
 // props: iconType, label, value
 export default function SummaryCard({ iconType, label, value }) {
@@ -47,9 +46,10 @@ export default function SummaryCard({ iconType, label, value }) {
         },
       }}
     >
-      {/* Left Side (Value + Label) */}
+      {/* Righte Side (Value + Label) */}
       <Box m={.75}>
       <Typography variant="body1">{label}</Typography>
+      
         <Typography
           variant="h5"
           fontWeight="bold"
@@ -59,7 +59,7 @@ export default function SummaryCard({ iconType, label, value }) {
         </Typography>
       </Box>
 
-      {/* Right Side (Icon) */}
+      {/* Left Side (Icon) */}
       <Box>{getIcon()}</Box>
     </Paper>
   );
