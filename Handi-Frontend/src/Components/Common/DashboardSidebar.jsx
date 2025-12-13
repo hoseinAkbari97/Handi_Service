@@ -61,7 +61,6 @@ export default function DashboardSidebar({ user, onClose }) {
         icon: <PeopleIcon />,
         path: "/technician/customers",
       },
-      { text: "گزارش گیری", icon: <WalletIcon />, path: "/technician/wallet" },
       { text: "پیام ها", icon: <WalletIcon />, path: "/technician/wallet" },
       { text: "پروفایل", icon: <WalletIcon />, path: "/technician/profile" },
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },

@@ -1,7 +1,7 @@
 import { Box, Paper, Typography, Avatar, Divider } from "@mui/material";
 import React from "react";
 
-export default function Requests({ requests }) {
+export default function RecentRequests({ requests }) {
   
   return (
     <Paper
