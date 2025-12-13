@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 
-export default function PackageCard({ title, technicians, bgColor, txtColor }) {
+export default function PackageCard({ title, comment, technicians, bgColor, txtColor }) {
   const [technician, setTechnician] = useState("");
 
   const handleChange = (event) => {
@@ -23,15 +23,28 @@ export default function PackageCard({ title, technicians, bgColor, txtColor }) {
         px: 4,
       }}
     >
-      <Typography
-        sx={{
-          color: txtColor,
-          fontWeight: "bold",
-          width: "50%",
-        }}
-      >
-        {title}
-      </Typography>
+      <Box>
+        <Typography
+          sx={{
+            color: txtColor,
+            fontWeight: "bold",
+            cursor: "default",
+          }}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="subtitle2"
+          sx={{
+            mt: 1,
+            color: txtColor,
+            cursor: "default",
+          }}
+        >
+          {comment}
+        </Typography>
+      </Box>
+
       <Box width="50%">
         <FormControl fullWidth>
           <InputLabel>تخصیص به تکنسین</InputLabel>

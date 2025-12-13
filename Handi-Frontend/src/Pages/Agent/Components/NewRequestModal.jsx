@@ -41,22 +41,25 @@ export default function NewRequestModal({ openModal, closeModal }) {
           </Typography>
 
           <PackageCard
-            title={"پکیج عادی"}
-            technicians={user.technicians}
-            bgColor={"info.main"}
-            txtColor={"text.primary"}
+            title= "پکیج عادی"
+            comment="تعمیرکار مورد تآیید + ۱ ماه گارانتی (نرخ اتحادیه)"
+            technicians= {user.technicians}
+            bgColor= "info.main"
+            txtColor= "text.primary"
           />
           <PackageCard
-            title={"پکیج نقره‌ای"}
-            technicians={user.technicians}
-            bgColor={"#C0C0C0"}
-            txtColor={"#646464"}
+            title= "پکیج نقره‌ای"
+            comment="تعمیرکار با ۲ سال سابقه + ۳ ماه گارانتی (۲۰٪ الی ۴۰٪ بالاتر از نرخ اتحادیه)"
+            technicians= {user.technicians}
+            bgColor= "#C0C0C0"
+            txtColor= "#646464"
           />
           <PackageCard
-            title={"پکیج طلایی"}
-            technicians={user.technicians}
-            bgColor={"secondary.dark"}
-            txtColor={"secondary.light"}
+            title= "پکیج طلایی"
+            comment="تعمیرکار با ۵ سال سابقه + ۶ ماه گارانتی (۵۰٪ الی ۸۰٪ بالاتر از نرخ اتحادیه)"
+            technicians= {user.technicians}
+            bgColor= "secondary.dark"
+            txtColor= "secondary.light"
           />
 
           <Button
