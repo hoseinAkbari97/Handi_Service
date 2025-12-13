@@ -11,15 +11,19 @@ import CustomerWallet from "../Pages/Customer/Pages/Wallet";
 import CustomerSettings from "../Pages/Customer/Pages/Settings";
 
 import TechnicianDashboard from "../Pages/Technician/TechnicianDashboard";
-import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
 import TechnicianDashboardPanel from "../Pages/Technician/Pages/Dashboard";
+import TechnicianManageTasks from "../Pages/Technician/Pages/ManageTasks";
+import TechnicianWorkCalendar from "../Pages/Technician/Pages/WorkCalendar";
+import TechnicianMessages from "../Pages/Technician/Pages/Messages";
+import TechnicianEditProfile from "../Pages/Technician/Pages/Profile";
+import TechnicianSettings from "../Pages/Technician/Pages/Settings";
 
 import AgentDashboard from "../Pages/Agent/AgentDashboard";
 import AgentDashboardPanel from "../Pages/Agent/Pages/Dashboard";
-import ManageTasks from "../Pages/Agent/Pages/ManageTasks";
-import Messages from "../Pages/Agent/Pages/Messages";
+import AgentManageTasks from "../Pages/Agent/Pages/ManageTasks";
+import AgentMessages from "../Pages/Agent/Pages/Messages";
 import AgentEditProfile from "../Pages/Agent/Pages/Profile";
-import Reports from "../Pages/Agent/Pages/Reports";
+import AgentReports from "../Pages/Agent/Pages/Reports";
 import AgentSettings from "../Pages/Agent/Pages/Setting";
 import TeamTechnicians from "../Pages/Agent/Pages/TeamTechnicians";
 
@@ -55,10 +59,10 @@ const routes = [
         element: <AgentDashboard />,
         children: [
           { index: true, element: <AgentDashboardPanel /> },
-          { path: "manage-tasks", element: <ManageTasks /> },
-          { path: "messages", element: <Messages /> },
+          { path: "manage-tasks", element: <AgentManageTasks /> },
+          { path: "messages", element: <AgentMessages /> },
           { path: "profile", element: <AgentEditProfile /> },
-          { path: "reports", element: <Reports /> },
+          { path: "reports", element: <AgentReports /> },
           { path: "settings", element: <AgentSettings /> },
           { path: "team-technicians", element: <TeamTechnicians /> },
         ],
