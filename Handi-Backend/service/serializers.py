@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Wallet, ServiceRequest, RepresentativeTechnician
+from .models import Profile, Wallet, ServiceRequest, AgentTechnician
 from django.utils import timezone
 import random
 
@@ -91,7 +91,7 @@ class TechnicianPanelSerializer(serializers.Serializer):
     profile = ProfileSerializer()
 
 
-class RepresentativePanelSerializer(serializers.Serializer):
+class AgentPanelSerializer(serializers.Serializer):
     active_jobs_today = serializers.IntegerField()
     team_size = serializers.IntegerField()
     monthly_income = serializers.IntegerField()
@@ -101,7 +101,7 @@ class RepresentativePanelSerializer(serializers.Serializer):
     technicians = TechnicianSerializer(many=True)
 
 
-class RepresentativeTechnicianFullSerializer(serializers.ModelSerializer):
+class AgentTechnicianFullSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source="user.phone", read_only=True)
     rate = serializers.FloatField(default=4.5)
     status = serializers.SerializerMethodField()
@@ -149,7 +149,7 @@ class TechnicianEditSerializer(serializers.ModelSerializer):
         ]
 
 
-class RepresentativeTaskSerializer(serializers.ModelSerializer):
+class AgentTaskSerializer(serializers.ModelSerializer):
     customer_name = serializers.SerializerMethodField()
     customer_phone = serializers.CharField(source="customer.user.phone", read_only=True)
 
@@ -196,13 +196,13 @@ class AssignTechnicianSerializer(serializers.Serializer):
     def validate(self, data):
         technician_id = data.get("technician_id")
         request_obj = self.context.get("request_obj")
-        representative = self.context.get("representative")
+        agent = self.context.get("agent")
 
-        # Check if technician belongs to representative
+        # Check if technician belongs to agent
         tech = Profile.objects.filter(
             id=technician_id,
             user_type="technician",
-            representative_links__representative=representative
+            agent_links__agent=agent
         ).first()
 
         if not tech:
@@ -222,7 +222,7 @@ class AssignTechnicianSerializer(serializers.Serializer):
         return request_obj
     
 
-class RepresentativeTaskDetailSerializer(serializers.ModelSerializer):
+class AgentTaskDetailSerializer(serializers.ModelSerializer):
     technician_name = serializers.SerializerMethodField()
     customer_name = serializers.SerializerMethodField()
     score = serializers.SerializerMethodField()
@@ -258,15 +258,15 @@ class RepresentativeTaskDetailSerializer(serializers.ModelSerializer):
         return random.randint(0, 100)
 
 
-class RepresentativeReportSerializer(serializers.Serializer):
+class AgentReportSerializer(serializers.Serializer):
     total_income = serializers.IntegerField()
     total_tasks = serializers.IntegerField()
     avg_rating = serializers.FloatField()
     efficiency = serializers.FloatField()
-    task_details = RepresentativeTaskDetailSerializer(many=True)
+    task_details = AgentTaskDetailSerializer(many=True)
 
 
-class RepresentativeEditSerializer(serializers.Serializer):
+class AgentEditSerializer(serializers.Serializer):
 
     # USER FIELDS
     phone = serializers.CharField(source="user.phone", read_only=True)
@@ -291,8 +291,8 @@ class RepresentativeEditSerializer(serializers.Serializer):
         return f"{diff.days} روز"
 
     def get_total_requests(self, profile):
-        tech_ids = RepresentativeTechnician.objects.filter(
-            representative=profile
+        tech_ids = AgentTechnician.objects.filter(
+            agent=profile
         ).values_list("technician_id", flat=True)
 
         return ServiceRequest.objects.filter(
@@ -301,7 +301,7 @@ class RepresentativeEditSerializer(serializers.Serializer):
         ).count()
 
     def get_technician_count(self, profile):
-        return RepresentativeTechnician.objects.filter(representative=profile).count()
+        return AgentTechnician.objects.filter(agent=profile).count()
 
     def update(self, instance, validated_data):
         # Update profile fields

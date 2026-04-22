@@ -3,7 +3,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, ServiceRequest, RepresentativeTechnician
+from .models import Profile, ServiceRequest, AgentTechnician
 from .serializers import (
     ProfileSerializer,
     CustomerPanelSerializer,
@@ -11,14 +11,14 @@ from .serializers import (
     TechnicianSerializer,     
     TechnicianPanelSerializer,
     RecentRequestSerializer,
-    RepresentativePanelSerializer,
-    RepresentativeTechnicianFullSerializer,
+    AgentPanelSerializer,
+    AgentTechnicianFullSerializer,
     TechnicianEditSerializer,
-    RepresentativeTaskSerializer,
+    AgentTaskSerializer,
     AssignTechnicianSerializer,
-    RepresentativeReportSerializer,
-    RepresentativeTaskDetailSerializer,
-    RepresentativeEditSerializer,
+    AgentReportSerializer,
+    AgentTaskDetailSerializer,
+    AgentEditSerializer,
     ServiceRequestCreateSerializer,
 )
 
@@ -118,27 +118,27 @@ class TechnicianPanelView(APIView):
         )
         return Response(serializer.data)
     
-class RepresentativePanelView(APIView):
+class AgentPanelView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         profile = request.user.profile
 
-        # Ensure user is representative
-        if profile.user_type != "representative":
-            return Response({"detail": "Only representatives can access this panel."}, status=403)
+        # Ensure user is agent
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can access this panel."}, status=403)
 
         # ---------------------------------------------------------
-        # TECHNICIANS OF THIS REPRESENTATIVE
+        # TECHNICIANS OF THIS AGENT
         # ---------------------------------------------------------
         technicians = Profile.objects.filter(
-            representative_links__representative=profile
+            agent_links__agent=profile
         )
 
         team_size = technicians.count()
 
         # ---------------------------------------------------------
-        # ACTIVE JOBS OF TODAY (assigned to the representative's technicians)
+        # ACTIVE JOBS OF TODAY (assigned to the agent's technicians)
         # ---------------------------------------------------------
         from django.utils.timezone import now
         today = now().date()
@@ -179,34 +179,34 @@ class RepresentativePanelView(APIView):
             "technicians": technicians,                # team
         }
 
-        serializer = RepresentativePanelSerializer(
+        serializer = AgentPanelSerializer(
             instance=data_to_serialize,
             context={"request": request}
         )
 
         return Response(serializer.data)
     
-class RepresentativeTeamView(APIView):
+class AgentTeamView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         rep = request.user.profile
 
-        if rep.user_type != "representative":
-            return Response({"detail": "Only representatives can access this"}, status=403)
+        if rep.user_type != "agent":
+            return Response({"detail": "Only agents can access this"}, status=403)
 
         technicians = Profile.objects.filter(
             user_type="technician",
-            representative_links__representative=rep
+            agent_links__agent=rep
         )
 
-        serializer = RepresentativeTechnicianFullSerializer(
+        serializer = AgentTechnicianFullSerializer(
             technicians, many=True, context={"request": request}
         )
 
         return Response(serializer.data)
     
-class RepresentativeEditTechnicianView(APIView):
+class AgentEditTechnicianView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, technician_id):
@@ -216,7 +216,7 @@ class RepresentativeEditTechnicianView(APIView):
         technician = Profile.objects.filter(
             id=technician_id,
             user_type="technician",
-            representative_links__representative=rep
+            agent_links__agent=rep
         ).first()
 
         if not technician:
@@ -230,23 +230,23 @@ class RepresentativeEditTechnicianView(APIView):
 
         return Response({"detail": "Technician updated successfully"})
     
-class RepresentativeTaskListView(APIView):
+class AgentTaskListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         rep = request.user.profile
 
-        if rep.user_type != "representative":
-            return Response({"detail": "Only representatives can access this."}, status=403)
+        if rep.user_type != "agent":
+            return Response({"detail": "Only agents can access this."}, status=403)
 
-        # All tasks where technician belongs to representative
-        technician_ids = RepresentativeTechnician.objects.filter(
-            representative=rep
+        # All tasks where technician belongs to agent
+        technician_ids = AgentTechnician.objects.filter(
+            agent=rep
         ).values_list("technician_id", flat=True)
 
         tasks = ServiceRequest.objects.filter(technician_id__in=technician_ids)
 
-        serializer = RepresentativeTaskSerializer(tasks, many=True)
+        serializer = AgentTaskSerializer(tasks, many=True)
         return Response(serializer.data)
     
 class AssignTechnicianToTaskView(APIView):
@@ -255,8 +255,8 @@ class AssignTechnicianToTaskView(APIView):
     def post(self, request, request_id):
         rep = request.user.profile
 
-        if rep.user_type != "representative":
-            return Response({"detail": "Only representatives can assign tasks."}, status=403)
+        if rep.user_type != "agent":
+            return Response({"detail": "Only agents can assign tasks."}, status=403)
 
         # Load task
         request_obj = ServiceRequest.objects.filter(id=request_id).first()
@@ -266,7 +266,7 @@ class AssignTechnicianToTaskView(APIView):
         # Validate
         serializer = AssignTechnicianSerializer(
             data=request.data,
-            context={"representative": rep, "request_obj": request_obj}
+            context={"agent": rep, "request_obj": request_obj}
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -276,15 +276,15 @@ class AssignTechnicianToTaskView(APIView):
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 
-class RepresentativeReportView(APIView):
+class AgentReportView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         profile = request.user.profile
 
-        if profile.user_type != "representative":
+        if profile.user_type != "agent":
             return Response(
-                {"detail": "Only representatives can access this page."}, status=403
+                {"detail": "Only agents can access this page."}, status=403
             )
 
         # -----------------------------
@@ -297,8 +297,8 @@ class RepresentativeReportView(APIView):
         # 2) Get technicians of this rep
         # -----------------------------
         technician_ids = (
-            RepresentativeTechnician.objects
-            .filter(representative=profile)
+            AgentTechnician.objects
+            .filter(agent=profile)
             .values_list("technician_id", flat=True)
         )
 
@@ -356,22 +356,22 @@ class RepresentativeReportView(APIView):
             "task_details": tasks,
         }
 
-        serializer = RepresentativeReportSerializer(
+        serializer = AgentReportSerializer(
             instance=data,
             context={"request": request}
         )
 
         return Response(serializer.data)
     
-class RepresentativeEditView(APIView):
+class AgentEditView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         profile = request.user.profile
-        if profile.user_type != "representative":
-            return Response({"detail": "Only representatives can edit their profile."}, status=403)
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can edit their profile."}, status=403)
 
-        serializer = RepresentativeEditSerializer(
+        serializer = AgentEditSerializer(
             instance=profile,
             context={"request": request}
         )
@@ -379,10 +379,10 @@ class RepresentativeEditView(APIView):
 
     def post(self, request):
         profile = request.user.profile
-        if profile.user_type != "representative":
-            return Response({"detail": "Only representatives can edit their profile."}, status=403)
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can edit their profile."}, status=403)
 
-        serializer = RepresentativeEditSerializer(
+        serializer = AgentEditSerializer(
             instance=profile,
             data=request.data,
             partial=True,

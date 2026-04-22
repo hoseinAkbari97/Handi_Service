@@ -5,7 +5,7 @@ class Profile(models.Model):
     USER_TYPE_CHOICES = [
         ('customer', 'Customer'),
         ('technician', 'Technician'),
-        ('representative', 'Representative'),
+        ('agent', 'Agent'),
     ]
 
     user = models.OneToOneField(
@@ -31,27 +31,27 @@ class Profile(models.Model):
         return f"{self.user.phone} ({self.user_type})"
 
 
-class RepresentativeTechnician(models.Model):
-    representative = models.ForeignKey(
+class AgentTechnician(models.Model):
+    agent = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
         related_name="technician_links",
-        limit_choices_to={"user_type": "representative"},
+        limit_choices_to={"user_type": "agent"},
     )
     technician = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
-        related_name="representative_links",
+        related_name="agent_links",
         limit_choices_to={"user_type": "technician"},
     )
 
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("representative", "technician")
+        unique_together = ("agent", "technician")
 
     def __str__(self):
-        return f"{self.technician.user.phone} → {self.representative.user.phone}"
+        return f"{self.technician.user.phone} → {self.agent.user.phone}"
 
 
 class ServiceRequest(models.Model):
