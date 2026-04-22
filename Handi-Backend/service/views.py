@@ -20,6 +20,7 @@ from .serializers import (
     AgentTaskDetailSerializer,
     AgentEditSerializer,
     ServiceRequestCreateSerializer,
+    CustomerServiceRequestSerializer,
 )
 
 
@@ -411,3 +412,23 @@ class ServiceRequestCreateView(generics.CreateAPIView):
 
         # Serializer will use request.user.profile internally for `customer`
         serializer.save()
+
+class CustomerServiceRequestsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.user_type != "customer":
+            return Response(
+                {"detail": "Only customers can view their own requests."},
+                status=403
+            )
+
+        requests_qs = ServiceRequest.objects.filter(
+            customer=profile
+        ).order_by("-created_at")
+
+        serializer = CustomerServiceRequestSerializer(requests_qs, many=True)
+
+        return Response(serializer.data)

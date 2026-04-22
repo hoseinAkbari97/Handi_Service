@@ -358,3 +358,31 @@ class ServiceRequestCreateSerializer(serializers.ModelSerializer):
             **validated_data,
         )
         return service_request
+    
+class CustomerServiceRequestSerializer(serializers.ModelSerializer):
+    technician_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ServiceRequest
+        fields = [
+            "id",
+            "title",
+            "description",
+            "device_type",
+            "brand",
+            "problem_type",
+            "status",
+            "preferred_date",
+            "preferred_time",
+            "full_address",
+            "latitude",
+            "longitude",
+            "attachment",
+            "created_at",
+            "technician_name",
+        ]
+
+    def get_technician_name(self, obj):
+        if obj.technician:
+            return f"{obj.technician.first_name or ''} {obj.technician.last_name or ''}".strip()
+        return None
