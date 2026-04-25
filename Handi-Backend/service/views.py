@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import generics, permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
@@ -240,12 +241,17 @@ class AgentTaskListView(APIView):
         if rep.user_type != "agent":
             return Response({"detail": "Only agents can access this."}, status=403)
 
-        # All tasks where technician belongs to agent
+        # 1) pending requests without technician
+        # 2) requests assigned to this agent's technicians
+
         technician_ids = AgentTechnician.objects.filter(
             agent=rep
         ).values_list("technician_id", flat=True)
 
-        tasks = ServiceRequest.objects.filter(technician_id__in=technician_ids)
+        tasks = ServiceRequest.objects.filter(
+            Q(status="pending", technician__isnull=True) |
+            Q(technician_id__in=technician_ids)
+        ).order_by("-created_at")
 
         serializer = AgentTaskSerializer(tasks, many=True)
         return Response(serializer.data)
