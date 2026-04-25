@@ -1,5 +1,22 @@
 from django.urls import path
-from .views import ProfileView, CustomerPanelView, TechnicianPanelView, AgentPanelView, AgentTeamView, AgentEditTechnicianView, AgentTaskListView, AssignTechnicianToTaskView, AgentReportView, AgentEditView, ServiceRequestCreateView, CustomerServiceRequestsView
+from .views import (
+    ProfileView, 
+    CustomerPanelView, 
+    TechnicianPanelView, 
+    AgentPanelView, 
+    AgentTeamView, 
+    AgentEditTechnicianView, 
+    AgentTaskListView, 
+    AssignTechnicianToTaskView, 
+    AgentReportView, 
+    AgentEditView, 
+    ServiceRequestCreateView, 
+    CustomerServiceRequestsView, 
+    AgentAcceptRequestView,
+    CustomerServiceRequestDetailView,
+    TechnicianServiceRequestListView,
+    TechnicianServiceRequestDetailView,
+)
 
 urlpatterns = [
     path('me/', ProfileView.as_view(), name='profile-me'),
@@ -30,4 +47,23 @@ urlpatterns = [
         CustomerServiceRequestsView.as_view(), 
         name="my-requests"
     ),
+    path(
+        "dashboard/agent/tasks/<int:pk>/accept/", 
+        AgentAcceptRequestView.as_view()),
+    path(
+        "dashboard/customer/requests/<int:request_id>/",
+        CustomerServiceRequestDetailView.as_view(),
+        name="customer_service_request_detail",
+    ),
+    path(
+        "dashboard/technician/requests/",
+        TechnicianServiceRequestListView.as_view(),
+        name="technician-requests"
+    ),
+    path(
+        "dashboard/technician/requests/<int:request_id>/",
+        TechnicianServiceRequestDetailView.as_view(),
+        name="technician-request-detail"
+    ),
+
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Wallet, ServiceRequest, AgentTechnician
+from .models import Profile, Wallet, ServiceRequest, AgentTechnician, ServiceRequestPackage
 from django.utils import timezone
 import random
 
@@ -359,8 +359,31 @@ class ServiceRequestCreateSerializer(serializers.ModelSerializer):
         )
         return service_request
     
+class ServiceRequestPackageSerializer(serializers.ModelSerializer):
+    technician_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ServiceRequestPackage
+        fields = [
+            "id",
+            "package_type",
+            "price",
+            "description",
+            "technician_id",
+            "technician_name",
+        ]
+
+    def get_technician_name(self, obj):
+        if obj.technician:
+            first = obj.technician.first_name or ""
+            last = obj.technician.last_name or ""
+            full = f"{first} {last}".strip()
+            return full if full else None
+        return None
+    
 class CustomerServiceRequestSerializer(serializers.ModelSerializer):
     technician_name = serializers.SerializerMethodField()
+    packages = ServiceRequestPackageSerializer(many=True, read_only=True)
 
     class Meta:
         model = ServiceRequest
@@ -380,9 +403,58 @@ class CustomerServiceRequestSerializer(serializers.ModelSerializer):
             "attachment",
             "created_at",
             "technician_name",
+            "packages",
         ]
 
     def get_technician_name(self, obj):
         if obj.technician:
             return f"{obj.technician.first_name or ''} {obj.technician.last_name or ''}".strip()
         return None
+    
+class AgentAcceptRequestSerializer(serializers.Serializer):
+    packages = serializers.ListField()
+
+    def validate(self, data):
+        # check exactly 3 packages
+        if len(data["packages"]) != 3:
+            raise serializers.ValidationError(
+                "Exactly 3 packages must be provided.")
+
+        types = [p["package_type"] for p in data["packages"]]
+        if set(types) != {"normal", "silver", "gold"}:
+            raise serializers.ValidationError(
+                "Packages must include normal, silver, and gold.")
+        
+        agent = self.context["agent"]
+        agent_technician_ids = AgentTechnician.objects.filter(
+            agent=agent
+        ).values_list("technician_id", flat=True)
+
+        for p in data["packages"]:
+            if p["technician_id"] not in agent_technician_ids:
+                raise serializers.ValidationError(
+                    f"Technician {p['technician_id']} does not belong to this agent."
+                )
+
+        return data
+
+    def create(self, validated_data):
+        request_obj = self.context["request_obj"]
+        agent = self.context["agent"]
+
+        # lock request to agent
+        request_obj.agent = agent
+        request_obj.status = "assigned"
+        request_obj.technician = None   
+        request_obj.save()
+
+        for p in validated_data["packages"]:
+            ServiceRequestPackage.objects.create(
+                request=request_obj,
+                package_type=p["package_type"],
+                technician_id=p["technician_id"],
+                price=p["price"],
+                description=p.get("description")
+            )
+
+        return request_obj

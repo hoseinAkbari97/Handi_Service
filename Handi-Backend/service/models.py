@@ -79,6 +79,14 @@ class ServiceRequest(models.Model):
         limit_choices_to={"user_type": "technician"},
     )
 
+    agent = models.ForeignKey(
+    Profile,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="assigned_requests_agent"
+    )
+
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     cost = models.PositiveIntegerField(default=0)

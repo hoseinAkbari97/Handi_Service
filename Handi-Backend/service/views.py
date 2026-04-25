@@ -1,10 +1,12 @@
 from django.db.models import Q
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, ServiceRequest, AgentTechnician
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from .models import Profile, ServiceRequest, AgentTechnician, ServiceRequestPackage
 from .serializers import (
     ProfileSerializer,
     CustomerPanelSerializer,
@@ -22,6 +24,7 @@ from .serializers import (
     AgentEditSerializer,
     ServiceRequestCreateSerializer,
     CustomerServiceRequestSerializer,
+    AgentAcceptRequestSerializer,
 )
 
 
@@ -250,8 +253,9 @@ class AgentTaskListView(APIView):
 
         tasks = ServiceRequest.objects.filter(
             Q(status="pending", technician__isnull=True) |
+            Q(agent=rep) |
             Q(technician_id__in=technician_ids)
-        ).order_by("-created_at")
+        ).distinct().order_by("-created_at")
 
         serializer = AgentTaskSerializer(tasks, many=True)
         return Response(serializer.data)
@@ -438,3 +442,282 @@ class CustomerServiceRequestsView(APIView):
         serializer = CustomerServiceRequestSerializer(requests_qs, many=True)
 
         return Response(serializer.data)
+    
+class CustomerServiceRequestDetailView(APIView):
+    permission_classes = [IsAuthenticated] 
+
+    def get_object(self, request, request_id):
+        return ServiceRequest.objects.select_related(
+            "technician",
+            "agent",
+            "customer"
+        ).prefetch_related("packages").get(
+            id=request_id,
+            customer=request.user.profile
+        )
+
+    def get(self, request, request_id):
+        try:
+            service_request = ServiceRequest.objects.select_related(
+                "technician",
+                "agent",
+                "customer__user"
+            ).prefetch_related("packages").get(
+                id=request_id,
+                customer=request.user.profile
+            )
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Service request not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = CustomerServiceRequestSerializer(service_request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request, request_id):
+        try:
+            service_request = self.get_object(request, request_id)
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Service request not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        action = request.data.get("action")
+
+        # ✅ Reject all packages
+        if action == "reject":
+            service_request.status = "cancelled"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request cancelled successfully."},
+                status=status.HTTP_200_OK
+            )
+
+        # ✅ Accept one package
+        if action == "accept":
+            package_id = request.data.get("package_id")
+
+            if not package_id:
+                return Response(
+                    {"detail": "package_id is required."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            try:
+                selected_package = service_request.packages.get(id=package_id)
+            except ServiceRequestPackage.DoesNotExist:
+                return Response(
+                    {"detail": "Invalid package selected."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # assign technician from selected package
+            service_request.technician = selected_package.technician
+            service_request.status = "approved"
+            service_request.save()
+
+            return Response(
+                {"detail": "Package accepted successfully."},
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {"detail": "Invalid action."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+accept_request_example = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "packages": openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "package_type": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="normal"
+                    ),
+                    "technician_id": openapi.Schema(
+                        type=openapi.TYPE_INTEGER,
+                        example=5
+                    ),
+                    "price": openapi.Schema(
+                        type=openapi.TYPE_INTEGER,
+                        example=350000
+                    ),
+                    "description": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="Basic service with standard technician"
+                    ),
+                }
+            )
+        )
+    }
+)
+    
+class AgentAcceptRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=accept_request_example,
+        responses={200: "Request accepted successfully"}
+    )
+
+    def post(self, request, pk):
+        profile = request.user.profile
+
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can accept tasks."}, status=403)
+
+        try:
+            request_obj = ServiceRequest.objects.get(id=pk, status="pending")
+        except ServiceRequest.DoesNotExist:
+            return Response({"detail": "Invalid or already processed request"}, status=404)
+
+        serializer = AgentAcceptRequestSerializer(
+            data=request.data,
+            context={"agent": profile, "request_obj": request_obj}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": "Request accepted and packages created."})
+
+        return Response(serializer.errors, status=400)
+    
+class TechnicianServiceRequestListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response(
+                {"detail": "Only technicians can access this."},
+                status=403
+            )
+
+        requests_qs = ServiceRequest.objects.select_related(
+            "customer__user",
+            "agent"
+        ).filter(
+            technician=profile
+        ).order_by("-created_at")
+
+        serializer = CustomerServiceRequestSerializer(
+            requests_qs,
+            many=True,
+            context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+class TechnicianServiceRequestDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, request, request_id):
+        return ServiceRequest.objects.select_related(
+            "customer__user",
+            "agent",
+            "technician"
+        ).get(
+            id=request_id,
+            technician=request.user.profile
+        )
+
+    def get(self, request, request_id):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response(
+                {"detail": "Only technicians can access this."},
+                status=403
+            )
+
+        try:
+            service_request = self.get_object(request, request_id)
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Request not found."},
+                status=404
+            )
+
+        serializer = CustomerServiceRequestSerializer(
+            service_request,
+            context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+    def post(self, request, request_id):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response(
+                {"detail": "Only technicians can perform this action."},
+                status=403
+            )
+
+        try:
+            service_request = self.get_object(request, request_id)
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Request not found."},
+                status=404
+            )
+
+        action = request.data.get("action")
+
+        # ✅ Accept job
+        if action == "accept":
+            if service_request.status != "approved":
+                return Response(
+                    {"detail": "Only approved requests can be accepted."},
+                    status=400
+                )
+
+            service_request.status = "in_progress"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request accepted. Status updated to in_progress."}
+            )
+
+        # ✅ Reject job
+        if action == "reject":
+            if service_request.status != "approved":
+                return Response(
+                    {"detail": "Only approved requests can be rejected."},
+                    status=400
+                )
+
+            service_request.status = "cancelled"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request rejected and cancelled."}
+            )
+
+        # ✅ Complete job
+        if action == "complete":
+            if service_request.status != "in_progress":
+                return Response(
+                    {"detail": "Only in_progress requests can be completed."},
+                    status=400
+                )
+
+            service_request.status = "completed"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request marked as completed."}
+            )
+
+        return Response(
+            {"detail": "Invalid action."},
+            status=400
+        )
