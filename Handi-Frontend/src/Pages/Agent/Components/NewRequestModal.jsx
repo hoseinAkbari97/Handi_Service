@@ -1,13 +1,75 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import PackageCard from "./PackageCard";
 import { Button, Typography } from "@mui/material";
 import { BorderClear } from "@mui/icons-material";
 
-export default function NewRequestModal({ openModal, closeModal }) {
+export default function NewRequestModal({ openModal, closeModal, task }) {
   const { user } = useContext(UserContext);
+  const [requests, setRequests] = useState([]);
+
+  const [normalTechID, setNormalTechID] = useState(null);
+  const [silverTechID, setSilverTechID] = useState(null);
+  const [goldTechID, setGoldTechID] = useState(null);
+
+  const registerRequestHandler = () => {
+    console.log("task ID: ", task);
+    console.log("normal: ", normalTechID);
+    console.log("silver: ", silverTechID);
+    console.log("gold: ", goldTechID);
+
+    fetch(
+      `http://127.0.0.1:8000/api/service/dashboard/agent/tasks/${task.id}/accept/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access}`,
+        },
+        body: JSON.stringify({
+          packages: [
+            {
+              package_type: "normal",
+              technician_id: normalTechID,
+              price: 1500,
+            },
+            {
+              package_type: "silver",
+              technician_id: silverTechID,
+              price: 2500,
+            },
+            {
+              package_type: "gold",
+              technician_id: goldTechID,
+              price: 3500,
+            },
+          ],
+        }),
+      },
+    )
+      .then(async (response) => {
+        const text = await response.text();
+
+        console.log("RAW response:", text);
+        console.log(response);
+        
+
+        try {
+          const json = JSON.parse(text);
+          return json;
+        } catch (err) {
+          console.error("Response is NOT JSON");
+          throw new Error("Server returned non-JSON response");
+        }
+      })
+      .then((data) => {
+        console.log("response data:", data);
+        closeModal();
+      })
+      .catch((error) => console.error("Fetch error:", error));
+  };
 
   return (
     <>
@@ -41,25 +103,31 @@ export default function NewRequestModal({ openModal, closeModal }) {
           </Typography>
 
           <PackageCard
-            title= "پکیج عادی"
+            title="پکیج عادی"
             comment="تعمیرکار مورد تآیید + ۱ ماه گارانتی (نرخ اتحادیه)"
-            technicians= {user.technicians}
-            bgColor= "info.main"
-            txtColor= "text.primary"
+            technicians={user.technicians}
+            bgColor="info.main"
+            txtColor="text.primary"
+            value={normalTechID}
+            onChange={(e) => setNormalTechID(e.target.value)}
           />
           <PackageCard
-            title= "پکیج نقره‌ای"
+            title="پکیج نقره‌ای"
             comment="تعمیرکار با ۲ سال سابقه + ۳ ماه گارانتی (۲۰٪ الی ۴۰٪ بالاتر از نرخ اتحادیه)"
-            technicians= {user.technicians}
-            bgColor= "#C0C0C0"
-            txtColor= "#646464"
+            technicians={user.technicians}
+            bgColor="#C0C0C0"
+            txtColor="#646464"
+            value={silverTechID}
+            onChange={(e) => setSilverTechID(e.target.value)}
           />
           <PackageCard
-            title= "پکیج طلایی"
+            title="پکیج طلایی"
             comment="تعمیرکار با ۵ سال سابقه + ۶ ماه گارانتی (۵۰٪ الی ۸۰٪ بالاتر از نرخ اتحادیه)"
-            technicians= {user.technicians}
-            bgColor= "secondary.dark"
-            txtColor= "secondary.light"
+            technicians={user.technicians}
+            bgColor="secondary.dark"
+            txtColor="secondary.light"
+            value={goldTechID}
+            onChange={(e) => setGoldTechID(e.target.value)}
           />
 
           <Button
@@ -75,6 +143,7 @@ export default function NewRequestModal({ openModal, closeModal }) {
                 color: "text.secondary",
               },
             }}
+            onClick={registerRequestHandler}
           >
             ثبت اطلاعات
           </Button>

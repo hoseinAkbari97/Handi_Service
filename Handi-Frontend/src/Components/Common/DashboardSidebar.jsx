@@ -48,7 +48,6 @@ export default function DashboardSidebar({ user, onClose }) {
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/customer/settings" },
     ],
 
-
     technician: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/technician" },
       {
@@ -66,8 +65,7 @@ export default function DashboardSidebar({ user, onClose }) {
       { text: "تنظیمات", icon: <SettingsIcon />, path: "/technician/settings" },
     ],
 
-
-    representative: [
+    agent: [
       { text: "داشبورد", icon: <HomeIcon />, path: "/agent" },
       {
         text: "تکنسین‌های تیم",
@@ -116,7 +114,10 @@ export default function DashboardSidebar({ user, onClose }) {
             alt={user?.profile?.first_name || ""}
             sx={{ width: 64, height: 64, mt: 2, mx: "auto" }}
           />
-          <Typography sx={{ mt: 1, cursor: "default" }}>{(`${user?.profile?.first_name} ${user?.profile?.last_name}`) || "بدون نام"}</Typography>
+          <Typography sx={{ mt: 1, cursor: "default" }}>
+            {`${user?.profile?.first_name} ${user?.profile?.last_name}` ||
+              "بدون نام"}
+          </Typography>
           <Typography
             variant="body2"
             sx={{ color: "text.dark", cursor: "default" }}
@@ -124,14 +125,21 @@ export default function DashboardSidebar({ user, onClose }) {
             {user?.profile?.user_type === "technician"
               ? "تعمیرکار"
               : user?.profile?.user_type === "customer"
-              ? "مشتری"
-              : user?.profile?.user_type === "representative"
-              ? "نماینده"
-              : "کاربر مهمان"}
+                ? "مشتری"
+                : user?.profile?.user_type === "agent"
+                  ? "نماینده"
+                  : "کاربر مهمان"}
           </Typography>
         </Box>
 
-        <Divider sx={{ bgcolor: "secondary.dark", opacity: ".5", width:"70%", mx:"auto" }} />
+        <Divider
+          sx={{
+            bgcolor: "secondary.dark",
+            opacity: ".5",
+            width: "70%",
+            mx: "auto",
+          }}
+        />
 
         {/* Navigation Menu */}
         <List>

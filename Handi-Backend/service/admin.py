@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, ServiceRequest, Wallet, RepresentativeTechnician
+from .models import Profile, ServiceRequest, Wallet, AgentTechnician
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -83,12 +83,12 @@ class WalletAdmin(admin.ModelAdmin):
     ordering = ("-balance",)
 
 
-@admin.register(RepresentativeTechnician)
-class RepresentativeTechnicianAdmin(admin.ModelAdmin):
-    list_display = ("id", "representative", "technician", "date_added")
+@admin.register(AgentTechnician)
+class AgentTechnicianAdmin(admin.ModelAdmin):
+    list_display = ("id", "agent", "technician", "date_added")
     search_fields = (
-        "representative__user__phone",
+        "agent__user__phone",
         "technician__user__phone",
     )
     ordering = ("-date_added",)
-    autocomplete_fields = ("representative", "technician")
+    autocomplete_fields = ("agent", "technician")

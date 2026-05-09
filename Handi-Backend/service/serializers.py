@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Wallet, ServiceRequest, RepresentativeTechnician
+from .models import Profile, Wallet, ServiceRequest, AgentTechnician, ServiceRequestPackage
 from django.utils import timezone
 import random
 
@@ -91,7 +91,7 @@ class TechnicianPanelSerializer(serializers.Serializer):
     profile = ProfileSerializer()
 
 
-class RepresentativePanelSerializer(serializers.Serializer):
+class AgentPanelSerializer(serializers.Serializer):
     active_jobs_today = serializers.IntegerField()
     team_size = serializers.IntegerField()
     monthly_income = serializers.IntegerField()
@@ -101,7 +101,7 @@ class RepresentativePanelSerializer(serializers.Serializer):
     technicians = TechnicianSerializer(many=True)
 
 
-class RepresentativeTechnicianFullSerializer(serializers.ModelSerializer):
+class AgentTechnicianFullSerializer(serializers.ModelSerializer):
     phone = serializers.CharField(source="user.phone", read_only=True)
     rate = serializers.FloatField(default=4.5)
     status = serializers.SerializerMethodField()
@@ -149,7 +149,7 @@ class TechnicianEditSerializer(serializers.ModelSerializer):
         ]
 
 
-class RepresentativeTaskSerializer(serializers.ModelSerializer):
+class AgentTaskSerializer(serializers.ModelSerializer):
     customer_name = serializers.SerializerMethodField()
     customer_phone = serializers.CharField(source="customer.user.phone", read_only=True)
 
@@ -196,13 +196,13 @@ class AssignTechnicianSerializer(serializers.Serializer):
     def validate(self, data):
         technician_id = data.get("technician_id")
         request_obj = self.context.get("request_obj")
-        representative = self.context.get("representative")
+        agent = self.context.get("agent")
 
-        # Check if technician belongs to representative
+        # Check if technician belongs to agent
         tech = Profile.objects.filter(
             id=technician_id,
             user_type="technician",
-            representative_links__representative=representative
+            agent_links__agent=agent
         ).first()
 
         if not tech:
@@ -222,7 +222,7 @@ class AssignTechnicianSerializer(serializers.Serializer):
         return request_obj
     
 
-class RepresentativeTaskDetailSerializer(serializers.ModelSerializer):
+class AgentTaskDetailSerializer(serializers.ModelSerializer):
     technician_name = serializers.SerializerMethodField()
     customer_name = serializers.SerializerMethodField()
     score = serializers.SerializerMethodField()
@@ -258,15 +258,15 @@ class RepresentativeTaskDetailSerializer(serializers.ModelSerializer):
         return random.randint(0, 100)
 
 
-class RepresentativeReportSerializer(serializers.Serializer):
+class AgentReportSerializer(serializers.Serializer):
     total_income = serializers.IntegerField()
     total_tasks = serializers.IntegerField()
     avg_rating = serializers.FloatField()
     efficiency = serializers.FloatField()
-    task_details = RepresentativeTaskDetailSerializer(many=True)
+    task_details = AgentTaskDetailSerializer(many=True)
 
 
-class RepresentativeEditSerializer(serializers.Serializer):
+class AgentEditSerializer(serializers.Serializer):
 
     # USER FIELDS
     phone = serializers.CharField(source="user.phone", read_only=True)
@@ -291,8 +291,8 @@ class RepresentativeEditSerializer(serializers.Serializer):
         return f"{diff.days} روز"
 
     def get_total_requests(self, profile):
-        tech_ids = RepresentativeTechnician.objects.filter(
-            representative=profile
+        tech_ids = AgentTechnician.objects.filter(
+            agent=profile
         ).values_list("technician_id", flat=True)
 
         return ServiceRequest.objects.filter(
@@ -301,7 +301,7 @@ class RepresentativeEditSerializer(serializers.Serializer):
         ).count()
 
     def get_technician_count(self, profile):
-        return RepresentativeTechnician.objects.filter(representative=profile).count()
+        return AgentTechnician.objects.filter(agent=profile).count()
 
     def update(self, instance, validated_data):
         # Update profile fields
@@ -358,3 +358,103 @@ class ServiceRequestCreateSerializer(serializers.ModelSerializer):
             **validated_data,
         )
         return service_request
+    
+class ServiceRequestPackageSerializer(serializers.ModelSerializer):
+    technician_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ServiceRequestPackage
+        fields = [
+            "id",
+            "package_type",
+            "price",
+            "description",
+            "technician_id",
+            "technician_name",
+        ]
+
+    def get_technician_name(self, obj):
+        if obj.technician:
+            first = obj.technician.first_name or ""
+            last = obj.technician.last_name or ""
+            full = f"{first} {last}".strip()
+            return full if full else None
+        return None
+    
+class CustomerServiceRequestSerializer(serializers.ModelSerializer):
+    technician_name = serializers.SerializerMethodField()
+    packages = ServiceRequestPackageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ServiceRequest
+        fields = [
+            "id",
+            "title",
+            "description",
+            "device_type",
+            "brand",
+            "problem_type",
+            "status",
+            "preferred_date",
+            "preferred_time",
+            "full_address",
+            "latitude",
+            "longitude",
+            "attachment",
+            "created_at",
+            "technician_name",
+            "packages",
+        ]
+
+    def get_technician_name(self, obj):
+        if obj.technician:
+            return f"{obj.technician.first_name or ''} {obj.technician.last_name or ''}".strip()
+        return None
+    
+class AgentAcceptRequestSerializer(serializers.Serializer):
+    packages = serializers.ListField()
+
+    def validate(self, data):
+        # check exactly 3 packages
+        if len(data["packages"]) != 3:
+            raise serializers.ValidationError(
+                "Exactly 3 packages must be provided.")
+
+        types = [p["package_type"] for p in data["packages"]]
+        if set(types) != {"normal", "silver", "gold"}:
+            raise serializers.ValidationError(
+                "Packages must include normal, silver, and gold.")
+        
+        agent = self.context["agent"]
+        agent_technician_ids = AgentTechnician.objects.filter(
+            agent=agent
+        ).values_list("technician_id", flat=True)
+
+        for p in data["packages"]:
+            if p["technician_id"] not in agent_technician_ids:
+                raise serializers.ValidationError(
+                    f"Technician {p['technician_id']} does not belong to this agent."
+                )
+
+        return data
+
+    def create(self, validated_data):
+        request_obj = self.context["request_obj"]
+        agent = self.context["agent"]
+
+        # lock request to agent
+        request_obj.agent = agent
+        request_obj.status = "assigned"
+        request_obj.technician = None   
+        request_obj.save()
+
+        for p in validated_data["packages"]:
+            ServiceRequestPackage.objects.create(
+                request=request_obj,
+                package_type=p["package_type"],
+                technician_id=p["technician_id"],
+                price=p["price"],
+                description=p.get("description")
+            )
+
+        return request_obj

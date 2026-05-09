@@ -26,7 +26,7 @@ export default function CreateRequest() {
   const [markerPosition, setMarkerPosition] = useState(["35.6892", "51.389"]);
 
   const handleSubmit = () => {
-    fetch("http://127.0.0.1:8000/api/service/requests/create/", {
+    fetch("http://127.0.0.1:8000/api/service/dashboard/customer/requests/create/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,15 +40,15 @@ export default function CreateRequest() {
         preferred_time: null,
         description: description,
         full_address: address,
-        latitude: markerPosition[0],
-        longitude: markerPosition[1],
+        // latitude: markerPosition[0],
+        // longitude: markerPosition[1],
       }),
     })
     .then(async (response) => {
       const data = await response.json(); 
         
         if (!response.ok) {
-          console.error("--- Server Validation Error Details (400) ---", data);
+          console.error("Server Validation Error Details (400)", data);
           let errorMsg = "خطا در ثبت درخواست. لطفاً مطمئن شوید همه فیلدهای اجباری پر شده‌اند.";
             if (data && typeof data === 'object') {
               errorMsg += "\nجزئیات خطا را در کنسول ببینید.";
@@ -60,7 +60,7 @@ export default function CreateRequest() {
         return data;
     })
     .then((data) => {
-        alert("درخواست شما با موفقیت ثبت شد!");
+        alert("درخواست شما با موفقیت ثبت شد!" , data);
     })
     .catch((error) => {
         console.error("Fetch/Network Error:", error);

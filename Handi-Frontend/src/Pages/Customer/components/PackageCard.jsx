@@ -9,6 +9,7 @@ export default function PackageCard({
   txtColor,
   selected,
   onSelect,
+  price
 }) {
   return (
     <Box
@@ -31,7 +32,7 @@ export default function PackageCard({
             cursor: "default",
           }}
         >
-          {title}
+          {title} : {price} تومان
         </Typography>
         <Typography
           variant="subtitle2"

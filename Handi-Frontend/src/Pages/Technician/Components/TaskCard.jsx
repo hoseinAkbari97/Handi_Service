@@ -78,6 +78,7 @@ export default function TaskCard({ task }) {
           <ErrorIcon fontSize="small" />
           <Typography
             sx={{
+              textAlign:"center",
               fontSize: 14,
               mt: 0.5,
             }}

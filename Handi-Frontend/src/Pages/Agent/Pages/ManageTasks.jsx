@@ -11,7 +11,7 @@ export default function ManageTasks() {
   const [pendingTasks, setPendingTasks] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/service/dashboard/representative/tasks/", {
+    fetch("http://127.0.0.1:8000/api/service/dashboard/agent/tasks/", {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())
@@ -20,12 +20,12 @@ export default function ManageTasks() {
   }, []);
 
   useEffect(() => {
-    const pending = allTasks.filter((task)=> task.status === "pending")
-    const checked = allTasks.filter((task)=> task.status !== "pending")
+    const pending = allTasks.filter((task) => task.status === "pending");
+    const checked = allTasks.filter((task) => task.status !== "pending");
 
     setPendingTasks(pending);
-    setCheckedTasks(checked)
-  }, [allTasks])
+    setCheckedTasks(checked);
+  }, [allTasks]);
 
   return (
     <Box
@@ -38,9 +38,12 @@ export default function ManageTasks() {
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       }}
     >
-      {pendingTasks.map(task => <NewRequestCard task={task} key={task.id}/> )}
-      {checkedTasks.map(task => <TaskCard task={task} key={task.id}/> )}
-
+      {pendingTasks.map((task) => (
+        <NewRequestCard task={task} key={task.id} />
+      ))}
+      {checkedTasks.map((task) => (
+        <TaskCard task={task} key={task.id} />
+      ))}
     </Box>
   );
 }

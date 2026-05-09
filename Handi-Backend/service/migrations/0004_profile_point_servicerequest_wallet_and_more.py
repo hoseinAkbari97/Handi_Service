@@ -39,15 +39,15 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='RepresentativeTechnician',
+            name='agentTechnician',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date_added', models.DateTimeField(auto_now_add=True)),
-                ('representative', models.ForeignKey(limit_choices_to={'user_type': 'representative'}, on_delete=django.db.models.deletion.CASCADE, related_name='technician_links', to='service.profile')),
-                ('technician', models.ForeignKey(limit_choices_to={'user_type': 'technician'}, on_delete=django.db.models.deletion.CASCADE, related_name='representative_links', to='service.profile')),
+                ('agent', models.ForeignKey(limit_choices_to={'user_type': 'agent'}, on_delete=django.db.models.deletion.CASCADE, related_name='technician_links', to='service.profile')),
+                ('technician', models.ForeignKey(limit_choices_to={'user_type': 'technician'}, on_delete=django.db.models.deletion.CASCADE, related_name='agent_links', to='service.profile')),
             ],
             options={
-                'unique_together': {('representative', 'technician')},
+                'unique_together': {('agent', 'technician')},
             },
         ),
     ]

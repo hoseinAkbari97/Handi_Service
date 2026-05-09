@@ -4,12 +4,16 @@ import Modal from "@mui/material/Modal";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 
-export default function PackageCard({ title, comment, technicians, bgColor, txtColor }) {
-  const [technician, setTechnician] = useState("");
+export default function PackageCard({
+  title,
+  comment,
+  technicians,
+  bgColor,
+  txtColor,
+  value,
+  onChange,
+}) {
 
-  const handleChange = (event) => {
-    setTechnician(event.target.value);
-  };
   return (
     <Box
       sx={{
@@ -49,13 +53,13 @@ export default function PackageCard({ title, comment, technicians, bgColor, txtC
         <FormControl fullWidth>
           <InputLabel>تخصیص به تکنسین</InputLabel>
           <Select
-            value={technician}
+            value={value ?? ""}
             label="تخصیص به تکنسین"
-            onChange={handleChange}
+            onChange={onChange}
           >
-            {technicians.map((technician) => (
-              <MenuItem key={technician.id} value={technician.first_name}>
-                {technician.first_name} {technician.last_name}
+            {technicians.map((tech) => (
+              <MenuItem key={tech.id} value={tech.id}>
+                {tech.first_name} {tech.last_name}
               </MenuItem>
             ))}
           </Select>

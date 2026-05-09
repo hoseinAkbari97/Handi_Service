@@ -38,10 +38,10 @@ export default function AgentEditProfile() {
       setError(null);
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/service/dashboard/representative/edit/",
+          "http://127.0.0.1:8000/api/service/dashboard/agent/edit/",
           {
             headers: { Authorization: `Bearer ${user.access}` },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -71,33 +71,29 @@ export default function AgentEditProfile() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name] : value }); 
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/service/me/",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.access}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:8000/api/service/me/", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || "خطا در ذخیره تغییرات.");
       }
 
-      setUserData((prev) => ({ ...prev, ...formData })); 
+      setUserData((prev) => ({ ...prev, ...formData }));
       alert("تغییرات با موفقیت ذخیره شد!");
-
     } catch (e) {
       console.error("Submit error:", e);
       setError(e.message || "خطای ناشناخته در ذخیره داده.");
@@ -246,7 +242,7 @@ export default function AgentEditProfile() {
             sx={inputSX}
           />
           <TextField
-            name="region"
+            name="address"
             label="منطقه تحت پوشش"
             value={formData.address}
             onChange={handleChange}

@@ -5,7 +5,7 @@ class Profile(models.Model):
     USER_TYPE_CHOICES = [
         ('customer', 'Customer'),
         ('technician', 'Technician'),
-        ('representative', 'Representative'),
+        ('agent', 'Agent'),
     ]
 
     user = models.OneToOneField(
@@ -31,27 +31,27 @@ class Profile(models.Model):
         return f"{self.user.phone} ({self.user_type})"
 
 
-class RepresentativeTechnician(models.Model):
-    representative = models.ForeignKey(
+class AgentTechnician(models.Model):
+    agent = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
         related_name="technician_links",
-        limit_choices_to={"user_type": "representative"},
+        limit_choices_to={"user_type": "agent"},
     )
     technician = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
-        related_name="representative_links",
+        related_name="agent_links",
         limit_choices_to={"user_type": "technician"},
     )
 
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("representative", "technician")
+        unique_together = ("agent", "technician")
 
     def __str__(self):
-        return f"{self.technician.user.phone} → {self.representative.user.phone}"
+        return f"{self.technician.user.phone} → {self.agent.user.phone}"
 
 
 class ServiceRequest(models.Model):
@@ -77,6 +77,14 @@ class ServiceRequest(models.Model):
         blank=True,
         related_name="assigned_requests",
         limit_choices_to={"user_type": "technician"},
+    )
+
+    agent = models.ForeignKey(
+    Profile,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="assigned_requests_agent"
     )
 
     title = models.CharField(max_length=255)
@@ -116,3 +124,23 @@ class Wallet(models.Model):
 
     def __str__(self):
         return f"{self.profile.user.phone} - {self.balance}"
+    
+    
+class ServiceRequestPackage(models.Model):
+    PACKAGE_CHOICES = (
+        ("normal", "Normal"),
+        ("silver", "Silver"),
+        ("gold", "Gold"),
+    )
+
+    request = models.ForeignKey("ServiceRequest", on_delete=models.CASCADE, related_name="packages")
+    package_type = models.CharField(max_length=10, choices=PACKAGE_CHOICES)
+
+    technician = models.ForeignKey("Profile", on_delete=models.SET_NULL, null=True, blank=True)
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    status = models.CharField(max_length=20, default="pending")

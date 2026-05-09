@@ -1,9 +1,12 @@
-from rest_framework import generics, permissions
+from django.db.models import Q
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Profile, ServiceRequest, RepresentativeTechnician
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from .models import Profile, ServiceRequest, AgentTechnician, ServiceRequestPackage
 from .serializers import (
     ProfileSerializer,
     CustomerPanelSerializer,
@@ -11,15 +14,17 @@ from .serializers import (
     TechnicianSerializer,     
     TechnicianPanelSerializer,
     RecentRequestSerializer,
-    RepresentativePanelSerializer,
-    RepresentativeTechnicianFullSerializer,
+    AgentPanelSerializer,
+    AgentTechnicianFullSerializer,
     TechnicianEditSerializer,
-    RepresentativeTaskSerializer,
+    AgentTaskSerializer,
     AssignTechnicianSerializer,
-    RepresentativeReportSerializer,
-    RepresentativeTaskDetailSerializer,
-    RepresentativeEditSerializer,
+    AgentReportSerializer,
+    AgentTaskDetailSerializer,
+    AgentEditSerializer,
     ServiceRequestCreateSerializer,
+    CustomerServiceRequestSerializer,
+    AgentAcceptRequestSerializer,
 )
 
 
@@ -118,27 +123,27 @@ class TechnicianPanelView(APIView):
         )
         return Response(serializer.data)
     
-class RepresentativePanelView(APIView):
+class AgentPanelView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         profile = request.user.profile
 
-        # Ensure user is representative
-        if profile.user_type != "representative":
-            return Response({"detail": "Only representatives can access this panel."}, status=403)
+        # Ensure user is agent
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can access this panel."}, status=403)
 
         # ---------------------------------------------------------
-        # TECHNICIANS OF THIS REPRESENTATIVE
+        # TECHNICIANS OF THIS AGENT
         # ---------------------------------------------------------
         technicians = Profile.objects.filter(
-            representative_links__representative=profile
+            agent_links__agent=profile
         )
 
         team_size = technicians.count()
 
         # ---------------------------------------------------------
-        # ACTIVE JOBS OF TODAY (assigned to the representative's technicians)
+        # ACTIVE JOBS OF TODAY (assigned to the agent's technicians)
         # ---------------------------------------------------------
         from django.utils.timezone import now
         today = now().date()
@@ -175,48 +180,48 @@ class RepresentativePanelView(APIView):
             "monthly_income": monthly_income,
             "team_average_rating": team_average_rating,
             "recent_team_requests": recent_requests,   # objects
-            "profile": profile,                        # representative profile
+            "profile": profile,                        # agent profile
             "technicians": technicians,                # team
         }
 
-        serializer = RepresentativePanelSerializer(
+        serializer = AgentPanelSerializer(
             instance=data_to_serialize,
             context={"request": request}
         )
 
         return Response(serializer.data)
     
-class RepresentativeTeamView(APIView):
+class AgentTeamView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         rep = request.user.profile
 
-        if rep.user_type != "representative":
-            return Response({"detail": "Only representatives can access this"}, status=403)
+        if rep.user_type != "agent":
+            return Response({"detail": "Only agents can access this"}, status=403)
 
         technicians = Profile.objects.filter(
             user_type="technician",
-            representative_links__representative=rep
+            agent_links__agent=rep
         )
 
-        serializer = RepresentativeTechnicianFullSerializer(
+        serializer = AgentTechnicianFullSerializer(
             technicians, many=True, context={"request": request}
         )
 
         return Response(serializer.data)
     
-class RepresentativeEditTechnicianView(APIView):
+class AgentEditTechnicianView(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, technician_id):
         rep = request.user.profile
 
-        # ensure the technician belongs to this representative
+        # ensure the technician belongs to this agent
         technician = Profile.objects.filter(
             id=technician_id,
             user_type="technician",
-            representative_links__representative=rep
+            agent_links__agent=rep
         ).first()
 
         if not technician:
@@ -230,23 +235,29 @@ class RepresentativeEditTechnicianView(APIView):
 
         return Response({"detail": "Technician updated successfully"})
     
-class RepresentativeTaskListView(APIView):
+class AgentTaskListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         rep = request.user.profile
 
-        if rep.user_type != "representative":
-            return Response({"detail": "Only representatives can access this."}, status=403)
+        if rep.user_type != "agent":
+            return Response({"detail": "Only agents can access this."}, status=403)
 
-        # All tasks where technician belongs to representative
-        technician_ids = RepresentativeTechnician.objects.filter(
-            representative=rep
+        # 1) pending requests without technician
+        # 2) requests assigned to this agent's technicians
+
+        technician_ids = AgentTechnician.objects.filter(
+            agent=rep
         ).values_list("technician_id", flat=True)
 
-        tasks = ServiceRequest.objects.filter(technician_id__in=technician_ids)
+        tasks = ServiceRequest.objects.filter(
+            Q(status="pending", technician__isnull=True) |
+            Q(agent=rep) |
+            Q(technician_id__in=technician_ids)
+        ).distinct().order_by("-created_at")
 
-        serializer = RepresentativeTaskSerializer(tasks, many=True)
+        serializer = AgentTaskSerializer(tasks, many=True)
         return Response(serializer.data)
     
 class AssignTechnicianToTaskView(APIView):
@@ -255,8 +266,8 @@ class AssignTechnicianToTaskView(APIView):
     def post(self, request, request_id):
         rep = request.user.profile
 
-        if rep.user_type != "representative":
-            return Response({"detail": "Only representatives can assign tasks."}, status=403)
+        if rep.user_type != "agent":
+            return Response({"detail": "Only agents can assign tasks."}, status=403)
 
         # Load task
         request_obj = ServiceRequest.objects.filter(id=request_id).first()
@@ -266,7 +277,7 @@ class AssignTechnicianToTaskView(APIView):
         # Validate
         serializer = AssignTechnicianSerializer(
             data=request.data,
-            context={"representative": rep, "request_obj": request_obj}
+            context={"agent": rep, "request_obj": request_obj}
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -276,15 +287,15 @@ class AssignTechnicianToTaskView(APIView):
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 
-class RepresentativeReportView(APIView):
+class AgentReportView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         profile = request.user.profile
 
-        if profile.user_type != "representative":
+        if profile.user_type != "agent":
             return Response(
-                {"detail": "Only representatives can access this page."}, status=403
+                {"detail": "Only agents can access this page."}, status=403
             )
 
         # -----------------------------
@@ -297,8 +308,8 @@ class RepresentativeReportView(APIView):
         # 2) Get technicians of this rep
         # -----------------------------
         technician_ids = (
-            RepresentativeTechnician.objects
-            .filter(representative=profile)
+            AgentTechnician.objects
+            .filter(agent=profile)
             .values_list("technician_id", flat=True)
         )
 
@@ -356,22 +367,22 @@ class RepresentativeReportView(APIView):
             "task_details": tasks,
         }
 
-        serializer = RepresentativeReportSerializer(
+        serializer = AgentReportSerializer(
             instance=data,
             context={"request": request}
         )
 
         return Response(serializer.data)
     
-class RepresentativeEditView(APIView):
+class AgentEditView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         profile = request.user.profile
-        if profile.user_type != "representative":
-            return Response({"detail": "Only representatives can edit their profile."}, status=403)
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can edit their profile."}, status=403)
 
-        serializer = RepresentativeEditSerializer(
+        serializer = AgentEditSerializer(
             instance=profile,
             context={"request": request}
         )
@@ -379,10 +390,10 @@ class RepresentativeEditView(APIView):
 
     def post(self, request):
         profile = request.user.profile
-        if profile.user_type != "representative":
-            return Response({"detail": "Only representatives can edit their profile."}, status=403)
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can edit their profile."}, status=403)
 
-        serializer = RepresentativeEditSerializer(
+        serializer = AgentEditSerializer(
             instance=profile,
             data=request.data,
             partial=True,
@@ -411,3 +422,302 @@ class ServiceRequestCreateView(generics.CreateAPIView):
 
         # Serializer will use request.user.profile internally for `customer`
         serializer.save()
+
+class CustomerServiceRequestsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.user_type != "customer":
+            return Response(
+                {"detail": "Only customers can view their own requests."},
+                status=403
+            )
+
+        requests_qs = ServiceRequest.objects.filter(
+            customer=profile
+        ).order_by("-created_at")
+
+        serializer = CustomerServiceRequestSerializer(requests_qs, many=True)
+
+        return Response(serializer.data)
+    
+class CustomerServiceRequestDetailView(APIView):
+    permission_classes = [IsAuthenticated] 
+
+    def get_object(self, request, request_id):
+        return ServiceRequest.objects.select_related(
+            "technician",
+            "agent",
+            "customer"
+        ).prefetch_related("packages").get(
+            id=request_id,
+            customer=request.user.profile
+        )
+
+    def get(self, request, request_id):
+        try:
+            service_request = ServiceRequest.objects.select_related(
+                "technician",
+                "agent",
+                "customer__user"
+            ).prefetch_related("packages").get(
+                id=request_id,
+                customer=request.user.profile
+            )
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Service request not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = CustomerServiceRequestSerializer(service_request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request, request_id):
+        try:
+            service_request = self.get_object(request, request_id)
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Service request not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        action = request.data.get("action")
+
+        # ✅ Reject all packages
+        if action == "reject":
+            service_request.status = "cancelled"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request cancelled successfully."},
+                status=status.HTTP_200_OK
+            )
+
+        # ✅ Accept one package
+        if action == "accept":
+            package_id = request.data.get("package_id")
+
+            if not package_id:
+                return Response(
+                    {"detail": "package_id is required."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            try:
+                selected_package = service_request.packages.get(id=package_id)
+            except ServiceRequestPackage.DoesNotExist:
+                return Response(
+                    {"detail": "Invalid package selected."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # assign technician from selected package
+            service_request.technician = selected_package.technician
+            service_request.status = "approved"
+            service_request.save()
+
+            return Response(
+                {"detail": "Package accepted successfully."},
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {"detail": "Invalid action."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+accept_request_example = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "packages": openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "package_type": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="normal"
+                    ),
+                    "technician_id": openapi.Schema(
+                        type=openapi.TYPE_INTEGER,
+                        example=5
+                    ),
+                    "price": openapi.Schema(
+                        type=openapi.TYPE_INTEGER,
+                        example=350000
+                    ),
+                    "description": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="Basic service with standard technician"
+                    ),
+                }
+            )
+        )
+    }
+)
+    
+class AgentAcceptRequestView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=accept_request_example,
+        responses={200: "Request accepted successfully"}
+    )
+
+    def post(self, request, pk):
+        profile = request.user.profile
+
+        if profile.user_type != "agent":
+            return Response({"detail": "Only agents can accept tasks."}, status=403)
+
+        try:
+            request_obj = ServiceRequest.objects.get(id=pk, status="pending")
+        except ServiceRequest.DoesNotExist:
+            return Response({"detail": "Invalid or already processed request"}, status=404)
+
+        serializer = AgentAcceptRequestSerializer(
+            data=request.data,
+            context={"agent": profile, "request_obj": request_obj}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": "Request accepted and packages created."})
+
+        return Response(serializer.errors, status=400)
+    
+class TechnicianServiceRequestListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response(
+                {"detail": "Only technicians can access this."},
+                status=403
+            )
+
+        requests_qs = ServiceRequest.objects.select_related(
+            "customer__user",
+            "agent"
+        ).filter(
+            technician=profile
+        ).order_by("-created_at")
+
+        serializer = CustomerServiceRequestSerializer(
+            requests_qs,
+            many=True,
+            context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+class TechnicianServiceRequestDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, request, request_id):
+        return ServiceRequest.objects.select_related(
+            "customer__user",
+            "agent",
+            "technician"
+        ).get(
+            id=request_id,
+            technician=request.user.profile
+        )
+
+    def get(self, request, request_id):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response(
+                {"detail": "Only technicians can access this."},
+                status=403
+            )
+
+        try:
+            service_request = self.get_object(request, request_id)
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Request not found."},
+                status=404
+            )
+
+        serializer = CustomerServiceRequestSerializer(
+            service_request,
+            context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+    def post(self, request, request_id):
+        profile = request.user.profile
+
+        if profile.user_type != "technician":
+            return Response(
+                {"detail": "Only technicians can perform this action."},
+                status=403
+            )
+
+        try:
+            service_request = self.get_object(request, request_id)
+        except ServiceRequest.DoesNotExist:
+            return Response(
+                {"detail": "Request not found."},
+                status=404
+            )
+
+        action = request.data.get("action")
+
+        # ✅ Accept job
+        if action == "accept":
+            if service_request.status != "approved":
+                return Response(
+                    {"detail": "Only approved requests can be accepted."},
+                    status=400
+                )
+
+            service_request.status = "in_progress"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request accepted. Status updated to in_progress."}
+            )
+
+        # ✅ Reject job
+        if action == "reject":
+            if service_request.status != "approved":
+                return Response(
+                    {"detail": "Only approved requests can be rejected."},
+                    status=400
+                )
+
+            service_request.status = "cancelled"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request rejected and cancelled."}
+            )
+
+        # ✅ Complete job
+        if action == "complete":
+            if service_request.status != "in_progress":
+                return Response(
+                    {"detail": "Only in_progress requests can be completed."},
+                    status=400
+                )
+
+            service_request.status = "completed"
+            service_request.save()
+
+            return Response(
+                {"detail": "Request marked as completed."}
+            )
+
+        return Response(
+            {"detail": "Invalid action."},
+            status=400
+        )

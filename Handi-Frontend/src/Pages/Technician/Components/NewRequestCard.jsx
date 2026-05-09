@@ -1,15 +1,43 @@
 import { Box, Typography, Button, ButtonGroup } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
-import NewRequestModal from "./NewRequestModal";
 import { useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 
 export default function NewRequestCard({ task }) {
   const { user } = useContext(UserContext);
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+
+  const cancleRequestHandler = () => {
+    fetch(
+      `http://127.0.0.1:8000/api/service/dashboard/technician/requests/${task.id}/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access}`,
+        },
+        body: JSON.stringify({
+          action: "reject",
+        }),
+      },
+    ).then((response) => console.log(response));
+  };
+
+    const acceptRequestHandler = () => {
+    fetch(
+      `http://127.0.0.1:8000/api/service/dashboard/technician/requests/${task.id}/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access}`,
+        },
+        body: JSON.stringify({
+          action: "accept",
+        }),
+      },
+    ).then((response) => console.log(response));
+  };
 
   return (
     <>
@@ -30,6 +58,7 @@ export default function NewRequestCard({ task }) {
           px: 2,
         }}
       >
+        {/* {console.log(task)        } */}
         <Box>
           <Typography
             sx={{
@@ -60,7 +89,7 @@ export default function NewRequestCard({ task }) {
                 mt: 0.5,
               }}
             >
-              نام مشتری: {task.customer_name}
+              زمان مراجعه: {task.preferred_date}
             </Typography>
           </Box>
 
@@ -81,7 +110,7 @@ export default function NewRequestCard({ task }) {
                 mt: 0.5,
               }}
             >
-              تلفن مشتری: {task.customer_phone}
+              آدرس مشتری: {task.full_address}
             </Typography>
           </Box>
 
@@ -102,7 +131,7 @@ export default function NewRequestCard({ task }) {
                 mt: 0.5,
               }}
             >
-              موضوع درخواست: {task.title}
+              موضوع درخواست: {task.title} {task.brand}
             </Typography>
           </Box>
 
@@ -137,28 +166,36 @@ export default function NewRequestCard({ task }) {
             width: "100%",
           }}
         >
-          <Button
-            onClick={handleOpenModal}
+          <ButtonGroup
             size="large"
             variant="contained"
+            aria-label="Basic button group"
             color="primary.main"
-            sx={{
-              minWidth: "50%",
-              textWrap: "nowrap",
-              backgroundColor: "success.main",
-              mt: 1,
-              justifySelf: "center",
-              "&:hover": {
-                  backgroundColor: "primary.main",
-                },
-            }}
+            sx={{ mt: 1, justifySelf: "center" }}
           >
-            تخصیص پکیج ها
-          </Button>
+            <Button
+              onClick={acceptRequestHandler}
+              sx={{
+                minWidth: "50%",
+                textWrap: "nowrap",
+                backgroundColor: "success.main",
+              }}
+            >
+              قبول درخواست
+            </Button>
+            <Button
+              sx={{
+                minWidth: "50%",
+                textWrap: "nowrap",
+                backgroundColor: "error.main",
+              }}
+              onClick={cancleRequestHandler}
+            >
+              رد درخواست
+            </Button>
+          </ButtonGroup>
         </Box>
       </Box>
-
-      <NewRequestModal openModal={openModal} closeModal={handleCloseModal} task={task} />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import SummaryCard from "../Components/SummaryCard";
 import Works from "../Components/Works";
 import { Box } from "@mui/material";
+import { toPersianNumber } from "../../../Utils/NumberUtils";
 import { UserContext } from "../../../Contexts/UserContext";
 
 export default function AgentDashboardPanel() {
@@ -21,6 +22,7 @@ export default function AgentDashboardPanel() {
           },
         }}
       >
+        {/* {console.log(user)} */}
         {/* Summary Section */}
         <Box
           mt={{ xs: 3, lg: 0 }}
@@ -33,18 +35,26 @@ export default function AgentDashboardPanel() {
           }}
           sx={{ gridArea: "summary" }}
         >
-          <SummaryCard iconType="group" label="تکنسین‌های تیم" value="۸ نفر" />
+          <SummaryCard
+            iconType="group"
+            label="تکنسین‌های تیم"
+            value={`${toPersianNumber(user.team_size)}`}
+          />
           <SummaryCard
             iconType="checkList"
             label="کارهای فعال امروز"
-            value="۱۲"
+            value={`${toPersianNumber(user.active_jobs_today)}`}
           />
           <SummaryCard
             iconType="money"
             label="درآمد این ماه تیم"
-            value="۱۲۰ میلیون تومان"
+            value={`${toPersianNumber(user.monthly_income)} تومان`}
           />
-          <SummaryCard iconType="rate" label="میانگین امتیاز تیم" value="۴.۸" />
+          <SummaryCard
+            iconType="rate"
+            label="میانگین امتیاز تیم"
+            value={`${toPersianNumber(user.team_average_rating)}`}
+          />
         </Box>
 
         {/* Income Chart */}
