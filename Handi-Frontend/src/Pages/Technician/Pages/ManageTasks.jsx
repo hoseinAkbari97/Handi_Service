@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TaskCard from "../Components/TaskCard";
 import NewRequestCard from "../Components/NewRequestCard";
 import { Box } from "@mui/material";
@@ -11,7 +11,7 @@ export default function ManageTasks() {
   const [pendingTasks, setPendingTasks] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/service/dashboard/agent/tasks/", {
+    fetch("http://127.0.0.1:8000/api/service/dashboard/technician/requests/", {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())
@@ -20,7 +20,7 @@ export default function ManageTasks() {
   }, []);
 
   useEffect(() => {
-    const pending = allTasks.filter((task) => task.status === "pending");
+    const pending = allTasks.filter((task) => task.status === "approved");
     const checked = allTasks.filter((task) => task.status !== "pending");
 
     setPendingTasks(pending);
@@ -38,6 +38,10 @@ export default function ManageTasks() {
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       }}
     >
+      {/* {console.log(pendingTasks)} */}
+      {/* {console.log(checkedTasks)} */}
+      {/* {console.log(allTasks)} */}
+      
       {pendingTasks.map((task) => (
         <NewRequestCard task={task} key={task.id} />
       ))}

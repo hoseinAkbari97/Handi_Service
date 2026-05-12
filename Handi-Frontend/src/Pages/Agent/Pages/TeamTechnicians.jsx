@@ -5,15 +5,15 @@ import { UserContext } from "../../../Contexts/UserContext";
 
 export default function TeamTechnicians() {
   const { user } = useContext(UserContext);
-  const [ technicianTeam, setTechnicianTeam ] = useState([]);
+  const [technicianTeam, setTechnicianTeam] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/service/dashboard/representative/team/", {
+    fetch("http://127.0.0.1:8000/api/service/dashboard/agent/team/", {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())
       .then((data) => setTechnicianTeam(data))
-      .catch((error) => console.error("Error fetching data:", error))
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
   return (
@@ -27,7 +27,6 @@ export default function TeamTechnicians() {
         gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
       }}
     >
-      
       {technicianTeam.map((technician, index) => (
         <Box key={index}>
           <TechnicianCard technician={technician} />

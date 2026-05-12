@@ -101,7 +101,7 @@ export default function UserProvider({ children, navigate }) {
           redirectPath = "/technician";
           break;
         case "agent":
-          dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/representative/";
+          dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/agent/";
           errorMessage = "نماینده‌ای با این شماره وجود ندارد";
           redirectPath = "/agent";
           break;
@@ -155,8 +155,8 @@ export default function UserProvider({ children, navigate }) {
         dashboardUrl =
           "http://127.0.0.1:8000/api/service/dashboard/technician/";
         break;
-      case "representative":
-        dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/representative/";
+      case "agent":
+        dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/agent/";
         break;
       default:
         return;

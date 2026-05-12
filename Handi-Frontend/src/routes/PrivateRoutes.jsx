@@ -9,7 +9,7 @@ export default function PrivateRoutes() {
     return <Navigate to="/" replace />;
   }
   if (
-    (location.pathname.startsWith("/agent") && role !== "representative") ||
+    (location.pathname.startsWith("/agent") && role !== "agent") ||
     (location.pathname.startsWith("/technician") && role !== "technician") ||
     (location.pathname.startsWith("/customer") && role !== "customer")
   ) {

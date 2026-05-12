@@ -180,7 +180,7 @@ class AgentPanelView(APIView):
             "monthly_income": monthly_income,
             "team_average_rating": team_average_rating,
             "recent_team_requests": recent_requests,   # objects
-            "profile": profile,                        # representative profile
+            "profile": profile,                        # agent profile
             "technicians": technicians,                # team
         }
 
@@ -217,7 +217,7 @@ class AgentEditTechnicianView(APIView):
     def patch(self, request, technician_id):
         rep = request.user.profile
 
-        # ensure the technician belongs to this representative
+        # ensure the technician belongs to this agent
         technician = Profile.objects.filter(
             id=technician_id,
             user_type="technician",

@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import SummaryCard from "../Components/SummaryCard";
-import Requests from "../Components/Requests";
+import RecentRequests from "../Components/RecentRequests";
 import { Box } from "@mui/material";
 import { UserContext } from "../../../Contexts/UserContext";
 import { toPersianNumber } from "../../../Utils/NumberUtils";
@@ -66,7 +66,7 @@ export default function TechnicianDashboardPanel() {
             mt: { xs: 2, lg: 0 },
           }}
         >
-          <Requests requests={user.recent_requests} />
+          <RecentRequests requests={user.recent_requests} />
         </Box>
       </Box>
     </>

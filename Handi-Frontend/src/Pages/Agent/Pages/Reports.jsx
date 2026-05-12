@@ -20,7 +20,7 @@ export default function Reports() {
   useEffect(() => {
     if (!user || !user.access) return;
 
-    fetch("http://127.0.0.1:8000/api/service/dashboard/representative/report", {
+    fetch("http://127.0.0.1:8000/api/service/dashboard/agent/report", {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())

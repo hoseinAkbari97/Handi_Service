@@ -29,6 +29,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.DeleteModel(
-            name='RepresentativeTechnician',
+            name='agentTechnician',
         ),
     ]

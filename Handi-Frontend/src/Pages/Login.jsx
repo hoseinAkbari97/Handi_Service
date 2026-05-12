@@ -94,7 +94,7 @@ export default function Login() {
             </Typography>
 
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
+              <InputLabel>
                 ورود به عنوان
               </InputLabel>
               <Select
