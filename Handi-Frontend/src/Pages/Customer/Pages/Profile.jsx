@@ -10,6 +10,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { toPersianNumber } from "../../../Utils/NumberUtils";
+import { API_CONFIG } from "../../../config/api";
 
 export default function CustomerEditProfile() {
   const { user } = useContext(UserContext);
@@ -37,7 +38,7 @@ export default function CustomerEditProfile() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/service/me/", {
+        const response = await fetch(API_CONFIG.endpoints.customerDashboard.getProfile, {
           headers: { Authorization: `Bearer ${user.access}` },
         });
 
@@ -75,7 +76,7 @@ export default function CustomerEditProfile() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/service/me/", {
+      const response = await fetch(API_CONFIG.endpoints.customerDashboard.getProfile, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +153,6 @@ export default function CustomerEditProfile() {
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {profileData?.first_name} {profileData?.last_name}
         </Typography>
-
       </Card>
 
       {/* Profile Form */}

@@ -4,57 +4,54 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import PackageCard from "./PackageCard";
 import { Button, ButtonGroup, Typography } from "@mui/material";
+import { API_CONFIG } from "../../../config/api";
 
 export default function PackageModal({ openModal, closeModal, taskData }) {
   const { user } = useContext(UserContext);
   const [requests, setRequests] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  
+
   const sendRequestHandler = () => {
-    fetch(
-      `http://127.0.0.1:8000/api/service/dashboard/customer/requests/${taskData.id}/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.access}`,
-        },
-        body: JSON.stringify({
-          action: "accept",
-          package_id: selectedPackage,
-        }),
+    fetch(API_CONFIG.endpoints.customerDashboard.packageModal(taskData.id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.access}`,
       },
-    )
-      .then(async (response) => {
-        if(response.status === 200){
-          alert("درخواست شما با موفقیت ثبت شد!")
-        }
-      })
-  
-      closeModal()
+      body: JSON.stringify({
+        action: "accept",
+        package_id: selectedPackage,
+      }),
+    }).then(async (response) => {
+      if (response.status === 200) {
+        alert("درخواست شما با موفقیت ثبت شد!");
+      }
+    });
+
+    closeModal();
   };
 
   const cancleRequestHandler = () => {
-    fetch(
-      `http://127.0.0.1:8000/api/service/dashboard/agent/requests/${taskData.id}/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.access}`,
-        },
-        body: JSON.stringify({
-          action: "reject",
-        }),
+    fetch(API_CONFIG.endpoints.customerDashboard.packageModal(taskData.id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.access}`,
       },
-    ).then((response) => console.log(response));
+      body: JSON.stringify({
+        action: "reject",
+      }),
+    }).then((response) => {
+      console.log(response);
+      closeModal();
+    });
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://127.0.0.1:8000/api/service/dashboard/customer/requests/",
+          API_CONFIG.endpoints.customerDashboard.getCustomerData,
           {
             headers: { Authorization: `Bearer ${user.access}` },
           },
@@ -69,7 +66,6 @@ export default function PackageModal({ openModal, closeModal, taskData }) {
       fetchData();
     }
   }, [taskData, user.access]);
-
 
   return (
     <>
@@ -93,7 +89,6 @@ export default function PackageModal({ openModal, closeModal, taskData }) {
             p: 2,
           }}
         >
-          {/* {console.log(taskData)} */}
           <Typography
             variant="h5"
             color="text.contrastText"

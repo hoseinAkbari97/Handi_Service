@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import theme from "../../../Theme/Theme";
 import SummaryReport from "../Components/SummaryReport";
 import Filter from "../Components/Filter";
 import DetailsTable from "../Components/DetailsTable";
 import { UserContext } from "../../../Contexts/UserContext";
+import { API_CONFIG } from "../../../config/api";
 
 export default function Reports() {
   const { user } = useContext(UserContext);
@@ -20,7 +20,7 @@ export default function Reports() {
   useEffect(() => {
     if (!user || !user.access) return;
 
-    fetch("http://127.0.0.1:8000/api/service/dashboard/agent/report", {
+    fetch(API_CONFIG.endpoints.agentDashboard.reports, {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())

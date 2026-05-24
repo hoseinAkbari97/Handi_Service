@@ -1,27 +1,25 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import PackageCard from "./PackageCard";
 import { Button, Typography } from "@mui/material";
-import { BorderClear } from "@mui/icons-material";
+import { API_CONFIG } from "../../../config/api";
 
 export default function NewRequestModal({ openModal, closeModal, task }) {
   const { user } = useContext(UserContext);
-  const [requests, setRequests] = useState([]);
 
   const [normalTechID, setNormalTechID] = useState(null);
   const [silverTechID, setSilverTechID] = useState(null);
   const [goldTechID, setGoldTechID] = useState(null);
 
-  const registerRequestHandler = () => {
+  const registerRequestHandler = useCallback(() => {
     console.log("task ID: ", task);
     console.log("normal: ", normalTechID);
     console.log("silver: ", silverTechID);
     console.log("gold: ", goldTechID);
 
-    fetch(
-      `http://127.0.0.1:8000/api/service/dashboard/agent/tasks/${task.id}/accept/`,
+    fetch(API_CONFIG.endpoints.agentDashboard.acceptTask(task.id),
       {
         method: "POST",
         headers: {
@@ -50,26 +48,28 @@ export default function NewRequestModal({ openModal, closeModal, task }) {
       },
     )
       .then(async (response) => {
-        const text = await response.text();
-
-        console.log("RAW response:", text);
-        console.log(response);
-        
-
-        try {
-          const json = JSON.parse(text);
-          return json;
-        } catch (err) {
-          console.error("Response is NOT JSON");
-          throw new Error("Server returned non-JSON response");
+        if (!response.ok){
+          let errorData;
+          
+          
+          try {
+            errorData = await response.json();
+            console.error("Server Error Response:", errorData)
+            alert(`خطا در ثبت درخواست: ${errorData.detail || response.statusText}`)
+          } catch (err) {
+            console.error("Non-JSON Error Response:", response.statusText);
+            alert(`خطا در ثبت درخواست: ${response.statusText}`);
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+      return response.json()
       })
-      .then((data) => {
-        console.log("response data:", data);
-        closeModal();
-      })
-      .catch((error) => console.error("Fetch error:", error));
-  };
+        .then((data) => {
+          console.log("response data:", data);
+          closeModal();
+        })
+        .catch((error) => console.error("Fetch error:", error));
+    }, [task, normalTechID, silverTechID, goldTechID, user, closeModal]);
 
   return (
     <>

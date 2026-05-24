@@ -3,13 +3,14 @@ import {
   useState,
   useEffect,
   useCallback,
-useMemo
+  useMemo,
 } from "react";
+
+import { API_CONFIG } from "../config/api";
 
 export const UserContext = createContext();
 
 export default function UserProvider({ children, navigate }) {
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -20,14 +21,13 @@ export default function UserProvider({ children, navigate }) {
   }, []);
 
   useEffect(() => {
-  if (!user || !user.access) return;
+    if (!user || !user.access) return;
+    const intervalId = setInterval(() => {
+      reFetchUser();
+    }, 5000);
 
-  const intervalId = setInterval(() => {
-    reFetchUser();
-  }, 5000);
-
-  return () => clearInterval(intervalId);
-}, [user?.access]);
+    return () => clearInterval(intervalId);
+  }, [user?.access]);
 
   const saveUser = useCallback((userData) => {
     setUser(userData);
@@ -35,9 +35,8 @@ export default function UserProvider({ children, navigate }) {
   }, []);
 
   const requestOTP = useCallback(async (phone) => {
-    const url = "http://127.0.0.1:8000/api/auth/request-otp/";
     try {
-      const response = await fetch(url, {
+      const response = await fetch(API_CONFIG.endpoints.requestOTP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone }),
@@ -52,8 +51,8 @@ export default function UserProvider({ children, navigate }) {
     }
   }, []);
 
-    const logout = useCallback(() => {
-      alert("مدت زمان زیادی از ورود شما می‌گذرد! لطفا دوباره وارد شوید")
+  const logout = useCallback(() => {
+    alert("مدت زمان زیادی از ورود شما می‌گذرد! لطفا دوباره وارد شوید");
     setUser(null);
     localStorage.removeItem("isValid");
     localStorage.removeItem("role");
@@ -63,8 +62,9 @@ export default function UserProvider({ children, navigate }) {
 
   const verifyAndLogin = useCallback(
     async (phone, otp, role) => {
-      const verifyUrl = "http://127.0.0.1:8000/api/auth/verify-otp/";
+      const verifyUrl = API_CONFIG.endpoints.verifyOTP;
       let tokenData;
+
       try {
         const verifyResponse = await fetch(verifyUrl, {
           method: "POST",
@@ -83,31 +83,27 @@ export default function UserProvider({ children, navigate }) {
       }
 
       const accessToken = tokenData.access;
-      let dashboardUrl;
       let errorMessage;
       let redirectPath;
 
       switch (role) {
         case "customer":
-          dashboardUrl =
-            "http://127.0.0.1:8000/api/service/dashboard/customer/";
           errorMessage = "مشتری با این شماره وجود ندارد";
           redirectPath = "/customer";
           break;
         case "technician":
-          dashboardUrl =
-            "http://127.0.0.1:8000/api/service/dashboard/technician/";
           errorMessage = "تعمیرکار با این شماره وجود ندارد";
           redirectPath = "/technician";
           break;
         case "agent":
-          dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/agent/";
           errorMessage = "نماینده‌ای با این شماره وجود ندارد";
           redirectPath = "/agent";
           break;
         default:
           throw new Error("نقش کاربری نامعتبر است.");
       }
+
+      const dashboardUrl = API_CONFIG.endpoints.dashboard(role);
 
       try {
         const dashboardResponse = await fetch(dashboardUrl, {
@@ -133,41 +129,23 @@ export default function UserProvider({ children, navigate }) {
         throw error;
       }
     },
-    [saveUser]
+    [saveUser],
   );
 
   const reFetchUser = useCallback(async () => {
-    if (!user || !user.access || !user.profile || !user.profile.user_type) {
+    if (!user?.access || !user?.profile?.user_type) {
       console.error("User or Access Token not available for reFetch.");
       return;
     }
 
-    const role = user.profile.user_type;
-    const accessToken = user.access;
-
-    let dashboardUrl;
-
-    switch (role) {
-      case "customer":
-        dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/customer/";
-        break;
-      case "technician":
-        dashboardUrl =
-          "http://127.0.0.1:8000/api/service/dashboard/technician/";
-        break;
-      case "agent":
-        dashboardUrl = "http://127.0.0.1:8000/api/service/dashboard/agent/";
-        break;
-      default:
-        return;
-    }
+    let dashboardUrl = API_CONFIG.endpoints.dashboard(user.profile.user_type);
 
     try {
       const response = await fetch(dashboardUrl, {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { Authorization: `Bearer ${user.access}` },
       });
 
-      if (!response.ok || !accessToken) {
+      if (!response.ok || !user.access) {
         console.error("Failed to refetch user data. Status:", response.status);
         logout();
         return;
@@ -175,7 +153,7 @@ export default function UserProvider({ children, navigate }) {
 
       const newUserData = await response.json();
 
-      saveUser({ ...newUserData, access: accessToken });
+      saveUser({ ...newUserData, access: user.access });
     } catch (error) {
       console.error("Error during user reFetch:", error);
     }
@@ -190,7 +168,7 @@ export default function UserProvider({ children, navigate }) {
       reFetchUser,
       logout,
     }),
-    [user, saveUser, requestOTP, verifyAndLogin, reFetchUser, logout]
+    [user, saveUser, requestOTP, verifyAndLogin, reFetchUser, logout],
   );
 
   return (
