@@ -3,13 +3,14 @@ import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
 import { useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
+import { API_CONFIG } from "../../../config/api";
 
 export default function NewRequestCard({ task }) {
   const { user } = useContext(UserContext);
 
   const cancleRequestHandler = () => {
     fetch(
-      `http://127.0.0.1:8000/api/service/dashboard/technician/requests/${task.id}/`,
+      API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id),
       {
         method: "POST",
         headers: {
@@ -23,9 +24,9 @@ export default function NewRequestCard({ task }) {
     ).then((response) => console.log(response));
   };
 
-    const acceptRequestHandler = () => {
+  const acceptRequestHandler = () => {
     fetch(
-      `http://127.0.0.1:8000/api/service/dashboard/technician/requests/${task.id}/`,
+      API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id),
       {
         method: "POST",
         headers: {
@@ -58,7 +59,6 @@ export default function NewRequestCard({ task }) {
           px: 2,
         }}
       >
-        {/* {console.log(task)        } */}
         <Box>
           <Typography
             sx={{

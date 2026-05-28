@@ -3,6 +3,7 @@ import TaskCard from "../Components/TaskCard";
 import NewRequestCard from "../Components/NewRequestCard";
 import { Box } from "@mui/material";
 import { UserContext } from "../../../Contexts/UserContext";
+import { API_CONFIG } from "../../../config/api";
 
 export default function ManageTasks() {
   const { user } = useContext(UserContext);
@@ -11,7 +12,7 @@ export default function ManageTasks() {
   const [pendingTasks, setPendingTasks] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/service/dashboard/technician/requests/", {
+    fetch(API_CONFIG.endpoints.technicianDashboard.manageTasks, {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())
@@ -38,10 +39,6 @@ export default function ManageTasks() {
         gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
       }}
     >
-      {/* {console.log(pendingTasks)} */}
-      {/* {console.log(checkedTasks)} */}
-      {/* {console.log(allTasks)} */}
-      
       {pendingTasks.map((task) => (
         <NewRequestCard task={task} key={task.id} />
       ))}

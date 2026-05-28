@@ -3,6 +3,7 @@ import TaskCard from "../Components/TaskCard";
 import NewRequestCard from "../Components/NewRequestCard";
 import { Box } from "@mui/material";
 import { UserContext } from "../../../Contexts/UserContext";
+import { API_CONFIG } from "../../../config/api";
 
 export default function ManageTasks() {
   const { user } = useContext(UserContext);
@@ -11,7 +12,7 @@ export default function ManageTasks() {
   const [pendingTasks, setPendingTasks] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/service/dashboard/agent/tasks/", {
+    fetch(API_CONFIG.endpoints.agentDashboard.manageTasks, {
       headers: { Authorization: `Bearer ${user.access}` },
     })
       .then((Response) => Response.json())

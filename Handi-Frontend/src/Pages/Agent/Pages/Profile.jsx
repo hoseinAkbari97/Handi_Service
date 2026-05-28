@@ -10,6 +10,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { toPersianNumber } from "../../../Utils/NumberUtils";
+import { API_CONFIG } from "../../../config/api";
 
 export default function AgentEditProfile() {
   const { user } = useContext(UserContext);
@@ -37,8 +38,7 @@ export default function AgentEditProfile() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/api/service/dashboard/agent/edit/",
+        const response = await fetch(API_CONFIG.endpoints.agentDashboard.getProfile,
           {
             headers: { Authorization: `Bearer ${user.access}` },
           },
@@ -78,7 +78,7 @@ export default function AgentEditProfile() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/service/me/", {
+      const response = await fetch(API_CONFIG.endpoints.agentDashboard.updateProfile, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

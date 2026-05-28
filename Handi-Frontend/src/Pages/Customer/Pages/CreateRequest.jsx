@@ -26,58 +26,62 @@ export default function CreateRequest() {
   const [markerPosition, setMarkerPosition] = useState(["35.6892", "51.389"]);
 
   const handleSubmit = () => {
-    fetch("http://127.0.0.1:8000/api/service/dashboard/customer/requests/create/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.access}`,
+    fetch(
+      "/api/service/dashboard/customer/requests/create/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access}`,
+        },
+        body: JSON.stringify({
+          device_type: deviceType,
+          brand: brand,
+          problem_type: problemType,
+          preferred_date: selectedDate.format("YYYY-MM-DD"),
+          preferred_time: null,
+          description: description,
+          full_address: address,
+          // latitude: markerPosition[0],
+          // longitude: markerPosition[1],
+        }),
       },
-      body: JSON.stringify({
-        device_type: deviceType,
-        brand: brand,
-        problem_type: problemType,
-        preferred_date: selectedDate.format("YYYY-MM-DD"),
-        preferred_time: null,
-        description: description,
-        full_address: address,
-        // latitude: markerPosition[0],
-        // longitude: markerPosition[1],
-      }),
-    })
-    .then(async (response) => {
-      const data = await response.json(); 
-        
+    )
+      .then(async (response) => {
+        const data = await response.json();
+
         if (!response.ok) {
           console.error("Server Validation Error Details (400)", data);
-          let errorMsg = "خطا در ثبت درخواست. لطفاً مطمئن شوید همه فیلدهای اجباری پر شده‌اند.";
-            if (data && typeof data === 'object') {
-              errorMsg += "\nجزئیات خطا را در کنسول ببینید.";
-            }
-            alert(errorMsg);
-            
-            throw new Error(`HTTP error! Status: ${response.status}`);
+          let errorMsg =
+            "خطا در ثبت درخواست. لطفاً مطمئن شوید همه فیلدهای اجباری پر شده‌اند.";
+          if (data && typeof data === "object") {
+            errorMsg += "\nجزئیات خطا را در کنسول ببینید.";
+          }
+          alert(errorMsg);
+
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return data;
-    })
-    .then((data) => {
-        alert("درخواست شما با موفقیت ثبت شد!" , data);
-    })
-    .catch((error) => {
+      })
+      .then((data) => {
+        alert("درخواست شما با موفقیت ثبت شد!", data);
+      })
+      .catch((error) => {
         console.error("Fetch/Network Error:", error);
-    });
-  };
+      });
+  };
 
-    // console.log("Request Data:", {
-    //   deviceType,
-    //   brand,
-    //   problemType,
-    //   selectedDate: selectedDate.format("YYYY/MM/DD"),
-    //   description,
-    //   address,
-    //   latitude: markerPosition[0],
-    //   longitude: markerPosition[1],
-    // });
-    // alert("درخواست شما ثبت شد! (Console.log)");
+  // console.log("Request Data:", {
+  //   deviceType,
+  //   brand,
+  //   problemType,
+  //   selectedDate: selectedDate.format("YYYY/MM/DD"),
+  //   description,
+  //   address,
+  //   latitude: markerPosition[0],
+  //   longitude: markerPosition[1],
+  // });
+  // alert("درخواست شما ثبت شد! (Console.log)");
   // };
 
   return (

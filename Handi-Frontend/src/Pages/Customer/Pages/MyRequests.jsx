@@ -2,19 +2,23 @@ import { useContext, useEffect, useState } from "react";
 import TaskCard from "../Components/TaskCard";
 import { Box } from "@mui/material";
 import { UserContext } from "../../../Contexts/UserContext";
+import { API_CONFIG } from "../../../config/api";
 
 export default function MyRequests() {
   const { user } = useContext(UserContext);
-  const [requests, setRequests] = useState([])
+  const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/service/dashboard/customer/requests/", {
-          headers: { Authorization: `Bearer ${user.access}` }
-        });
+        const res = await fetch(
+          API_CONFIG.endpoints.customerDashboard.getCustomerData,
+          {
+            headers: { Authorization: `Bearer ${user.access}` },
+          },
+        );
         const data = await res.json();
-        setRequests(data);     
+        setRequests(data);
       } catch (error) {
         console.error("خطا در دریافت داده‌ها:", error);
       }
