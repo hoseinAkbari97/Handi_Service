@@ -6,7 +6,7 @@ import PackageCard from "./PackageCard";
 import { Button, Typography } from "@mui/material";
 import { API_CONFIG } from "../../../config/api";
 
-export default function NewRequestModal({ openModal, closeModal, task }) {
+export default function NewRequestModal({ openModal, closeModal, task, refreshTasks }) {
   const { user } = useContext(UserContext);
 
   const [normalTechID, setNormalTechID] = useState(null);
@@ -66,6 +66,7 @@ export default function NewRequestModal({ openModal, closeModal, task }) {
       })
         .then((data) => {
           console.log("response data:", data);
+          refreshTasks();
           closeModal();
         })
         .catch((error) => console.error("Fetch error:", error));

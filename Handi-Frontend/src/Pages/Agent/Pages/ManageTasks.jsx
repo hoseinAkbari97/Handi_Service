@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TaskCard from "../Components/TaskCard";
 import NewRequestCard from "../Components/NewRequestCard";
 import { Box } from "@mui/material";
@@ -8,25 +8,32 @@ import { API_CONFIG } from "../../../config/api";
 export default function ManageTasks() {
   const { user } = useContext(UserContext);
   const [allTasks, setAllTasks] = useState([]);
-  const [checkedTasks, setCheckedTasks] = useState([]);
-  const [pendingTasks, setPendingTasks] = useState([]);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch(
+        API_CONFIG.endpoints.agentDashboard.manageTasks,
+        {
+          headers: {
+            Authorization: `Bearer ${user.access}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+      setAllTasks(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    fetch(API_CONFIG.endpoints.agentDashboard.manageTasks, {
-      headers: { Authorization: `Bearer ${user.access}` },
-    })
-      .then((Response) => Response.json())
-      .then((data) => setAllTasks(data))
-      .catch((error) => console.error("Error fetching data:", error));
+    fetchTasks();
   }, []);
 
-  useEffect(() => {
-    const pending = allTasks.filter((task) => task.status === "pending");
-    const checked = allTasks.filter((task) => task.status !== "pending");
+  const pendingTasks = allTasks.filter((task) => task.status === "pending");
 
-    setPendingTasks(pending);
-    setCheckedTasks(checked);
-  }, [allTasks]);
+  const checkedTasks = allTasks.filter((task) => task.status !== "pending");
 
   return (
     <Box
@@ -40,10 +47,10 @@ export default function ManageTasks() {
       }}
     >
       {pendingTasks.map((task) => (
-        <NewRequestCard task={task} key={task.id} />
+        <NewRequestCard task={task} key={task.id} refreshTasks={fetchTasks} />
       ))}
       {checkedTasks.map((task) => (
-        <TaskCard task={task} key={task.id} />
+        <TaskCard task={task} key={task.id} refreshTasks={fetchTasks} />
       ))}
     </Box>
   );

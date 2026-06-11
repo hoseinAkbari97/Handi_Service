@@ -5,7 +5,7 @@ import NewRequestModal from "./NewRequestModal";
 import { useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 
-export default function NewRequestCard({ task }) {
+export default function NewRequestCard({ task, refreshTasks }) {
   const { user } = useContext(UserContext);
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -158,7 +158,7 @@ export default function NewRequestCard({ task }) {
         </Box>
       </Box>
 
-      <NewRequestModal openModal={openModal} closeModal={handleCloseModal} task={task} />
+      <NewRequestModal openModal={openModal} closeModal={handleCloseModal} task={task} refreshTasks={refreshTasks} />
     </>
   );
 }
