@@ -61,6 +61,16 @@ export default function Login() {
       });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (step === "login") {
+      stepHandler();
+    } else {
+      verifyHandler();
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -80,128 +90,130 @@ export default function Login() {
           borderColor: "secondary.main",
         }}
       >
-        <Box display={"flex"} justifyContent={"center"} sx={{ mb: 2 }}>
-          <HandymanIcon sx={{ height: 110, width: 110, mb: 3 }} />
-        </Box>
-        <Typography variant="h5" gutterBottom align="center">
-          سیستم تعمیرات لوازم خانگی
-        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Box display={"flex"} justifyContent={"center"} sx={{ mb: 2 }}>
+            <HandymanIcon sx={{ height: 110, width: 110, mb: 3 }} />
+          </Box>
+          <Typography variant="h5" gutterBottom align="center">
+            سیستم تعمیرات لوازم خانگی
+          </Typography>
 
-        {step === "login" ? (
-          <>
-            <Typography variant="body1" gutterBottom align="center" mb={4}>
-              ورود به حساب کاربری
-            </Typography>
+          {step === "login" ? (
+            <>
+              <Typography variant="body1" gutterBottom align="center" mb={4}>
+                ورود به حساب کاربری
+              </Typography>
 
-            <FormControl fullWidth>
-              <InputLabel>
-                ورود به عنوان
-              </InputLabel>
-              <Select
-                value={role}
-                label="ورود به عنوان"
-                onChange={roleChange}
-              >
-                <MenuItem value={"customer"}>کاربر</MenuItem>
-                <MenuItem value={"technician"}>تکنسین</MenuItem>
-                <MenuItem value={"agent"}>نماینده</MenuItem>
-              </Select>
-            </FormControl>
+              <FormControl fullWidth>
+                <InputLabel>ورود به عنوان</InputLabel>
+                <Select
+                  value={role}
+                  label="ورود به عنوان"
+                  onChange={roleChange}
+                >
+                  <MenuItem value={"customer"}>کاربر</MenuItem>
+                  <MenuItem value={"technician"}>تکنسین</MenuItem>
+                  <MenuItem value={"agent"}>نماینده</MenuItem>
+                </Select>
+              </FormControl>
 
-            <TextField
-              label="شماره موبایل"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={phone}
-              onChange={phoneHandler}
-            />
+              <TextField
+                label="شماره موبایل"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={phone}
+                onChange={phoneHandler}
+              />
 
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={!isValid || phone.length === 0 || !role}
-              onClick={stepHandler}
-              sx={{
-                mt: 2,
-                py: 1.2,
-              }}
-            >
-              ارسال کد تأیید
-            </Button>
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              align="center"
-              sx={{ mt: 2 }}
-            >
-              حساب کاربری ندارید؟{" "}
-              <Typography
-                variant="body2"
-                component={Link}
-                to="/register"
-                color="text.primary"
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={!isValid || phone.length === 0 || !role}
+                onClick={stepHandler}
                 sx={{
-                  textDecoration: "none",
-                  "&:hover": {
-                    color: "secondary.light",
-                  },
+                  mt: 2,
+                  py: 1.2,
                 }}
               >
-                ثبت نام کنید
-              </Typography>
-            </Typography>
+                ارسال کد تأیید
+              </Button>
 
-            <Paper sx={{ mt: 4 }} elevation={5}>
               <Typography
-                align="center"
                 variant="body2"
-                p={3}
-                color="text.contrastText"
+                color="text.secondary"
+                align="center"
+                sx={{ mt: 2 }}
               >
-                اطلاعات ورود آزمایشی <br />
-                شماره موبایل دلخواه + کد تأیید ۱۲۳۴
+                حساب کاربری ندارید؟{" "}
+                <Typography
+                  variant="body2"
+                  component={Link}
+                  to="/register"
+                  color="text.primary"
+                  sx={{
+                    textDecoration: "none",
+                    "&:hover": {
+                      color: "secondary.light",
+                    },
+                  }}
+                >
+                  ثبت نام کنید
+                </Typography>
               </Typography>
-            </Paper>
-          </>
-        ) : (
-          <>
-            <Typography variant="body1" gutterBottom align="center">
-              کد تأیید ارسال شده را وارد نمائید
-            </Typography>
 
-            <TextField
-              label="کد تأیید پیامک شده"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={verifyOTP}
-              onChange={codeHandler}
-            />
+              <Paper sx={{ mt: 4 }} elevation={5}>
+                <Typography
+                  align="center"
+                  variant="body2"
+                  p={3}
+                  color="text.contrastText"
+                >
+                  اطلاعات ورود آزمایشی <br />
+                  شماره موبایل دلخواه + کد تأیید ۱۲۳۴
+                </Typography>
+              </Paper>
+            </>
+          ) : (
+            <>
+              <Typography variant="body1" gutterBottom align="center">
+                کد تأیید ارسال شده را وارد نمائید
+              </Typography>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              onClick={verifyHandler}
-              sx={{ mt: 2, py: 1.2 }}
-            >
-              ورود
-            </Button>
+              <TextField
+                label="کد تأیید پیامک شده"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={verifyOTP}
+                onChange={codeHandler}
+              />
 
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              onClick={() => setStep("login")}
-              sx={{ mt: 2, py: 1.2 }}
-            >
-              ویرایش شماره وارد شده
-            </Button>
-          </>
-        )}
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                fullWidth
+                onClick={verifyHandler}
+                sx={{ mt: 2, py: 1.2 }}
+              >
+                ورود
+              </Button>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                fullWidth
+                onClick={() => setStep("login")}
+                sx={{ mt: 2, py: 1.2 }}
+              >
+                ویرایش شماره وارد شده
+              </Button>
+            </>
+          )}
+        </form>
       </Paper>
     </Box>
   );
