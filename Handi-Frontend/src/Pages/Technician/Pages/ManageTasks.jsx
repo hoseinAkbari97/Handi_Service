@@ -46,7 +46,7 @@ export default function ManageTasks() {
       }}
     >
       {pendingTasks.map((task) => (
-        <NewRequestCard task={task} key={task.id} refreshTasks />
+        <NewRequestCard task={task} key={task.id} refreshTasks={fetchTasks} />
       ))}
       {checkedTasks.map((task) => (
         <TaskCard task={task} key={task.id} />
