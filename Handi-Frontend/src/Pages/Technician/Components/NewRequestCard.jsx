@@ -5,39 +5,39 @@ import { useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { API_CONFIG } from "../../../config/api";
 
-export default function NewRequestCard({ task }) {
+export default function NewRequestCard({ task, refreshTasks }) {
   const { user } = useContext(UserContext);
 
   const cancleRequestHandler = () => {
-    fetch(
-      API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id),
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.access}`,
-        },
-        body: JSON.stringify({
-          action: "reject",
-        }),
+    fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.access}`,
       },
-    ).then((response) => console.log(response));
+      body: JSON.stringify({
+        action: "reject",
+      }),
+    }).then((response) => {
+      refreshTasks();
+      console.log(response);
+    });
   };
 
   const acceptRequestHandler = () => {
-    fetch(
-      API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id),
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.access}`,
-        },
-        body: JSON.stringify({
-          action: "accept",
-        }),
+    fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.access}`,
       },
-    ).then((response) => console.log(response));
+      body: JSON.stringify({
+        action: "accept",
+      }),
+    }).then((response) => {
+      refreshTasks();
+      console.log(response);
+    });
   };
 
   return (
