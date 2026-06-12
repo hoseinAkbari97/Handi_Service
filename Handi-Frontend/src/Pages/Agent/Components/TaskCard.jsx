@@ -147,32 +147,6 @@ export default function TaskCard({ task }) {
                       : "رد شده"}
           </Typography>
         </Box>
-
-        {task.status === "suspended" && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignSelf: "",
-              mt: 1,
-              width: "100%",
-            }}
-          >
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{
-                color: "text.contrastText",
-                backgroundColor: "secondary.main",
-                "&:hover": {
-                  backgroundColor: "secondary.light",
-                },
-              }}
-            >
-              تخصیص به تکنسین
-            </Button>
-          </Box>
-        )}
       </Box>
     </Box>
   );

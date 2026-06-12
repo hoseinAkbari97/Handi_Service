@@ -49,7 +49,7 @@ export default function ManageTasks() {
         <NewRequestCard task={task} key={task.id} refreshTasks={fetchTasks} />
       ))}
       {checkedTasks.map((task) => (
-        <TaskCard task={task} key={task.id} />
+        <TaskCard task={task} key={task.id} refreshTasks={fetchTasks} />
       ))}
     </Box>
   );

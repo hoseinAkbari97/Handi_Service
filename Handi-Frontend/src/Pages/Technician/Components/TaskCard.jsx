@@ -2,8 +2,33 @@ import { Box, Typography, Button } from "@mui/material";
 import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
+import { API_CONFIG } from "../../../config/api";
+import { UserContext } from "../../../Contexts/UserContext";
+import { useContext } from "react";
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, refreshTasks }) {
+  const { user } = useContext(UserContext);
+
+  const completeWorkHandler = () => {
+    console.log("completed");
+    
+    // fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${user.access}`,
+    //   },
+    //   body: JSON.stringify({
+    //     status: "completed",
+    //   }),
+    // }).then((response) => {
+    //   console.log(response);
+
+    //   refreshTasks();
+    //   console.log(response);
+    // });
+  };
+
   return (
     <Box
       sx={{
@@ -78,7 +103,7 @@ export default function TaskCard({ task }) {
           <ErrorIcon fontSize="small" />
           <Typography
             sx={{
-              textAlign:"center",
+              textAlign: "center",
               fontSize: 14,
               mt: 0.5,
             }}
@@ -149,7 +174,7 @@ export default function TaskCard({ task }) {
           </Typography>
         </Box>
 
-        {task.status === "suspended" && (
+        {task.status === "in_progress" && (
           <Box
             sx={{
               display: "flex",
@@ -160,17 +185,23 @@ export default function TaskCard({ task }) {
             }}
           >
             <Button
+              onClick={completeWorkHandler}
+              size="large"
               variant="contained"
-              fullWidth
               sx={{
+                minWidth: "50%",
+                textWrap: "nowrap",
                 color: "text.contrastText",
                 backgroundColor: "secondary.main",
+                mt: 1,
+                padding: "8px 22px",
+                justifySelf: "center",
                 "&:hover": {
                   backgroundColor: "secondary.light",
                 },
               }}
             >
-              تخصیص به تکنسین
+              پایان کار
             </Button>
           </Box>
         )}
