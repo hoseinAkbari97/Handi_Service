@@ -8,22 +8,6 @@ import { API_CONFIG } from "../../../config/api";
 export default function NewRequestCard({ task, refreshTasks }) {
   const { user } = useContext(UserContext);
 
-  const cancleRequestHandler = () => {
-    fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.access}`,
-      },
-      body: JSON.stringify({
-        action: "reject",
-      }),
-    }).then((response) => {
-      refreshTasks();
-      console.log(response);
-    });
-  };
-
   const acceptRequestHandler = () => {
     fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
       method: "POST",
@@ -182,16 +166,6 @@ export default function NewRequestCard({ task, refreshTasks }) {
               }}
             >
               قبول درخواست
-            </Button>
-            <Button
-              sx={{
-                minWidth: "50%",
-                textWrap: "nowrap",
-                backgroundColor: "error.main",
-              }}
-              onClick={cancleRequestHandler}
-            >
-              رد درخواست
             </Button>
           </ButtonGroup>
         </Box>
