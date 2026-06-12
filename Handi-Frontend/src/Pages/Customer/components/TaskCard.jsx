@@ -4,7 +4,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import PackageModal from "./PackageModal";
 import { useState } from "react";
 
-export default function TaskCard({ tasks }) {
+export default function TaskCard({ tasks, refreshTasks }) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
@@ -219,6 +219,7 @@ export default function TaskCard({ tasks }) {
         openModal={openModal}
         closeModal={handleCloseModal}
         taskData={selectedTask}
+        refreshTasks={refreshTasks}
       />
     </>
   );

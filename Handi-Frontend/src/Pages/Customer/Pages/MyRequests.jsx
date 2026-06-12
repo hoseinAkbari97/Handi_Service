@@ -8,23 +8,26 @@ export default function MyRequests() {
   const { user } = useContext(UserContext);
   const [requests, setRequests] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          API_CONFIG.endpoints.customerDashboard.getCustomerData,
-          {
-            headers: { Authorization: `Bearer ${user.access}` },
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch(
+        API_CONFIG.endpoints.customerDashboard.getCustomerData,
+        {
+          headers: {
+            Authorization: `Bearer ${user.access}`,
           },
-        );
-        const data = await res.json();
-        setRequests(data);
-      } catch (error) {
-        console.error("خطا در دریافت داده‌ها:", error);
-      }
-    };
+        },
+      );
 
-    fetchData();
+      const data = await response.json();
+      setRequests(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
   }, []);
 
   return (
@@ -39,7 +42,7 @@ export default function MyRequests() {
       }}
     >
       <Box>
-        <TaskCard tasks={requests} />
+        <TaskCard tasks={requests} refreshTasks={fetchTasks} />
       </Box>
     </Box>
   );

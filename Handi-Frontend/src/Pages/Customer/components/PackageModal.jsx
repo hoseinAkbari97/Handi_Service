@@ -6,7 +6,12 @@ import PackageCard from "./PackageCard";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { API_CONFIG } from "../../../config/api";
 
-export default function PackageModal({ openModal, closeModal, taskData }) {
+export default function PackageModal({
+  openModal,
+  closeModal,
+  taskData,
+  refreshTasks,
+}) {
   const { user } = useContext(UserContext);
   const [requests, setRequests] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -23,12 +28,14 @@ export default function PackageModal({ openModal, closeModal, taskData }) {
         package_id: selectedPackage,
       }),
     }).then(async (response) => {
+      refreshTasks();
+      closeModal();
       if (response.status === 200) {
         alert("درخواست شما با موفقیت ثبت شد!");
+      } else {
+        alert("ثبت درخواست با مشکل مواجه شد!");
       }
     });
-
-    closeModal();
   };
 
   const cancleRequestHandler = () => {
@@ -43,6 +50,7 @@ export default function PackageModal({ openModal, closeModal, taskData }) {
       }),
     }).then((response) => {
       console.log(response);
+      refreshTasks();
       closeModal();
     });
   };
