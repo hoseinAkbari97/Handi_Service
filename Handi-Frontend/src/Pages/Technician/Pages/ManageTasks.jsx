@@ -32,7 +32,7 @@ export default function ManageTasks() {
   }, []);
 
   const pendingTasks = allTasks.filter((task) => task.status === "approved");
-  const checkedTasks = allTasks.filter((task) => task.status !== "pending");
+  const checkedTasks = allTasks.filter((task) => task.status !== "approved");
 
   return (
     <Box
@@ -46,7 +46,7 @@ export default function ManageTasks() {
       }}
     >
       {pendingTasks.map((task) => (
-        <NewRequestCard task={task} key={task.id} refreshTasks={fetchTasks} />
+        <NewRequestCard task={task} key={task.id} refreshTasks />
       ))}
       {checkedTasks.map((task) => (
         <TaskCard task={task} key={task.id} />
