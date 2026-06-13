@@ -28,7 +28,7 @@ export default function PopularService() {
   ];
 
   return (
-    <Container sx={{ py: 8 }}>
+    <Container sx={{ pb: 8 }}>
       <Typography
         variant="h5"
         align="center"
