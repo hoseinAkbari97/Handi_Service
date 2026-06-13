@@ -28,6 +28,7 @@ export const API_CONFIG = {
       newRequestCard: (taskID) =>
         `${BASE_URL}/api/service/dashboard/technician/requests/${taskID}/`,
       manageTasks: `${BASE_URL}/api/service/dashboard/technician/requests/`,
+      getProfile: `${BASE_URL}/api/service/me/`,
     },
   },
   timeout: 5000,

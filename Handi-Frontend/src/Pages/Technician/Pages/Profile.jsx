@@ -7,12 +7,17 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 import { toPersianNumber } from "../../../Utils/NumberUtils";
+import { API_CONFIG } from "../../../config/api";
 
 export default function TechnicianEditProfile() {
   const { user } = useContext(UserContext);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     first_name: user.profile.first_name || "",
@@ -22,8 +27,81 @@ export default function TechnicianEditProfile() {
     region: user.profile.address || "",
   });
 
+    useEffect(() => {
+      if (!user || !user.access) {
+        setLoading(false);
+        setError("اطلاعات کاربری موجود نیست.");
+        return;
+      }
+  
+      const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(API_CONFIG.endpoints.technicianDashboard.getProfile, {
+            headers: { Authorization: `Bearer ${user.access}` },
+          });
+  
+          if (!response.ok) {
+            throw new Error("خطا در دریافت اطلاعات پروفایل.");
+          }
+  
+          const data = await response.json();
+          setUserData(data);
+          console.log(data);
+          
+  
+          setFormData({
+            first_name: data.first_name || "",
+            last_name: data.last_name || "",
+            city: data.city || "",
+            email: data.email || "",
+            address: data.address || "",
+          });
+        } catch (e) {
+          console.error("Fetch error:", e);
+          setError(e.message || "خطای ناشناخته در دریافت داده.");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchData();
+    }, []);
+
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        API_CONFIG.endpoints.customerDashboard.getProfile,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.access}`,
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "خطا در ذخیره تغییرات.");
+      }
+
+      setUserData((prev) => ({ ...prev, ...formData }));
+      alert("تغییرات با موفقیت ذخیره شد!");
+    } catch (e) {
+      console.error("Submit error:", e);
+      setError(e.message || "خطای ناشناخته در ذخیره داده.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputSX = {
@@ -41,6 +119,19 @@ export default function TechnicianEditProfile() {
     },
   };
 
+    if (loading) {
+    return <Typography sx={{ mt: 4 }}>در حال بارگذاری اطلاعات...</Typography>;
+  }
+
+  if (error) {
+    return (
+      <Typography color="error" sx={{ mt: 4 }}>
+        خطا: {error}
+      </Typography>
+    );
+  }
+  const profileData = userData || user.profile;
+
   return (
     <Box>
       {/* Profile Information */}
@@ -54,7 +145,7 @@ export default function TechnicianEditProfile() {
         }}
       >
         <Avatar
-          src={user.profile.profile_picture}
+          src={profileData?.profile_picture}
           sx={{
             width: 90,
             height: 91,
@@ -65,7 +156,7 @@ export default function TechnicianEditProfile() {
           }}
         />
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          {user.profile.first_name} {user.profile.last_name}
+          {profileData.first_name} {profileData.last_name}
         </Typography>
         <Typography variant="body2" sx={{ color: "text.primary", mt: 1 }}>
           تعمیرکار منطقه {user?.profile?.address || "(وارد نشده)"}
@@ -147,17 +238,17 @@ export default function TechnicianEditProfile() {
             sx={inputSX}
           />
           <TextField
-            name="email"
-            label="ایمیل"
-            value={formData.email}
+            name="city"
+            label="شهر"
+            value={formData.city}
             onChange={handleChange}
             fullWidth
             sx={inputSX}
           />
           <TextField
-            name="region"
+            name="address"
             label="منطقه تحت پوشش"
-            value={formData.region}
+            value={formData.address}
             onChange={handleChange}
             fullWidth
             sx={inputSX}
@@ -170,6 +261,8 @@ export default function TechnicianEditProfile() {
           fullWidth
           variant="contained"
           color="secondary"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
           sx={{
             mt: 4,
             py: 1.2,
@@ -187,7 +280,7 @@ export default function TechnicianEditProfile() {
             },
           }}
         >
-          ذخیره تغییرات
+          {isSubmitting ? "در حال ذخیره..." : "ذخیره تغییرات"}
         </Button>
       </Card>
     </Box>

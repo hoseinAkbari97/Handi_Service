@@ -12,21 +12,19 @@ export default function TaskCard({ task, refreshTasks }) {
   const completeWorkHandler = () => {
     console.log("completed");
     
-    // fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${user.access}`,
-    //   },
-    //   body: JSON.stringify({
-    //     status: "completed",
-    //   }),
-    // }).then((response) => {
-    //   console.log(response);
-
-    //   refreshTasks();
-    //   console.log(response);
-    // });
+    fetch(API_CONFIG.endpoints.technicianDashboard.newRequestCard(task.id), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.access}`,
+      },
+      body: JSON.stringify({
+        status: "completed",
+      }),
+    }).then((response) => {
+      console.log(response);
+      refreshTasks();
+    });
   };
 
   return (
