@@ -20,7 +20,7 @@ export default function CreateRequest() {
   const [deviceType, setDeviceType] = useState("");
   const [brand, setBrand] = useState("");
   const [problemType, setProblemType] = useState("");
-  const [selectedDate, setSelectedDate] = useState(dayjs().calendar("jalali"));
+  // const [selectedDate, setSelectedDate] = useState(dayjs().calendar("jalali"));
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
   const [markerPosition, setMarkerPosition] = useState(["35.6892", "51.389"]);
@@ -120,10 +120,10 @@ export default function CreateRequest() {
       />
 
       {/* Select Date */}
-      <SelectDate
+      {/* <SelectDate
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-      />
+      /> */}
 
       {/* Description */}
       <TextField
