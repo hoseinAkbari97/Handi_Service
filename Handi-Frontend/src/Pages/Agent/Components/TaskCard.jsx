@@ -14,26 +14,51 @@ export default function TaskCard({ task }) {
         justifyContent: "space-between",
         width: 280,
         height: 380,
-        borderTop: 5,
-        borderColor:
-          task.status === "pending"
-            ? "secondary.main"
-            : task.status === "assigned"
-              ? "success.dark"
-              : task.status === "in_progress"
-                ? "warning.light"
-                : task.status === "completed"
-                  ? "success.light"
-                  : task.status === "approved"
-                    ? "secondary.main"
-                    : "error.main",
         borderRadius: 3,
         mt: 2,
         pb: 2,
-        px: 2,
       }}
     >
       <Box>
+        <Button
+          sx={{
+            minWidth: "100% !important",
+            height: "2rem",
+            color: "primary.dark",
+            backgroundColor:
+              task.status === "pending"
+                ? "secondary.main"
+                : task.status === "assigned"
+                  ? "success.dark"
+                  : task.status === "in_progress"
+                    ? "warning.light"
+                    : task.status === "completed"
+                      ? "success.light"
+                      : task.status === "approved"
+                        ? "secondary.main"
+                        : "error.main",
+            "&:hover": {
+              bgcolor:
+                task.status === "pending"
+                  ? "secondary.light"
+                  : task.status === "assigned"
+                    ? "success.light"
+                    : task.status === "in_progress"
+                      ? "warning.main"
+                      : task.status === "completed"
+                        ? "success.main"
+                        : task.status === "approved"
+                          ? "secondary.main"
+                          : "error.light",
+            },
+            p: "0",
+            m: "0",
+            borderRadius: "10px 10px 0px 0px",
+          }}
+        >
+          اطلاعات بیشتر
+        </Button>
+
         <Typography
           sx={{
             fontSize: 18,
