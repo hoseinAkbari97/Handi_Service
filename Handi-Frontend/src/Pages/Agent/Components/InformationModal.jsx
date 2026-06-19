@@ -1,18 +1,12 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useCallback, useContext, useState } from "react";
-import { UserContext } from "../../../Contexts/UserContext";
-import PackageCard from "./PackageCard";
 import { Button, Typography } from "@mui/material";
-import { API_CONFIG } from "../../../config/api";
 
 export default function InformationModal({
   openModal,
   closeModal,
   task,
-  refreshTasks,
 }) {
-  const { user } = useContext(UserContext);
 
   return (
     <>
