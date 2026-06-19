@@ -92,7 +92,6 @@ export default function PackageModal({
             backgroundColor: "background.default",
             width: "70%",
             maxWidth: "60rem",
-            height: "70%",
             borderRadius: 3,
             p: 2,
           }}
