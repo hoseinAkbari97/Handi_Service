@@ -24,7 +24,7 @@ export default function PackageCard({
         borderRadius: 3,
         justifyContent: "space-around",
         alignItems: "center",
-        px: 4,
+        p: 4,
       }}
     >
       <Box>
@@ -33,6 +33,11 @@ export default function PackageCard({
             color: txtColor,
             fontWeight: "bold",
             cursor: "default",
+            fontSize:{
+              lg:"20px",
+              sm:"1rem",
+              xs: "12px"
+            }
           }}
         >
           {title}
@@ -43,13 +48,18 @@ export default function PackageCard({
             mt: 1,
             color: txtColor,
             cursor: "default",
+            fontSize:{
+              lg:"15px",
+              sm:"14px",
+              xs: "10px"
+            }
           }}
         >
           {comment}
         </Typography>
       </Box>
 
-      <Box width="50%">
+      <Box width="30%">
         <FormControl fullWidth>
           <InputLabel>تخصیص به تکنسین</InputLabel>
           <Select
