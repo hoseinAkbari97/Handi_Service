@@ -46,6 +46,18 @@ export default function InformationModal({
             اطلاعات کامل درخواست
           </Typography>
 
+          <Box
+            sx={{
+              width: "90%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "secondary.main",
+              borderRadius: ".5rem",
+            }}
+          >
+          </Box>
 
           <Button
             variant="contained"
