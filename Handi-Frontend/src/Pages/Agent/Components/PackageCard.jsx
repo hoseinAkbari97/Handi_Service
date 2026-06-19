@@ -13,14 +13,13 @@ export default function PackageCard({
   value,
   onChange,
 }) {
-
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection:{
+        flexDirection: {
           xs: "column",
-          sm: "row"
+          sm: "row",
         },
         backgroundColor: bgColor,
         width: "100%",
@@ -31,17 +30,24 @@ export default function PackageCard({
         p: 4,
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "50%",
+          },
+        }}
+      >
         <Typography
           sx={{
             color: txtColor,
             fontWeight: "bold",
             cursor: "default",
-            fontSize:{
-              lg:"20px",
-              sm:"1rem",
-              xs: "12px"
-            }
+            fontSize: {
+              lg: "20px",
+              sm: "1rem",
+              xs: "12px",
+            },
           }}
         >
           {title}
@@ -52,23 +58,42 @@ export default function PackageCard({
             mt: 1,
             color: txtColor,
             cursor: "default",
-            fontSize:{
-              lg:"15px",
-              sm:"14px",
-              xs: "10px"
-            }
+            fontSize: {
+              lg: "15px",
+              sm: "14px",
+              xs: "10px",
+            },
           }}
         >
           {comment}
         </Typography>
       </Box>
 
-      <Box sx={{width:"50%", mt:{
-       xs:"1rem",
-       sm:0
-      }}}>
+      <Box
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "50%",
+          },
+          mt: {
+            xs: "1rem",
+            sm: 0,
+          },
+        }}
+      >
         <FormControl fullWidth>
-          <InputLabel>تخصیص به تکنسین</InputLabel>
+          <InputLabel
+            sx={{
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: {
+                xs: "12px",
+                md: "16px",
+              },
+            }}
+          >
+            تخصیص به تکنسین
+          </InputLabel>
           <Select
             value={value ?? ""}
             label="تخصیص به تکنسین"
