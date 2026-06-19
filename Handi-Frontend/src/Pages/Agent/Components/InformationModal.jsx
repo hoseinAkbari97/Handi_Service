@@ -57,6 +57,27 @@ export default function InformationModal({
               borderRadius: ".5rem",
             }}
           >
+            <Typography>نام مشتری: {task.customer_name}</Typography>
+            <Typography>شماره تلفن مشتری: {task.customer_phone}</Typography>
+            <Typography>تاریخ ثبت درخواست: {task.created_at}</Typography>
+            <Typography>مبلغ اولیه: {task.cost} تومان</Typography>
+            <Typography>
+              ایراد ثبت شده توسط مشتری: {task.description}
+            </Typography>
+            <Typography>
+              وضعیت فعلی درخواست:{" "}
+              {task.status === "pending"
+                ? "درحال بررسی"
+                : task.status === "assigned"
+                  ? "اختصاص داده شده"
+                  : task.status === "in_progress"
+                    ? "درحال انجام"
+                    : task.status === "completed"
+                      ? "تکمیل شده"
+                      : task.status === "approved"
+                        ? "درحال بررسی توسط تعمیرکار"
+                        : "رد شده"}
+            </Typography>
           </Box>
 
           <Button
