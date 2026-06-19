@@ -2,12 +2,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Button, Typography } from "@mui/material";
 
-export default function InformationModal({
-  openModal,
-  closeModal,
-  task,
-}) {
-
+export default function InformationModal({ openModal, closeModal, task }) {
   return (
     <>
       <Modal open={openModal} onClose={closeModal}>
@@ -47,9 +42,9 @@ export default function InformationModal({
               alignItems: "center",
               backgroundColor: "secondary.main",
               borderRadius: ".5rem",
-              gap:1,
-              color:"text.contrastText",
-              p:2
+              gap: 1,
+              color: "text.contrastText",
+              p: 3,
             }}
           >
             <Typography>{task?.title}</Typography>
@@ -74,10 +69,17 @@ export default function InformationModal({
                         ? "درحال بررسی توسط تعمیرکار"
                         : "رد شده"}
             </Typography>
-            <Typography>تعمیرکار: {task?.technician_name ? task.technician_name : "تخصیص داده نشده"}</Typography>
-            <Typography>تلفن تعمیرکار: {task?.technician_name ? task.technician_phone : "تخصیص داده نشده"}</Typography>
+            <Typography>
+              تعمیرکار:{" "}
+              {task?.technician_name ? task.technician_name : "تخصیص داده نشده"}
+            </Typography>
+            <Typography>
+              تلفن تعمیرکار:{" "}
+              {task?.technician_name
+                ? task.technician_phone
+                : "تخصیص داده نشده"}
+            </Typography>
             <Typography>آخرین تغییر وضعیت: {task.updated_at}</Typography>
-
           </Box>
 
           <Button
