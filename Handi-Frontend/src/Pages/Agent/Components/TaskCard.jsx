@@ -1,9 +1,15 @@
 import { Box, Typography, Button } from "@mui/material";
-import { Engineering } from "@mui/icons-material";
+import { Engineering, Task } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
+import InformationModal from "./InformationModal";
+import { useState } from "react";
 
 export default function TaskCard({ task }) {
+  const [openModal, setOpenModal] = useState(true);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   return (
     <Box
       sx={{
@@ -21,6 +27,7 @@ export default function TaskCard({ task }) {
     >
       <Box>
         <Button
+        onClick={handleOpenModal}
           sx={{
             minWidth: "100% !important",
             height: "2rem",
@@ -173,6 +180,12 @@ export default function TaskCard({ task }) {
           </Typography>
         </Box>
       </Box>
+
+      <InformationModal
+        openModal={openModal}
+        closeModal={handleCloseModal}
+        task={task}
+      />
     </Box>
   );
 }
