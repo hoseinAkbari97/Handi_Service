@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from "@mui/material";
-import { Engineering, Task } from "@mui/icons-material";
+import { Engineering } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
 import InformationModal from "./InformationModal";

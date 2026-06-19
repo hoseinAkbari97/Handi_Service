@@ -25,7 +25,6 @@ export default function InformationModal({
             backgroundColor: "background.default",
             width: "70%",
             maxWidth: "60rem",
-            height: "70%",
             borderRadius: 3,
             p: 2,
           }}
@@ -41,13 +40,16 @@ export default function InformationModal({
 
           <Box
             sx={{
-              width: "90%",
+              width: "80%",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "secondary.main",
               borderRadius: ".5rem",
+              gap:1,
+              color:"text.contrastText",
+              p:2
             }}
           >
             <Typography>{task?.title}</Typography>
