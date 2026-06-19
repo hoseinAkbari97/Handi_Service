@@ -6,7 +6,7 @@ import InformationModal from "./InformationModal";
 import { useState } from "react";
 
 export default function TaskCard({ task }) {
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
