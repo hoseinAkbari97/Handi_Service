@@ -47,15 +47,43 @@ export default function InformationModal({ openModal, closeModal, task }) {
               p: 3,
             }}
           >
-            <Typography>{task?.title}</Typography>
-            <Typography>نام مشتری: {task?.customer_name}</Typography>
-            <Typography>شماره تلفن مشتری: {task?.customer_phone}</Typography>
-            <Typography>تاریخ ثبت درخواست: {task?.created_at}</Typography>
-            <Typography>مبلغ اولیه: {task?.cost} تومان</Typography>
-            <Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>{task?.title}</Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>نام مشتری: {task?.customer_name}</Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>شماره تلفن مشتری: {task?.customer_phone}</Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>تاریخ ثبت درخواست: {task?.created_at}</Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>مبلغ اولیه: {task?.cost} تومان</Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>
               ایراد ثبت شده توسط مشتری: {task?.description}
             </Typography>
-            <Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>
               وضعیت فعلی درخواست:{" "}
               {task?.status === "pending"
                 ? "درحال بررسی"
@@ -69,17 +97,29 @@ export default function InformationModal({ openModal, closeModal, task }) {
                         ? "درحال بررسی توسط تعمیرکار"
                         : "رد شده"}
             </Typography>
-            <Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>
               تعمیرکار:{" "}
               {task?.technician_name ? task.technician_name : "تخصیص داده نشده"}
             </Typography>
-            <Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>
               تلفن تعمیرکار:{" "}
               {task?.technician_name
                 ? task.technician_phone
                 : "تخصیص داده نشده"}
             </Typography>
-            <Typography>آخرین تغییر وضعیت: {task.updated_at}</Typography>
+            <Typography sx={{fontSize:{
+              xs:"12px",
+              sm:"14px",
+              md:"1rem"
+            }}}>آخرین تغییر وضعیت: {task.updated_at}</Typography>
           </Box>
 
           <Button
