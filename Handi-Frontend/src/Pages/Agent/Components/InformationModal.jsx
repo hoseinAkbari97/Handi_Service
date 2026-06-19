@@ -36,7 +36,6 @@ export default function InformationModal({
             p: 2,
           }}
         >
-          {/* {console.log(task)} */}
           <Typography
             variant="h5"
             color="text.contrastText"
@@ -57,27 +56,32 @@ export default function InformationModal({
               borderRadius: ".5rem",
             }}
           >
-            <Typography>نام مشتری: {task.customer_name}</Typography>
-            <Typography>شماره تلفن مشتری: {task.customer_phone}</Typography>
-            <Typography>تاریخ ثبت درخواست: {task.created_at}</Typography>
-            <Typography>مبلغ اولیه: {task.cost} تومان</Typography>
+            <Typography>{task?.title}</Typography>
+            <Typography>نام مشتری: {task?.customer_name}</Typography>
+            <Typography>شماره تلفن مشتری: {task?.customer_phone}</Typography>
+            <Typography>تاریخ ثبت درخواست: {task?.created_at}</Typography>
+            <Typography>مبلغ اولیه: {task?.cost} تومان</Typography>
             <Typography>
-              ایراد ثبت شده توسط مشتری: {task.description}
+              ایراد ثبت شده توسط مشتری: {task?.description}
             </Typography>
             <Typography>
               وضعیت فعلی درخواست:{" "}
-              {task.status === "pending"
+              {task?.status === "pending"
                 ? "درحال بررسی"
-                : task.status === "assigned"
+                : task?.status === "assigned"
                   ? "اختصاص داده شده"
-                  : task.status === "in_progress"
+                  : task?.status === "in_progress"
                     ? "درحال انجام"
-                    : task.status === "completed"
+                    : task?.status === "completed"
                       ? "تکمیل شده"
-                      : task.status === "approved"
+                      : task?.status === "approved"
                         ? "درحال بررسی توسط تعمیرکار"
                         : "رد شده"}
             </Typography>
+            <Typography>تعمیرکار: {task?.technician_name ? task.technician_name : "تخصیص داده نشده"}</Typography>
+            <Typography>تلفن تعمیرکار: {task?.technician_name ? task.technician_phone : "تخصیص داده نشده"}</Typography>
+            <Typography>آخرین تغییر وضعیت: {task.updated_at}</Typography>
+
           </Box>
 
           <Button
