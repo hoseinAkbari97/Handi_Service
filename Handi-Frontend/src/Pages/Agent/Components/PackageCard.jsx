@@ -18,6 +18,10 @@ export default function PackageCard({
     <Box
       sx={{
         display: "flex",
+        flexDirection:{
+          xs: "column",
+          sm: "row"
+        },
         backgroundColor: bgColor,
         width: "100%",
         height: "33%",
@@ -59,7 +63,10 @@ export default function PackageCard({
         </Typography>
       </Box>
 
-      <Box width="30%">
+      <Box sx={{width:"50%", mt:{
+       xs:"1rem",
+       sm:0
+      }}}>
         <FormControl fullWidth>
           <InputLabel>تخصیص به تکنسین</InputLabel>
           <Select
