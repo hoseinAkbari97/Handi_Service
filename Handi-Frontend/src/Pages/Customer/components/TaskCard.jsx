@@ -3,19 +3,29 @@ import { Engineering } from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
 import PackageModal from "./PackageModal";
 import { useState } from "react";
+import InformationModal from "./InformationModal";
 
 export default function TaskCard({ tasks, refreshTasks }) {
-  const [openModal, setOpenModal] = useState(false);
+  const [openPackageModal, setOpenPackageModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
-  const handleOpenModal = (task) => {
+  const handleOpenPackageModal = (task) => {
     setSelectedTask(task);
-    setOpenModal(true);
+    setOpenPackageModal(true);
   };
-  const handleCloseModal = () => {
+  const handleClosePackageModal = () => {
     setSelectedTask(null);
-    setOpenModal(false);
+    setOpenPackageModal(false);
   };
+
+  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const handleOpenInfoModal = (task) => {
+    setSelectedTask(task)
+    setOpenInfoModal(true)
+  }
+  const handleCloseInfoModal = () => {
+    setSelectedTask(null)
+    setOpenInfoModal(false)
+  }
 
   return (
     <>
@@ -31,28 +41,51 @@ export default function TaskCard({ tasks, refreshTasks }) {
               justifyContent: "space-between",
               width: 280,
               height: 380,
-              borderTop: 5,
-              borderColor:
-                task.status === "pending"
-                  ? "secondary.main"
-                  : task.status === "assigned"
-                    ? "success.main"
-                    : task.status === "approved"
-                      ? "secondary.dark"
-                      : task.status === "in_progress"
-                        ? "warning.light"
-                        : task.status === "cancelled"
-                          ? "error.main"
-                          : task.status === "completed"
-                            ? "success.light"
-                            : "error.main",
               borderRadius: 3,
               mt: 2,
               pb: 2,
-              px: 2,
             }}
           >
             <Box>
+              <Button
+                onClick={handleOpenInfoModal(task)}
+                sx={{
+                  minWidth: "100% !important",
+                  height: "2rem",
+                  color: "text.primary",
+                  backgroundColor:
+                    task.status === "pending"
+                      ? "secondary.main"
+                      : task.status === "assigned"
+                        ? "success.dark"
+                        : task.status === "in_progress"
+                          ? "warning.light"
+                          : task.status === "completed"
+                            ? "success.light"
+                            : task.status === "approved"
+                              ? "secondary.main"
+                              : "error.main",
+                  "&:hover": {
+                    bgcolor:
+                      task.status === "pending"
+                        ? "secondary.light"
+                        : task.status === "assigned"
+                          ? "success.light"
+                          : task.status === "in_progress"
+                            ? "warning.main"
+                            : task.status === "completed"
+                              ? "success.main"
+                              : task.status === "approved"
+                                ? "secondary.main"
+                                : "error.light",
+                  },
+                  p: "0",
+                  m: "0",
+                  borderRadius: "10px 10px 0px 0px",
+                }}
+              >
+                اطلاعات بیشتر
+              </Button>
               <Typography
                 sx={{
                   fontSize: 18,
@@ -111,8 +144,6 @@ export default function TaskCard({ tasks, refreshTasks }) {
                     آدرس: {task?.full_address}{" "}
                   </Typography>
                 </Box>
-
-                {/* {console.log(task)} */}
 
                 {task.status === "pending" ? (
                   <Typography
@@ -199,9 +230,15 @@ export default function TaskCard({ tasks, refreshTasks }) {
               {task.status === "assigned" && (
                 <Button
                   variant="contained"
-                  onClick={() => handleOpenModal(task)}
+                  onClick={() => handleOpenPackageModal(task)}
                   fullWidth
-                  sx={{ mt: 2, py: 1.2 }}
+                  sx={{
+                    mt: 2,
+                    py: 1.2,
+                    width: "70%",
+                    display: "flex",
+                    justifySelf: "center",
+                  }}
                 >
                   مشاهده پکیج ها
                 </Button>
@@ -216,10 +253,16 @@ export default function TaskCard({ tasks, refreshTasks }) {
       )}
 
       <PackageModal
-        openModal={openModal}
-        closeModal={handleCloseModal}
+        openModal={openPackageModal}
+        closeModal={handleClosePackageModal}
         taskData={selectedTask}
         refreshTasks={refreshTasks}
+      />
+
+      <InformationModal
+        openModal={openInfoModal}
+        closeModal={handleCloseInfoModal}
+        task={selectedTask}
       />
     </>
   );

@@ -119,7 +119,7 @@ export default function InformationModal({ openModal, closeModal, task }) {
               xs:"12px",
               sm:"14px",
               md:"1rem"
-            }}}>آخرین تغییر وضعیت: {task.updated_at}</Typography>
+            }}}>آخرین تغییر وضعیت: {task?.updated_at}</Typography>
           </Box>
 
           <Button
