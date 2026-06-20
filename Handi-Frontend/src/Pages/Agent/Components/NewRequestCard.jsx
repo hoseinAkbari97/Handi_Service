@@ -2,14 +2,19 @@ import { Box, Typography, Button, ButtonGroup } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import ErrorIcon from "@mui/icons-material/Error";
 import NewRequestModal from "./NewRequestModal";
+import InformationModal from "./InformationModal";
 import { useContext, useState } from "react";
 import { UserContext } from "../../../Contexts/UserContext";
 
 export default function NewRequestCard({ task, refreshTasks }) {
   const { user } = useContext(UserContext);
-  const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const [openPackageModal, setOpenPackageModal] = useState(false);
+  const handleOpenPackageModal = () => setOpenPackageModal(true);
+  const handleClosePackageModal = () => setOpenPackageModal(false);
+
+  const [openInfoModal, setOpenInfoModal] = useState(false);
+  const handleOpenInfoModal = () => setOpenInfoModal(true);
+  const handleCloseInfoModal = () => setOpenInfoModal(false);
 
   return (
     <>
@@ -29,7 +34,7 @@ export default function NewRequestCard({ task, refreshTasks }) {
       >
         <Box>
           <Button
-            onClick={handleOpenModal}
+            onClick={handleOpenInfoModal}
             sx={{
               minWidth: "100% !important",
               height: "2.1rem",
@@ -152,7 +157,7 @@ export default function NewRequestCard({ task, refreshTasks }) {
           }}
         >
           <Button
-            onClick={handleOpenModal}
+            onClick={handleOpenPackageModal}
             size="large"
             variant="contained"
             color="primary.dark"
@@ -173,10 +178,16 @@ export default function NewRequestCard({ task, refreshTasks }) {
       </Box>
 
       <NewRequestModal
-        openModal={openModal}
-        closeModal={handleCloseModal}
+        openModal={openPackageModal}
+        closeModal={handleClosePackageModal}
         task={task}
         refreshTasks={refreshTasks}
+      />
+
+      <InformationModal
+        openModal={openInfoModal}
+        closeModal={handleCloseInfoModal}
+        task={task}
       />
     </>
   );
