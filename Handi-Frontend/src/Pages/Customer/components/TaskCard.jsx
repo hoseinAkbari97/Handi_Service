@@ -48,7 +48,7 @@ export default function TaskCard({ tasks, refreshTasks }) {
           >
             <Box>
               <Button
-                onClick={handleOpenInfoModal(task)}
+                onClick={()=> handleOpenInfoModal(task)}
                 sx={{
                   minWidth: "100% !important",
                   height: "2rem",
