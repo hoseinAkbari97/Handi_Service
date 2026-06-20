@@ -27,11 +27,11 @@ export default function TaskCard({ task }) {
     >
       <Box>
         <Button
-        onClick={handleOpenModal}
+          onClick={handleOpenModal}
           sx={{
             minWidth: "100% !important",
             height: "2rem",
-            color: "primary.dark",
+            color: "text.primary",
             backgroundColor:
               task.status === "pending"
                 ? "secondary.main"

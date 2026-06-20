@@ -22,15 +22,29 @@ export default function NewRequestCard({ task, refreshTasks }) {
           justifyContent: "space-between",
           width: 280,
           height: 380,
-          borderTop: 5,
-          borderColor: "primary.light",
           borderRadius: 3,
           mt: 2,
           pb: 2,
-          px: 2,
         }}
       >
         <Box>
+          <Button
+            onClick={handleOpenModal}
+            sx={{
+              minWidth: "100% !important",
+              height: "2.1rem",
+              color: "text.primary",
+              backgroundColor: "success.main",
+              "&:hover": {
+                bgcolor: "primary.main",
+              },
+              p: "0",
+              m: "0",
+              borderRadius: "10px 10px 0px 0px",
+            }}
+          >
+            اطلاعات بیشتر
+          </Button>
           <Typography
             sx={{
               fontSize: 18,
@@ -141,7 +155,7 @@ export default function NewRequestCard({ task, refreshTasks }) {
             onClick={handleOpenModal}
             size="large"
             variant="contained"
-            color="primary.main"
+            color="primary.dark"
             sx={{
               minWidth: "50%",
               textWrap: "nowrap",
@@ -149,8 +163,8 @@ export default function NewRequestCard({ task, refreshTasks }) {
               mt: 1,
               justifySelf: "center",
               "&:hover": {
-                  backgroundColor: "primary.main",
-                },
+                backgroundColor: "primary.main",
+              },
             }}
           >
             تخصیص پکیج ها
@@ -158,7 +172,12 @@ export default function NewRequestCard({ task, refreshTasks }) {
         </Box>
       </Box>
 
-      <NewRequestModal openModal={openModal} closeModal={handleCloseModal} task={task} refreshTasks={refreshTasks} />
+      <NewRequestModal
+        openModal={openModal}
+        closeModal={handleCloseModal}
+        task={task}
+        refreshTasks={refreshTasks}
+      />
     </>
   );
 }
